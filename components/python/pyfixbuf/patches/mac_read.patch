@@ -1,0 +1,12 @@
+--- a/src/pyfixbuf/_pyfixbuf.c	2017-03-23 02:21:09.945520711 -0700
++++ b/src/pyfixbuf/_pyfixbuf.c	2017-03-23 02:22:01.545521141 -0700
+@@ -1667,6 +1667,9 @@
+             return NULL;
+             }*/
+
++    } else if (IS_BYTE(value)) {
++	string = PyByteArray_AsString(value);
++	memcpy(self->rec + offset, string, len);
+     } else if (type == FB_SUB_TMPL_MULTI_LIST) {
+         if (!fixbufPySTML_Check(value)) {
+             PyErr_SetString(PyExc_AttributeError,
