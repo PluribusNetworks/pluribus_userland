@@ -15,6 +15,7 @@
  */
 #include <stdio.h>
 #include <string.h>
+#include <pthread.h>
 
 #include <openssl/asn1t.h>
 #include <openssl/pem.h>
@@ -27,6 +28,7 @@
 
 static const char *engine_id = "tpm2.0";
 static const char *engine_name = "TPM2.0 hardware engine support";
+static pthread_mutex_t e_tpm_mutex;
 
 typedef struct {
 	TPM_HANDLE	pri_key_obj_hnd;
@@ -508,6 +510,9 @@ tpm2dot0_engine_init(ENGINE *e)
 	}
 
 	if (tpm2dot_gctx == NULL) {
+		if (pthread_mutex_init(&e_tpm_mutex, NULL) != 0) {
+			return(0);
+		}
 		if (tpm2dot0_startup() != 0) {
 			return (0);
 		}
@@ -673,6 +678,8 @@ tpm2dot0_pmeth_keygen(EVP_PKEY_CTX *ctx, EVP_PKEY *pkey)
 	E_TPM2DOT0_PKEY_CTX	*tctx;
 	E_TPM2DOT0_RSA_CTX	*hptr;
 	RSA			*rsa;
+	int			ret = 1;
+
 
 	tctx = EVP_PKEY_CTX_get_data(ctx);
 
@@ -680,12 +687,14 @@ tpm2dot0_pmeth_keygen(EVP_PKEY_CTX *ctx, EVP_PKEY *pkey)
 	if (!hptr) {
 		return (0);
 	}
-
+	pthread_mutex_lock(&e_tpm_mutex);
 	if (tpm2dot0_create_ch_key(tctx, hptr) != 0) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
 	if (tpm2dot0_load_ch_key(hptr) != 0) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
 
 	rsa = RSA_new_method(pkey->engine);
@@ -693,19 +702,23 @@ tpm2dot0_pmeth_keygen(EVP_PKEY_CTX *ctx, EVP_PKEY *pkey)
 
 	rsa->n = BN_new();
 	if (!rsa->n) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
 	if (!BN_bin2bn(hptr->ch_key_pub.t.publicArea.unique.rsa.t.buffer,
 	    hptr->ch_key_pub.t.publicArea.unique.rsa.t.size, rsa->n)) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
 
 	rsa->e = BN_new();
 	if (!rsa->e) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
 	if (!BN_set_word(rsa->e, 65537)) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
 
 	rsa->d = NULL;
@@ -713,10 +726,12 @@ tpm2dot0_pmeth_keygen(EVP_PKEY_CTX *ctx, EVP_PKEY *pkey)
 	EVP_PKEY_assign_RSA(pkey, rsa);
 
 	if (tpm2dot0_flush_ch_key(hptr) != 0) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
-
-	return (1);
+cleanup:
+	pthread_mutex_unlock(&e_tpm_mutex);
+	return (ret);
 }
 
 static int
@@ -727,7 +742,7 @@ tpm2dot0_pmeth_sign(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen,
 	E_TPM2DOT0_PKEY_CTX	*tctx;
 	RSA			*rsa;
 	E_TPM2DOT0_RSA_CTX	*hptr;
-	int			ret;
+	int			ret = 1;
 
 	pkey = EVP_PKEY_CTX_get0_pkey(ctx);
 	tctx = EVP_PKEY_CTX_get_data(ctx);
@@ -744,20 +759,25 @@ tpm2dot0_pmeth_sign(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *siglen,
 		return (ret);
 	}
 
+	pthread_mutex_lock(&e_tpm_mutex);
 	if (tpm2dot0_load_ch_key(hptr) != 0) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
 
 	if (tpm2dot0_ch_key_sign(tctx, hptr, sig, siglen,
 	    tbs, tbslen) != 0) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
 
 	if (tpm2dot0_flush_ch_key(hptr) != 0) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
-
-	return (1);
+cleanup:
+	pthread_mutex_unlock(&e_tpm_mutex);
+	return (ret);
 }
 
 static int
@@ -822,33 +842,40 @@ tpm2dot0_pmeth_decrypt(EVP_PKEY_CTX *ctx, unsigned char *out, size_t *outlen,
 	EVP_PKEY		*pkey;
 	RSA			*rsa;
 	E_TPM2DOT0_RSA_CTX	*hptr;
+	int			ret = 1;
 
 	pkey = EVP_PKEY_CTX_get0_pkey(ctx);
 	rsa = EVP_PKEY_get1_RSA(pkey);
 	hptr = RSA_get_ex_data(rsa, tpm2dot0_hndidx_rsa);
 
+	pthread_mutex_lock(&e_tpm_mutex);
 	if (tpm2dot0_load_ch_key(hptr) != 0) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
 
 	if (!out) {
 		unsigned char	*tmp_out;
 		tmp_out = OPENSSL_malloc(hptr->ch_key_pub.t.publicArea.parameters.rsaDetail.keyBits / 8);
 		if (tpm2dot0_ch_key_decrypt(hptr, tmp_out, outlen, in, inlen) != 0) {
-			return (0);
+			ret = 0;
+			goto cleanup;
 		}
 		OPENSSL_free(tmp_out);
 	} else {
 		if (tpm2dot0_ch_key_decrypt(hptr, out, outlen, in, inlen) != 0) {
-			return (0);
+			ret = 0;
+			goto cleanup;
 		}
 	}
 
 	if (tpm2dot0_flush_ch_key(hptr) != 0) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
-
-	return (1);
+cleanup:
+	pthread_mutex_unlock(&e_tpm_mutex);
+	return (ret);
 }
 
 const EVP_PKEY_ASN1_METHOD	*generic_ameth_rsa;
@@ -942,6 +969,7 @@ tpm2dot0_priv_decode(EVP_PKEY *pkey, PKCS8_PRIV_KEY_INFO *p8info)
 	const unsigned char	*p = NULL;
 	int			plen = 0;
 	TPM_KEY_INFO		*tki;
+	int			ret = 1;
 
 	hptr = OPENSSL_malloc(sizeof (E_TPM2DOT0_RSA_CTX));
 	if (!hptr) {
@@ -961,10 +989,12 @@ tpm2dot0_priv_decode(EVP_PKEY *pkey, PKCS8_PRIV_KEY_INFO *p8info)
 	memcpy(&hptr->ch_key_priv, ASN1_STRING_data(tki->encrypted_priv_key), ASN1_STRING_length(tki->encrypted_priv_key));
 	memcpy(&hptr->ch_key_pub, ASN1_STRING_data(tki->public_key), ASN1_STRING_length(tki->public_key));
 
+	pthread_mutex_lock(&e_tpm_mutex);
 	TPM_KEY_INFO_free(tki);
-
+	
 	if (tpm2dot0_load_ch_key(hptr) != 0) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
 
 	rsa = RSA_new_method(pkey->engine);
@@ -972,19 +1002,23 @@ tpm2dot0_priv_decode(EVP_PKEY *pkey, PKCS8_PRIV_KEY_INFO *p8info)
 
 	rsa->n = BN_new();
 	if (!rsa->n) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
 
 	if (!BN_bin2bn(hptr->ch_key_pub.t.publicArea.unique.rsa.t.buffer, hptr->ch_key_pub.t.publicArea.unique.rsa.t.size, rsa->n)) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
 
 	rsa->e = BN_new();
 	if (!rsa->e) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
 	if (!BN_set_word(rsa->e, 65537)) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
 
 	rsa->d = NULL;
@@ -992,10 +1026,12 @@ tpm2dot0_priv_decode(EVP_PKEY *pkey, PKCS8_PRIV_KEY_INFO *p8info)
 	EVP_PKEY_assign_RSA(pkey, rsa);
 
 	if (tpm2dot0_flush_ch_key(hptr) != 0) {
-		return (0);
+		ret = 0;
+		goto cleanup;
 	}
-
-	return (1);
+cleanup:
+	pthread_mutex_unlock(&e_tpm_mutex);
+	return (ret);
 }
 
 static int
@@ -1175,6 +1211,7 @@ tpm2dot0_rsa_priv_decrypt(int flen, const unsigned char *from,
 {
 	E_TPM2DOT0_RSA_CTX	*hptr;
 	size_t			tlen;
+	int			ret = 1;
 
 	if (padding != RSA_PKCS1_PADDING) {
 		return (-1);
@@ -1182,17 +1219,25 @@ tpm2dot0_rsa_priv_decrypt(int flen, const unsigned char *from,
 
 	hptr = RSA_get_ex_data(rsa, tpm2dot0_hndidx_rsa);
 
+	pthread_mutex_lock(&e_tpm_mutex);
 	if (tpm2dot0_load_ch_key(hptr) != 0) {
-		return (-1);
+		ret = -1;
+		goto cleanup;
 	}
 
 	if (tpm2dot0_ch_key_decrypt(hptr, to, &tlen, from, flen) != 0) {
-		return (-1);
+		ret = -1;
+		goto cleanup;
 	}
 
 	if (tpm2dot0_flush_ch_key(hptr) != 0) {
-		return (-1);
+		ret = -1;
+		goto cleanup;
 	}
+cleanup:
+	pthread_mutex_unlock(&e_tpm_mutex);
+	if (ret == -1)
+		return(ret);
 
 	return (tlen);
 }
