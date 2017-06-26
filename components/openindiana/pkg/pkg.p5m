@@ -4,6 +4,14 @@ set name=description value="$(COMPONENT_DESCRIPTION)"
 set name=info.classification value=$(COMPONENT_CLASSIFICATION)
 set name=pkg.summary value="$(COMPONENT_SUMMARY)"
 
+#
+# -- MAJOR HACK --
+# Include an old BUG to allow us to upgrade to this newer Pkg which
+# can handle buggy packages containing '.'. This will be removed
+# in future (UGH).
+#
+dir group=root mode=0755 owner=root path=.
+
 dir group=sys mode=0755 owner=root path=etc
 dir group=bin mode=0755 owner=root path=etc/security
 dir group=bin mode=0755 owner=root path=etc/security/auth_attr.d
