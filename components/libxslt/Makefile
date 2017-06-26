@@ -56,9 +56,7 @@ CONFIGURE_OPTIONS += PYTHON_VENDOR_PACKAGES=$(PYTHON.2.6.VENDOR_PACKAGES)
 
 COMPONENT_PREP_ACTION = \
 	(cd $(@D) ; cp ../mapfile.xslt libxslt/libxslt.syms ; \
-		    $(RM) libxslt/xsltconfig.h libexslt/exsltconfig.h ; \
-		    libtoolize --force --copy ; aclocal ; \
-		    automake --addmissing --copy ; autoconf)
+		autoreconf --force --install)
 
 # After we have configured, make a copy of the python bits so we
 # can build separate python 2.7 support.
