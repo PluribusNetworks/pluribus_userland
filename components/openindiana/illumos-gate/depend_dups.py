@@ -5,6 +5,8 @@ import sys
 # A simple python script to prune duplicate dependencies in 
 # the given manifest. The longest matching dependency entry
 # for the fmri is retained.
+# This also strips java dependencies. We have a transform rule
+# but somehow that does not work properly.
 #
 
 mfname = sys.argv[1]
@@ -19,6 +21,10 @@ found_dups = False
 for ln in m:
 	ent = ln.strip()
 	if ent.startswith("depend"):
+                if ent.find("fmri=runtime/java") > -1 or \
+                   ent.find("fmri=developer/java/jdk") > -1:
+                        found_dups = True
+                        continue
 		toks = ent.split()
 		fmri = None
 		for tok in toks:

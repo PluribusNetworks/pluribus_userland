@@ -159,6 +159,12 @@ $(BUILD_DIR)/$(MACH)/publish.transforms: $(BUILD_DIR)/$(MACH)/.overlay
 	echo "<transform set name=pkg.fmri -> emit set name=illumos-gate.info.git-rev value=$(shell cd $(COMPONENT_SRC); git rev-parse HEAD)>" >> \
 	  $(BUILD_DIR)/$(MACH)/publish.transforms
 
+	# Drop all java dependencies. Heavy handed but ON gate pkgs pulling in Java is unwanted.
+	# We will ensure to pull in Java where we want it.
+	echo "<transform depend fmri=developer/java/jdk.* -> drop>" >> $(BUILD_DIR)/$(MACH)/publish.transforms
+	echo "<transform depend fmri=runtine/java.* -> drop>" >> $(BUILD_DIR)/$(MACH)/publish.transforms
+	echo "<transform depend fmri=runtine/java/runtime64.* -> drop>" >> $(BUILD_DIR)/$(MACH)/publish.transforms
+
 	# OI hipster is using updated bnx driver published directly from oi-userland
 	echo "<transform depend fmri=pkg:/driver/network/bnx@.* -> drop>" >> $(BUILD_DIR)/$(MACH)/publish.transforms
 
