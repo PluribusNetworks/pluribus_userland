@@ -23,16 +23,8 @@
 include ../../../make-rules/shared-macros.mk
 include ../illumos-gate/version-macros.mk
 
-#
-# Note this perl is 32-bit only.
-#
-
-# I want to override PERL_VERSION and PERL_ARCH because when building
-# a new version of perl it probably isn't installed so shared-macros.mk
-# can't call it.
-
 COMPONENT_NAME=         name
-COMPONENT_VERSION=      1.0
+COMPONENT_VERSION=      1.1
 COMPONENT_SUMMARY=      Enable Pluribus OS Name in /etc/release file
 COMPONENT_PROJECT_URL=  http://www.pluribusnetworks.com/
 COMPONENT_CLASSIFICATION=       System/Core
@@ -47,6 +39,9 @@ build:
 	mkdir -p $(BUILD_DIR)/prototype/$(MACH)/etc
 	echo "Pluribus Networks Netvisor(TM) OS" > $(BUILD_DIR)/prototype/$(MACH)/etc/release
 	echo "Illumos BUILD $(ONNV_BUILDNUM)" > $(BUILD_DIR)/prototype/$(MACH)/etc/illumos-release
+	mkdir -p $(BUILD_DIR)/prototype/$(MACH)/etc/profile.d
+	echo "PATH=/usr/bin:/usr/sbin:/sbin" > $(BUILD_DIR)/prototype/$(MACH)/etc/profile.d/def_env.sh
+	echo "export PATH" >> $(BUILD_DIR)/prototype/$(MACH)/etc/profile.d/def_env.sh
 
 install:
 

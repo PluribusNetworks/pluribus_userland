@@ -7,6 +7,9 @@ set name=pkg.summary value="$(COMPONENT_SUMMARY)"
 dir group=sys mode=0755 owner=root path=etc
 file group=sys mode=0444 owner=root path=etc/release
 file group=sys mode=0444 owner=root path=etc/illumos-release
+dir group=sys mode=0755 owner=root path=etc/profile.d
+file group=sys mode=0444 owner=root path=etc/profile.d/def_env.sh
+
 legacy arch=i386 category=system desc="$(COMPONENT_SUMMARY)" hotline="Please contact your local service provider" name="$(COMPONENT_SUMMARY)" pkg=SUNWsolnm variant.arch=i386 vendor="Pluribus Networks" version=11,REV=2010.03.01.11.19
 
 #
