@@ -54,6 +54,7 @@ ANT_DIST_DIRS+=-Ddist.lib=$(PROTO_DIR)/usr/share/lib/ant
 
 OPTIONAL_LIBS+=/usr/share/lib/java/junit.jar
 OPTIONAL_LIBS+=/usr/share/antlr-2.7.7/antlr.jar
+OPTIONAL_LIBS+=/usr/share/lib/java/bcel.jar
 
 COMPONENT_PRE_BUILD_ACTION = $(CP) $(OPTIONAL_LIBS) $(@D)/lib/optional
 

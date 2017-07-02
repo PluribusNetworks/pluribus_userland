@@ -276,4 +276,6 @@ pkg image-update
 ./build.sh runtime/openjdk-7
 ./build.sh developer/junit
 ./build.sh developer/antlr
+./build.sh developer/bcel
 ./build.sh developer/ant
+./build.sh developer/maven
