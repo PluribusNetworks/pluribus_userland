@@ -98,10 +98,7 @@ file path=usr/share/doc/junit/samples/org/junit/samples/money/MoneyBag.java
 file path=usr/share/doc/junit/samples/org/junit/samples/money/MoneyTest.class
 file path=usr/share/doc/junit/samples/org/junit/samples/money/MoneyTest.java
 file \
-    path=usr/share/doc/junit/samples/org/junit/samples/money/package-info.class
-file \
     path=usr/share/doc/junit/samples/org/junit/samples/money/package-info.java
-file path=usr/share/doc/junit/samples/org/junit/samples/package-info.class
 file path=usr/share/doc/junit/samples/org/junit/samples/package-info.java
 file path=usr/share/lib/java/javadoc/junit/allclasses-frame.html
 file path=usr/share/lib/java/javadoc/junit/allclasses-noframe.html
@@ -274,10 +271,6 @@ file path=usr/share/lib/java/javadoc/junit/overview-frame.html
 file path=usr/share/lib/java/javadoc/junit/overview-summary.html
 file path=usr/share/lib/java/javadoc/junit/overview-tree.html
 file path=usr/share/lib/java/javadoc/junit/package-list
-file path=usr/share/lib/java/javadoc/junit/resources/background.gif
-file path=usr/share/lib/java/javadoc/junit/resources/tab.gif
-file path=usr/share/lib/java/javadoc/junit/resources/titlebar.gif
-file path=usr/share/lib/java/javadoc/junit/resources/titlebar_end.gif
 file path=usr/share/lib/java/javadoc/junit/serialized-form.html
 file path=usr/share/lib/java/javadoc/junit/stylesheet.css
 file path=usr/share/lib/java/junit-$(COMPONENT_VERSION).jar

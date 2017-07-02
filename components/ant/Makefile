@@ -26,13 +26,13 @@
 include ../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		ant
-COMPONENT_VERSION=	1.9.3
+COMPONENT_VERSION=	1.7.1
 COMPONENT_PROJECT_URL=	http://ant.apache.org/
 COMPONENT_SRC_NAME=	apache-ant
 COMPONENT_SRC=		$(COMPONENT_SRC_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC)-src.tar.bz2
 COMPONENT_ARCHIVE_HASH=	\
-    sha256:eb9306e8b8322bb09b78cc3d8e288398f9cb657d76ffc61ee3fb175e786e8365
+    sha256:4dc49a7260ef90a6dc6611b7e96b9f047d507589736d4a2ad6efbe3edfc6fba6
 COMPONENT_ARCHIVE_URL=	http://archive.apache.org/dist/ant/source/$(COMPONENT_ARCHIVE)
 COMPONENT_BUGDB=	utility/ant
 
@@ -43,6 +43,7 @@ include ../../make-rules/ips.mk
 GMAKE=./build.sh
 
 ANT_ENV+=JAVA_HOME=/usr/jdk/instances/openjdk1.7.0
+#ANT_ENV+=JAVA_HOME=/usr/jdk/instances/jdk1.6.0
 
 ANT_DIST_DIRS+=-Ddist.dir=$(PROTO_DIR)
 ANT_DIST_DIRS+=-Ddist.bin=$(PROTO_DIR)/usr/bin
@@ -55,7 +56,9 @@ ANT_DIST_DIRS+=-Ddist.lib=$(PROTO_DIR)/usr/share/lib/ant
 OPTIONAL_LIBS+=/usr/share/lib/java/junit.jar
 OPTIONAL_LIBS+=/usr/share/antlr-2.7.7/antlr.jar
 
-COMPONENT_PRE_BUILD_ACTION = $(CP) $(OPTIONAL_LIBS) $(@D)/lib/optional
+#COMPONENT_PRE_BUILD_ACTION = ($(MKDIR) -p $(@D)/lib/optional; \
+#	$(CP) $(OPTIONAL_LIBS) $(@D)/lib/optional)
+COMPONENT_PRE_BUILD_ACTION = (/usr/gnu/bin/sed -i 's/depends="jars,test-jar"/depends="jars"/' $(@D)/build.xml)
 
 COMPONENT_BUILD_ARGS =
 COMPONENT_BUILD_TARGETS =	build

@@ -54,6 +54,8 @@ COMPONENT_POST_UNPACK_ACTION += rm -fr $(RHINO) cacerts cacerts.out;
 COMPONENT_POST_UNPACK_ACTION += $(UNPACK) $(USERLAND_ARCHIVES)$(COMPONENT_ARCHIVE_1) ;
 COMPONENT_POST_UNPACK_ACTION += $(UNPACK) $(USERLAND_ARCHIVES)$(COMPONENT_ARCHIVE_2) ;
 
+COMPONENT_PRE_BUILD_ACTION = ($(GSED) -i 's/\bBUILD_VERSION\b/H_BUILD_VERSION/' $(@D)/hotspot/make/solaris/makefiles/vm.make)
+
 # build the configured source
 # We need to copy, not use CLONEY, so this part of Makefile is rewritten
 $(BUILD_DIR)/%/.built: $(SOURCE_DIR)/.prep

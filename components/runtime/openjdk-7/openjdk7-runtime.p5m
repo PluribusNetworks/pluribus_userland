@@ -613,3 +613,14 @@ file path=usr/jdk/instances/openjdk1.7.0/jre/lib/zi/SystemV/YST9YDT
 file path=usr/jdk/instances/openjdk1.7.0/jre/lib/zi/WET
 file path=usr/jdk/instances/openjdk1.7.0/jre/lib/zi/ZoneInfoMappings
 file path=usr/jdk/instances/openjdk1.7.0/lib/i386/jli/libjli.so mode=0555
+
+depend fmri=library/zlib type=require
+depend fmri=system/library/freetype-2 type=require
+depend fmri=system/library/g++-4-runtime type=require
+depend fmri=system/library/gcc-4-runtime type=require
+depend fmri=system/library/math type=require
+depend fmri=x11/library/libx11 type=require
+depend fmri=x11/library/libxext type=require
+depend fmri=x11/library/libxi type=require
+depend fmri=x11/library/libxrender type=require
+depend fmri=x11/library/libxtst type=require
