@@ -31,7 +31,7 @@ $(BUILD_DIR)/%/.built:	$(SOURCE_DIR)/.prep
 	$(CLONEY) $(SOURCE_DIR) $(@D)
 	$(COMPONENT_PRE_BUILD_ACTION)
 	(cd $(@D) ; $(ENV) $(COMPONENT_BUILD_ENV) \
-		$(MVN) clean compile)
+		$(MVN) clean)
 	$(COMPONENT_POST_BUILD_ACTION)
 	$(TOUCH) $@
 
@@ -41,10 +41,16 @@ $(BUILD_DIR)/%/.installed:	$(BUILD_DIR)/%/.built
 	$(COMPONENT_PRE_INSTALL_ACTION)
 	(cd $(@D) ; $(ENV) $(COMPONENT_INSTALL_ENV) \
 		$(MVN) package; \
-		$(MKDIR) -p $(PROTO_DIR)/$(JAVA_LIB); \
-		$(CP) -rp target/* $(PROTO_DIR)/$(JAVA_LIB))
+		for dir in `find . -name target`; do \
+			pdir=`dirname $$dir`; \
+			mkdir -p $(PROTO_DIR)/$$pdir; \
+			ln -s `pwd`/$$dir $(PROTO_DIR)/$$pdir/target; \
+		done)
 	$(COMPONENT_POST_INSTALL_ACTION)
 	$(TOUCH) $@
+
+
+#		$(CP) -rp target/* $(PROTO_DIR)/$(JAVA_LIB))
 
 clean::
 	$(RM) -r $(SOURCE_DIR) $(BUILD_DIR)
