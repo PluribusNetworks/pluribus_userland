@@ -867,7 +867,7 @@ class Action(object):
                 # to be a link.  When found, that's the parent that has been
                 # redirected to some other location.
                 idx = 0
-                while parent_path[idx] == os.path.sep:
+                while idx < len(parent_path) and parent_path[idx] == os.path.sep:
                         idx += 1
                 tmp = parent_path[idx-1:]
                 if pkgplan.image.root != os.path.sep:
