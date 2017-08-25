@@ -1,0 +1,95 @@
+#!/bin/sh
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+# Copyright (c) 2010, 2011, Oracle and/or its affiliates. All rights reserved.
+#
+# Script to enable accessibility for the live CD.
+#
+
+. /lib/svc/share/media_include.sh
+. /lib/svc/share/smf_include.sh
+
+SU=/usr/bin/su
+GCONF=/usr/bin/gconftool-2
+SED=/usr/bin/sed
+CUT=/usr/bin/cut
+MV=/usr/bin/mv
+CAT=/usr/bin/cat
+CHMOD=/usr/bin/chmod
+
+if [ is_livecd ] ; then
+	# Determine if we should enable accessibility for the live CD
+	# based upon the value of the assistive_tech boot property.
+	#
+	assistive_tech=`/sbin/devprop -s assistive_tech`
+
+	if [ "x$assistive_tech" != "x" ] ; then
+		# Allow the nwam GUI to participate in the accessibility
+		# infrastructure.  This is because the nwam GUI is not
+		# running as jack, but is instead running as root.
+		#
+		$MV /lib/inet/nwamd /lib/inet/nwamd.bin
+		$CAT << \NWAMD_EOF > /lib/inet/nwamd
+#!/bin/sh
+GTK_MODULES=gail:atk-bridge /lib/inet/nwamd.bin $*
+NWAMD_EOF
+		$CHMOD +x /lib/inet/nwamd
+
+		# Make it so things running as root can be seen by
+		# assistive technologies.  This includes the nwam
+		# GUI, for example.
+		#
+		$CAT << ORBITRC_EOF > /root/.orbitrc
+ORBIIOPIPv4=1
+ORBIIOPUNIX=0
+ORBITRC_EOF
+
+		# Enable accessibility for root.
+		#
+		$GCONF --type bool \
+		   --set /desktop/gnome/interface/accessibility true
+
+		# Enable accessibility for jack.
+		#
+		$SU jack -c "$GCONF --type bool \
+		    --set /desktop/gnome/interface/accessibility true"
+
+		# Tell jack to autostart the appropriate assistive technology.
+		#
+		visual_prefix="/desktop/gnome/applications/at/visual"
+		if [ "x$assistive_tech" = "xreader" ] ;	then
+			echo "enabling screen reader"
+			$SU jack -c "$GCONF --type bool \
+			    --set $visual_prefix/startup true"
+			$SU jack -c "$GCONF --type string \
+			    --set $visual_prefix/exec \
+			    'orca -n -e braille-monitor -d main-window'"
+		elif [ "x$assistive_tech" = "xmagnifier" ] ; then
+			echo "enabling screen magnifier"
+			$SU jack -c "$GCONF --type bool \
+			    --set $visual_prefix/startup true"
+			$SU jack -c "$GCONF --type string \
+			    --set $visual_prefix/exec \
+			    'orca -n -e magnifier -d speech -d main-window'"
+		fi
+	fi
+fi
+
+exit $SMF_EXIT_OK

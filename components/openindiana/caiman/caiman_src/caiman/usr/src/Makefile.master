@@ -1,0 +1,496 @@
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+
+#
+# Copyright (c) 2007, 2011, Oracle and/or its affiliates. All rights reserved.
+#
+
+#
+# Makefile.master, global definitions for system source
+#
+
+ROOT=	/proto
+
+# Special reference pointers: these allow install to be built on
+# machines that don't necessarily have the very latest ON or SFW packages,
+# or when testing features that depend on changed ON/SFW interfaces.  (The
+# only use of the *REF_GATE variables is here, so you can override just the
+# *REF_PROTO variables if you need to point directly to a root directory.)
+ONREF_GATE=
+SFWREF_GATE=
+ONREF_PROTO=$(ONREF_GATE:%=%/proto/root_$(MACH))
+SFWREF_PROTO=$(SFWREF_GATE:%=%/proto/root_$(MACH))
+
+# Locations of the main build tools.  Can be overridden in the environment.
+BUILD_TOOLS=		/opt
+ONBLD_TOOLS=            $(BUILD_TOOLS)/onbld
+SPRO_ROOT=		$(BUILD_TOOLS)/SUNWspro
+SPRO_VROOT=            	$(SPRO_ROOT)/sunstudio12.1
+
+LINT=			$(SPRO_VROOT)/bin/lint
+CC=			$(SPRO_VROOT)/bin/cc
+
+#
+# The following information regarding license terms and stripping CDDL
+# is applicable only to employees of Oracle Corporation.  Anyone else
+# building a release distribution from this source code must abide by
+# all applicable license terms.  If in doubt, please seek legal advice.
+#
+# Solaris source is licensed under the CDDL, but binary distributions
+# may not be. Because of this discrepancy, it is desirable to strip
+# the CDDL from human readable files to avoid end user confusion.  
+#
+# To strip CDDL from installed files, set and export INS_STRIP_CDDL in
+# your build environment:
+#
+#	INS_STRIP_CDDL= ; export INS_STRIP_CDDL
+#
+# For files which should NOT have CDDL stripped, because they contain
+# CDDL start and end tags but are licensed by someone other than
+# Oracle, set INS_STRIP_CDDL_OVR to $(POUND_SIGN) in your Makefile
+# prior to including Makefile.master:
+#
+#	INS_STRIP_CDDL_OVR= $(POUND_SIGN)
+#	include $(SRC)/Makefile.master
+#
+INS_STRIP_CDDL= $(POUND_SIGN)
+INS_STRIP_CDDL_OVR= $(POUND_SIGN)
+$(INS_STRIP_CDDL)$(INS_STRIP_CDDL_OVR)INS_CDDL_ARG= -C
+INS=            install $(INS_CDDL_ARG)
+
+# Other commands
+LD=			/usr/ccs/bin/ld
+RM=			/usr/bin/rm -f
+SYMLINK=		/usr/bin/ln -s
+LN=			/usr/bin/ln
+CP=			/usr/bin/cp
+MV=			/usr/bin/mv -f
+SH=			/usr/bin/sh
+CHMOD=			/usr/bin/chmod
+CHOWN=			/usr/bin/chown
+CHGRP=			/usr/bin/chgrp
+MKDIR=			/usr/bin/mkdir
+TOUCH=			/usr/bin/touch
+SED=			/usr/bin/sed
+TAR=			/usr/bin/tar
+ECHO=			/usr/bin/echo
+PYTHON=			/usr/bin/i86/python2.7
+CAT=			/usr/bin/cat
+GENCAT=			/usr/bin/gencat
+XGETTEXT=		xgettext
+XGETFLAGS=		-c TRANSLATION_NOTE
+GNUXGETTEXT=		/usr/gnu/bin/xgettext
+GNUXGETFLAGS=		--keyword=_ --strict --no-location --omit-header
+CSTYLE=			cstyle -pP
+NAWK=			/usr/bin/nawk
+GREP=			/usr/bin/grep
+
+# Reference paths for ON
+ONLIBDIR=		$(ONREF_PROTO)/lib
+ONUSRLIBDIR=		$(ONREF_PROTO)/usr/lib
+ONINCDIR=		$(ONREF_PROTO)/usr/include
+
+# Common path definitions.
+i386_USRLIB=		/usr/lib
+amd64_USRLIB=		/usr/lib/64
+USRLIB=$($(MACH)_USRLIB)
+ADMINLIB=		/usr/snadm/lib
+ADMINLIB64=		/usr/snadm/lib/$(MACH64)
+ROOTADMIN=		$(ROOT)/usr/snadm
+ROOTADMINLIB=		$(ROOTADMIN)/lib
+ROOTADMINLIB64=		$(ROOTADMIN)/lib/$(MACH64)
+ROOTBIN=		$(ROOT)/bin
+ROOTDC=			$(ROOT)/usr/share/distro_const
+ROOTDC_PROFILE= $(ROOTDC)/profile
+ROOTDC_SORT= $(ROOTDC)/sort
+ROOTINC=		$(ROOT)/usr/include
+ROOTINCADMIN=		$(ROOTINC)/admin
+ROOTMAN=		$(ROOT)/usr/share/man
+ROOTMAN1M=		$(ROOTMAN)/man1m
+ROOTMAN4=		$(ROOTMAN)/man4
+ROOTOPTINSTALLTESTBIN=	$(ROOT)/opt/install-test/bin
+ROOTPYTHON=		$(ROOTUSRLIB)/python2.7
+ROOTPYTHONVENDOR=	$(ROOTPYTHON)/vendor-packages
+ROOTPYTHONVENDORINSTALL=	$(ROOTPYTHONVENDOR)/osol_install
+ROOTPYTHONVENDORINSTALL64=	$(ROOTPYTHONVENDOR)/osol_install/64
+ROOTPYTHONVENDORINSTALLAI=	$(ROOTPYTHONVENDORINSTALL)/auto_install
+ROOTPYTHONVENDORINSTALLPROF=    $(ROOTPYTHONVENDORINSTALL)/profile
+ROOTPYTHONVENDORSOLINSTALL=	$(ROOTPYTHONVENDOR)/solaris_install
+ROOTPYTHONVENDORSOLINSTALL64=	$(ROOTPYTHONVENDOR)/solaris_install/64
+ROOTPYTHONVENDORSOLINSTALLBOOT =	$(ROOTPYTHONVENDORSOLINSTALL)/boot
+ROOTPYTHONVENDORSOLINSTALLCONFIGURATION =	$(ROOTPYTHONVENDORSOLINSTALL)/configuration
+ROOTPYTHONVENDORSOLINSTALLDATACACHE=	$(ROOTPYTHONVENDORSOLINSTALL)/data_object
+ROOTPYTHONVENDORINSTALLDC=	$(ROOTPYTHONVENDORSOLINSTALL)/distro_const
+ROOTPYTHONVENDORINSTALLDCCHKPT= $(ROOTPYTHONVENDORINSTALLDC)/checkpoints
+ROOTPYTHONVENDORINSTALLDCCHKPTXSLT= $(ROOTPYTHONVENDORINSTALLDCCHKPT)/xslt
+ROOTPYTHONVENDORSOLINSTALLAI= \
+		$(ROOTPYTHONVENDORSOLINSTALL)/auto_install
+ROOTPYTHONVENDORSOLINSTALLAICHKPT= \
+		$(ROOTPYTHONVENDORSOLINSTALLAI)/checkpoints
+ROOTPYTHONVENDORSOLINSTALLENGINE =	$(ROOTPYTHONVENDORSOLINSTALL)/engine
+ROOTPYTHONVENDORSOLINSTALLENGINETEST =  $(ROOTPYTHONVENDORSOLINSTALLENGINE)/test
+ROOTPYTHONVENDORSOLINSTALLICT =         $(ROOTPYTHONVENDORSOLINSTALL)/ict
+ROOTPYTHONVENDORSOLINSTALLJS2AI=	$(ROOTPYTHONVENDORSOLINSTALL)/js2ai
+ROOTPYTHONVENDORSOLINSTALLMANIFEST=	$(ROOTPYTHONVENDORSOLINSTALL)/manifest
+ROOTPYTHONVENDORSOLINSTALLMANINPUT= \
+				$(ROOTPYTHONVENDORSOLINSTALL)/manifest_input
+ROOTPYTHONVENDORSOLINSTALLTARGET =	$(ROOTPYTHONVENDORSOLINSTALL)/target
+ROOTPYTHONVENDORSCI =	$(ROOTPYTHONVENDORSOLINSTALL)/sysconfig
+ROOTPYTHONVENDORSCIPROF =	$(ROOTPYTHONVENDORSCI)/profile
+ROOTPYTHONTERMUI=	$(ROOTPYTHONVENDOR)/terminalui
+ROOTPYTHONVENDORSOLINSTALLTARGETLIBADM=$(ROOTPYTHONVENDORSOLINSTALLTARGET)/libadm
+ROOTPYTHONVENDORSOLINSTALLTARGETLIBBE = $(ROOTPYTHONVENDORSOLINSTALLTARGET)/libbe
+ROOTPYTHONVENDORSOLINSTALLTARGETLIBDEVINFO = $(ROOTPYTHONVENDORSOLINSTALLTARGET)/libdevinfo
+ROOTPYTHONVENDORSOLINSTALLTARGETLIBDISKMGT = $(ROOTPYTHONVENDORSOLINSTALLTARGET)/libdiskmgt
+ROOTPYTHONVENDORSOLINSTALLTARGETLIBNVPAIR = $(ROOTPYTHONVENDORSOLINSTALLTARGET)/libnvpair
+ROOTPYTHONVENDORSOLINSTALLTARGETSHADOW = $(ROOTPYTHONVENDORSOLINSTALLTARGET)/shadow
+ROOTPYTHONVENDORSOLINSTALLTI=	$(ROOTPYTHONVENDORSOLINSTALL)/text_install
+ROOTPYTHONVENDORSOLINSTALLGUI=	$(ROOTPYTHONVENDORSOLINSTALL)/gui_install
+ROOTPYTHONVENDORINSTALLTRANSFER =       $(ROOTPYTHONVENDORSOLINSTALL)/transfer
+ROOTPYTHONVENDORBOOTMGMT=	$(ROOTPYTHONVENDOR)/bootmgmt
+ROOTPYTHONVENDORBOOTMGMTBKND=	$(ROOTPYTHONVENDORBOOTMGMT)/backend
+ROOTPYTHONVENDORBOOTMGMTBKNDAUTOGEN=	$(ROOTPYTHONVENDORBOOTMGMTBKND)/autogen
+ROOTPYTHONVENDORBOOTMGMTBKNDBOOTVARS=	$(ROOTPYTHONVENDORBOOTMGMTBKND)/bootvars
+ROOTPYTHONVENDORBOOTMGMTBKNDBOOTVARSSPARC=	$(ROOTPYTHONVENDORBOOTMGMTBKNDBOOTVARS)/sparc
+ROOTPYTHONVENDORBOOTMGMTBKNDBOOTVARSX86=	  $(ROOTPYTHONVENDORBOOTMGMTBKNDBOOTVARS)/x86
+ROOTPYTHONVENDORBOOTMGMTBKNDFW=	$(ROOTPYTHONVENDORBOOTMGMTBKND)/fw
+ROOTPYTHONVENDORBOOTMGMTBKNDLOADER=	$(ROOTPYTHONVENDORBOOTMGMTBKND)/loader
+ROOTAUTOINST=		$(ROOT)/usr/share/auto_install
+ROOTAUTOINSTMANIFEST=	$(ROOTAUTOINST)/manifest
+ROOTAUTOINSTSCPROFILES=	$(ROOTAUTOINST)/sc_profiles
+ROOTGUIINST=		$(ROOT)/usr/share/gui-install
+ROOTSBIN=		$(ROOT)/sbin
+ROOTUSRBIN=		$(ROOT)/usr/bin
+ROOTUSRSHARE=		$(ROOT)/usr/share
+ROOTUSRSHAREINSTALL=	$(ROOTUSRSHARE)/install
+ROOTUSRSHARESC=		$(ROOTUSRSHARE)/sysconfig
+ROOTUSRSHARESCHELP=	$(ROOTUSRSHARESC)/help
+ROOTUSRSHARESCHELPC=	$(ROOTUSRSHARESCHELP)/C
+ROOTUSRSHARESCXSLT=	$(ROOTUSRSHARESC)/xslt
+ROOTUSRSHARETI=		$(ROOTUSRSHARE)/text-install
+ROOTUSRSHARETIHELP=	$(ROOTUSRSHARETI)/help
+ROOTUSRSHARETIHELPC=	$(ROOTUSRSHARETIHELP)/C
+ROOTUSRLIB=		$(ROOT)/usr/lib
+ROOTUSRLIB64=		$(ROOT)/usr/lib/$(MACH64)
+ROOTUSRLIBBOOT=		$(ROOTUSRLIB)/boot
+ROOTUSRLIBMSGS=		$(ROOTUSRLIB)/locale/C/LC_MESSAGES
+ROOTUSRSBIN=		$(ROOT)/usr/sbin
+ROOTVAR=		$(ROOT)/var
+
+INSTMSGS=		$(MSG_DOMAIN:%=$(ROOTUSRLIBMSGS)/%.po)
+ROOTSBINPROG=		$(PROG:%=$(ROOTSBIN)/%)
+ROOTUSRINCLEXP=		$(EXPHDRS:%=$(ROOTINCADMIN)/%)
+ROOTUSRSBINPROG=	$(PROG:%=$(ROOTUSRSBIN)/%)
+
+FILEMODE=		644
+EXECMODE=		755
+DIRMODE=		755
+OWNER=			bin
+GROUP=			bin
+
+# DTD File Versions
+DTD_VERSION_AI = 1
+DTD_VERSION_DC = 1
+DTD_VERSION_BOOT_MODS = 1
+DTD_VERSION_CONFIGURATION = 1
+DTD_VERSION_EXECUTION = 1
+DTD_VERSION_MEDIA_TRANSFER = 1
+DTD_VERSION_SOFTWARE = 1
+DTD_VERSION_TARGET = 1
+
+# CH toggles operations restricted to root.  It is normally set to `#'.  When
+# running as root, it should be set to `' (null) in your environment.
+# RELEASE_BUILD should be cleared for RE builds.  This is completely
+# independent of CH.  NOT_RELEASE_BUILD is exactly what the name implies.
+#
+# The declaration POUND_SIGN is always '#'. This is needed to get around the
+# make feature that '#' is always a comment delimiter, even when escaped or
+# quoted. We use this macro expansion method to get POUND_SIGN rather than
+# always breaking out a shell because the general case can cause a noticable
+# slowdown in build times when so many Makefiles include Makefile.master.
+#
+# While the majority of users are expected to override the setting below
+# with an env file (via nightly or bldenv), if you aren't building that way
+# (ie, you're using "ws" or some other bootstrapping method) then you need
+# this definition in order to avoid the subshell invocation mentioned above.
+
+PRE_POUND=                              pre\#
+POUND_SIGN=                             $(PRE_POUND:pre\%=%)
+
+CH=					$(POUND_SIGN)
+NOT_RELEASE_BUILD=
+RELEASE_BUILD=				$(POUND_SIGN)
+$(RELEASE_BUILD)NOT_RELEASE_BUILD=	$(POUND_SIGN)
+SRU_BUILD=                              $(POUND_SIGN)
+
+INS.file=	$(RM) $@; $(INS) -s -m $(FILEMODE) -f $(@D) $<
+$(CH)INS.file=	$(INS) -m $(FILEMODE) -u $(OWNER) -g $(GROUP) -f $(@D) $<
+INS.exec=	$(RM) $@; $(INS) -s -m $(EXECMODE) -f $(@D) $<
+$(CH)INS.exec=	$(INS) -m $(EXECMODE) -u $(OWNER) -g $(GROUP) -f $(@D) $<
+INS.dir=	$(INS) -d -m $(DIRMODE) $@
+$(CH)INS.dir=	$(INS) -d -m $(DIRMODE) -u $(OWNER) -g $(GROUP) $@
+INS.rename=	$(INS.file); $(MV) $(@D)/$(<F) $@
+INSTALL=	$(INS.file)
+
+#
+# Python bakes the mtime of the .py file into the compiled .pyc and
+# rebuilds if the baked-in mtime != the mtime of the source file
+# (rather than only if it's less than), thus when installing python
+# files we must make certain to not adjust the mtime of the source
+# (.py) file.
+#
+INS.pyfile=     $(INS.file); $(TOUCH) -r $< $@
+
+__GNUC=			$(POUND_SIGN)
+__GNUC64=		$(__GNUC)
+i386_CC=                $(ONBLD_TOOLS)/bin/$(MACH)/cw -_cc
+$(__GNUC)i386_CC=       $(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
+i386_CC=		$(SPRO_VROOT)/bin/cc
+i386_LD=		/usr/ccs/bin/ld
+amd64_CC=               $(ONBLD_TOOLS)/bin/$(MACH)/cw -_cc
+$(__GNUC64)amd64_CC=    $(ONBLD_TOOLS)/bin/$(MACH)/cw -_gcc
+amd64_CC=               $(SPRO_VROOT)/bin/cc
+amd64_LD=		/usr/ccs/bin/ld
+
+CC=	$($(MACH)_CC)
+LD=	$($(MACH)_LD)
+
+#MACH=	$(TARGET_MACH:-%=%)
+#ARCH=	$(TARGET_ARCH:-%=%)
+MACH64=	$(MACH:i386=amd64)
+
+i386_BUILD64=
+
+BUILD64=  $($(MACH)_BUILD64)
+
+i386_XARCH=
+amd64_XARCH=    -m64 -Ui386 -U__i386
+LDBITS=		-32
+
+# Message catalog build rule for packaging commands.
+BUILD.po= $(XGETTEXT) -d msg.$$$$ $(XGETFLAGS) $<.i ;\
+	$(CAT) msg.$$$$.po | sed "/^domain/d" > $@ ;\
+	$(RM) msg.$$$$.po $<.i
+
+POFILE=         $(PROG).po
+MSGROOT=        $(ROOT)/catalog
+MSGDOMAIN=      $(MSGROOT)/$(TEXT_DOMAIN)
+CLOBBERFILES += $(POFILE) $(POFILES)
+
+# The use of TEXT_DOMAIN here is strange, but required for the normal
+# message catalog build rules.  (This would be better done with a
+# conditional on CFLAGS, but that would require significant Makefile
+# effort.)
+COMPILE.po=	$(CC) $(CFLAGS) \
+		    $(CPPFLAGS:\"$(TEXT_DOMAIN)\"=$(TEXT_DOMAIN)) -E -C
+
+i386_COPTFLAG=	-O
+amd64_COPTFLAG=	-xO3
+
+i386_CFLAGS=	$(i386_XARCH)
+amd64_CFLAGS=	$(amd64_XARCH)
+
+# CPPFLAGS.master allows values to be prepended to CPPFLAGS.
+CPPFLAGS.master= -I$(ROOT)/usr/include -I$(ONINCDIR)
+CPPFLAGS= $(CPPFLAGS.master)
+
+COPTFLAG=	$($(MACH)_COPTFLAG)
+COPTFLAG64=	$($(MACH64)_COPTFLAG)
+CFLAGS=		$(COPTFLAG) $($(MACH)_CFLAGS)
+CFLAGS64=	$(COPTFLAG64) $($(MACH64)_CFLAGS)
+
+COMPILE.c=	$(CC) $(CFLAGS) $(CPPFLAGS) -c
+COMPILE64.c=	$(CC) $(CFLAGS64) $(CPPFLAGS) -c
+
+LINK.c=		$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS)
+LINK64.c=	$(CC) $(CFLAGS64) $(CPPFLAGS) $(LDFLAGS)
+
+# Rules (normally from default.mk) and macros which are used for post
+# processing files. Normally, these do stripping of the comment section
+# automatically.
+#    RELEASE_CM:	Should be edited if std format changes.
+#    POST_PROCESS_O:	Post-processing for `.o' files.
+#    POST_PROCESS_A:	Post-processing for `.a' files (currently null).
+#    POST_PROCESS_SO:	Post-processing for `.so' files.
+#    POST_PROCESS:	Post-processing for executable files (no suffix).
+# Note that these macros are not completely generalized as they are to be
+# used with the file name to be processed following.
+#
+# It is left as an exercise to Release Engineering to embellish the generation
+# of the release comment string.
+#
+#	If this is a development build:
+#		delete the comment section (mcs -d)
+#		add the standard comment (mcs -a $(RELEASE_CM))
+#		add the development specific comment (mcs -a $(DEV_CM))
+#
+#	If this is a release build:
+#		delete the comment section (mcs -d)
+#		add the standard comment (mcs -a $(RELEASE_CM))
+#
+#	Sigh,... The declaration POUND_SIGN is always '#'. This is just needed
+#	to get around the make **bug** that '#' is always a comment delimiter,
+#	even when escaped of quoted.
+#
+POUND_SIGN:sh=	/usr/bin/echo \\043
+
+# The following list of macros are used in the definition of RELEASE_CM
+# which is used to label all binaries in the build:
+#
+#       RELEASE         Specific release of the build, eg: 5.2
+#       RELEASE_MAJOR   Major version number part of $(RELEASE)
+#       RELEASE_MINOR   Minor version number part of $(RELEASE)
+#       VERSION         Version of the build (alpha, beta, Generic)
+#       PATCHID         If this is a patch this value should contain
+#                       the patchid value (eg: "Generic 100832-01"), otherwise
+#                       it will be set to $(VERSION)
+#       RELEASE_DATE    Date of the Release Build
+#       PATCH_DATE      Date the patch was created, if this is blank it
+#                       will default to the RELEASE_DATE
+#
+RELEASE_MAJOR=  5
+RELEASE_MINOR=  11
+RELEASE=        $(RELEASE_MAJOR).$(RELEASE_MINOR)
+VERSION=        OmniOS Dev
+PATCHID=        $(VERSION)
+RELEASE_DATE=   release date not set
+PATCH_DATE=     $(RELEASE_DATE)
+RELEASE_CM=     "@($(POUND_SIGN))OmniOS $(RELEASE) $(PATCHID) $(PATCH_DATE)"
+DEV_CM=         "@($(POUND_SIGN))OmniOS Internal Development: non-nightly build"
+
+PROCESS_COMMENT=	@?mcs -d -a $(RELEASE_CM) -a $(DEV_CM)
+$(RELEASE_BUILD)PROCESS_COMMENT=	@?mcs -d -a $(RELEASE_CM)
+
+POST_PROCESS_O=		$(PROCESS_COMMENT) $@
+POST_PROCESS_A=
+POST_PROCESS_SO=	$(PROCESS_COMMENT) $@
+POST_PROCESS=           $(PROCESS_COMMENT) $@
+
+$(RELEASE_BUILD)POST_PROCESS= $(PROCESS_COMMENT) $@ ;\
+				strip $@
+
+#
+# The repositories will be created with these publisher settings.  To
+# update an image to the resulting repositories, this must match the
+# publisher name provided to "pkg set-publisher."
+#
+PKGPUBLISHER_REDIST=    install-nightly
+PKGPUBLISHER_NONREDIST= install-extra
+
+
+#	Default build rules which perform comment section post-processing.
+#
+.c:
+	$(PURIFY) $(LINK.c) -o $@ $< $(LDLIBS)
+	$(POST_PROCESS)
+.c.o:
+	$(PURIFY) $(COMPILE.c) $(OUTPUT_OPTION) $<
+	$(POST_PROCESS_O)
+.c.a:
+	$(PURIFY) $(COMPILE.c) -o $% $<
+	$(PROCESS_COMMENT) $%
+	$(AR) $(ARFLAGS) $@ $%
+	$(RM) $%
+.cc:
+	$(PURIFY) $(LINK.cc) -o $@ $< $(LDLIBS)
+	$(POST_PROCESS)
+.cc.o:
+	$(PURIFY) $(COMPILE.cc) $(OUTPUT_OPTION) $<
+	$(POST_PROCESS_O)
+.cc.a:
+	$(PURIFY) $(COMPILE.cc) -o $% $<
+	$(PROCESS_COMMENT) $%
+	$(AR) $(ARFLAGS) $@ $%
+	$(RM) $%
+
+.C:
+	$(PURIFY) $(LINK.cc) -o $@ $< $(LDLIBS)
+	$(POST_PROCESS)
+.C.o:
+	$(PURIFY) $(COMPILE.cc) $(OUTPUT_OPTION) $<
+	$(POST_PROCESS_O)
+.C.a:
+	$(PURIFY) $(COMPILE.cc) -o $% $<
+	$(PROCESS_COMMENT) $%
+	$(AR) $(ARFLAGS) $@ $%
+	$(RM) $%
+
+.s.o:
+	$(COMPILE.s) -o $@ $<
+	$(POST_PROCESS_O)
+.s.a:
+	$(COMPILE.s) -o $% $<
+	$(PROCESS_COMMENT) $%
+	$(AR) $(ARFLAGS) $@ $%
+	$(RM) $%
+.y:
+	$(YACC.y) $<
+	$(LINK.c) -o $@ y.tab.c $(LDLIBS)
+	$(POST_PROCESS)
+	$(RM) y.tab.c
+.y.o:
+	$(YACC.y) $<
+	$(COMPILE.c) -o $@ y.tab.c
+	$(POST_PROCESS_O)
+	$(RM) y.tab.c
+.l:
+	$(RM) $*.c
+	$(LEX.l) $< > $*.c
+	$(LINK.c) -o $@ $*.c -ll $(LDLIBS)
+	$(POST_PROCESS)
+	$(RM) $*.c
+.l.o:
+	$(RM) $*.c
+	$(LEX.l) $< > $*.c
+	$(COMPILE.c) -o $@ $*.c
+	$(POST_PROCESS_O)
+	$(RM) $*.c
+
+.po:
+	$(COMPILE.po) $<  > $<.i
+	$(BUILD.po)
+
+.c.po:
+	$(COMPILE.po) $<  > $<.i
+	$(BUILD.po)
+
+.ksh:
+	$(RM) $@
+	cat $< > $@
+	chmod +x $@
+.ksh~:
+	$(GET) $(GFLAGS) -p $< > $*.ksh
+	cp $*.ksh $@
+	chmod a+x $@
+
+.src:
+	$(RM) $@
+	$(SED)	-e "s,@DTD_VERSION_AI@,$(DTD_VERSION_AI),g" \
+		-e "s,@DTD_VERSION_DC@,$(DTD_VERSION_DC),g" \
+		-e "s,@DTD_VERSION_BOOT_MODS@,$(DTD_VERSION_BOOT_MODS),g" \
+		-e "s,@DTD_VERSION_CONFIGURATION@,$(DTD_VERSION_CONFIGURATION),g" \
+		-e "s,@DTD_VERSION_EXECUTION@,$(DTD_VERSION_EXECUTION),g" \
+		-e "s,@DTD_VERSION_MEDIA_TRANSFER@,$(DTD_VERSION_MEDIA_TRANSFER),g" \
+		-e "s,@DTD_VERSION_SOFTWARE@,$(DTD_VERSION_SOFTWARE),g" \
+		-e "s,@DTD_VERSION_TARGET@,$(DTD_VERSION_TARGET),g" \
+ 		$< > $@
+
+.SUFFIXES:    $(SUFFIXES) .po .ksh .ksh~ .src

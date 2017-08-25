@@ -1,0 +1,155 @@
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+# Copyright (c) 2007, 2011, Oracle and/or its affiliates. All rights reserved.
+#
+#
+# The list is built of owner-group combinations.
+#
+# It is easier to think in terms of directory names without the ROOT macro
+# prefix.  ROOTDIRS is TARGETDIRS with ROOT prefixes.  It is necessary
+# to work with ROOT prefixes when controlling conditional assignments.
+
+TARGETDIRS=	$(ROOT.SYS) $(ROOT.BIN) $(OTHERS)
+
+ROOT.SYS= \
+	/etc \
+	/etc/gconf \
+	/etc/gconf/schemas \
+	/etc/svc \
+	/etc/svc/profile \
+	/mnt \
+	/mnt/misc \
+	/sbin \
+	/usr \
+	/usr/share
+	
+ROOT.BIN= \
+	/lib \
+	/lib/svc \
+	/lib/svc/manifest \
+	/lib/svc/manifest/application \
+	/lib/svc/manifest/system \
+	/lib/svc/manifest/system/device \
+	/lib/svc/manifest/system/filesystem \
+	/lib/svc/manifest/system/install \
+	/lib/svc/method \
+	/lib/svc/share \
+	/usr/bin \
+	/usr/include \
+	/usr/lib \
+	/usr/lib/64 \
+	/usr/lib/install \
+	/usr/lib/installadm \
+	/usr/lib/locale \
+	/usr/lib/locale/C \
+	/usr/lib/locale/C/LC_MESSAGES \
+	/usr/lib/python2.7 \
+	/usr/lib/python2.7/vendor-packages \
+	/usr/lib/python2.7/vendor-packages/osol_install \
+	/usr/lib/python2.7/vendor-packages/osol_install/64 \
+	/usr/lib/python2.7/vendor-packages/osol_install/auto_install \
+	/usr/lib/python2.7/vendor-packages/osol_install/profile \
+	/usr/lib/python2.7/vendor-packages/solaris_install/auto_install \
+	/usr/lib/python2.7/vendor-packages/solaris_install/auto_install/checkpoints \
+	/usr/lib/python2.7/vendor-packages/solaris_install/distro_const \
+	/usr/lib/python2.7/vendor-packages/solaris_install/distro_const/checkpoints \
+	/usr/lib/python2.7/vendor-packages/solaris_install/distro_const/checkpoints/defaultfiles \
+	/usr/lib/python2.7/vendor-packages/solaris_install/distro_const/checkpoints/xslt \
+	/usr/lib/python2.7/vendor-packages/solaris_install \
+	/usr/lib/python2.7/vendor-packages/solaris_install/64 \
+	/usr/lib/python2.7/vendor-packages/solaris_install/boot \
+	/usr/lib/python2.7/vendor-packages/solaris_install/configuration \
+	/usr/lib/python2.7/vendor-packages/solaris_install/data_object \
+	/usr/lib/python2.7/vendor-packages/solaris_install/engine \
+	/usr/lib/python2.7/vendor-packages/solaris_install/engine/test \
+	/usr/lib/python2.7/vendor-packages/solaris_install/ict \
+	/usr/lib/python2.7/vendor-packages/solaris_install/js2ai \
+	/usr/lib/python2.7/vendor-packages/solaris_install/manifest \
+	/usr/lib/python2.7/vendor-packages/solaris_install/manifest_input \
+	/usr/lib/python2.7/vendor-packages/solaris_install/sysconfig \
+	/usr/lib/python2.7/vendor-packages/solaris_install/sysconfig/profile \
+	/usr/lib/python2.7/vendor-packages/solaris_install/target \
+	/usr/lib/python2.7/vendor-packages/solaris_install/target/libadm \
+	/usr/lib/python2.7/vendor-packages/solaris_install/target/libbe \
+	/usr/lib/python2.7/vendor-packages/solaris_install/target/libdevinfo \
+	/usr/lib/python2.7/vendor-packages/solaris_install/target/libdiskmgt \
+	/usr/lib/python2.7/vendor-packages/solaris_install/target/libnvpair \
+	/usr/lib/python2.7/vendor-packages/solaris_install/target/shadow \
+	/usr/lib/python2.7/vendor-packages/solaris_install/text_install \
+	/usr/lib/python2.7/vendor-packages/solaris_install/transfer \
+	/usr/lib/python2.7/vendor-packages/terminalui \
+	/usr/sbin \
+	/usr/share/auto_install \
+	/usr/share/auto_install/manifest \
+	/usr/share/auto_install/sc_profiles \
+	/usr/share/distro_const \
+	/usr/share/distro_const/profile \
+	/usr/share/distro_const/sort \
+	/usr/share/install \
+	/usr/share/lib \
+	/usr/share/lib/xml \
+	/usr/share/lib/xml/rng \
+	/usr/share/lib/xml/rng/auto_install \
+	/usr/share/man \
+	/usr/share/man/man1m \
+	/usr/share/man/man4 \
+	/usr/share/sysconfig \
+	/usr/share/sysconfig/xslt \
+	/usr/share/text-install \
+	/usr/share/text-install/help \
+	/usr/share/text-install/help/C \
+	/usr/snadm \
+	/usr/snadm/bin 
+
+
+OTHERS= \
+	/opt \
+	/opt/install-test \
+	/opt/install-test/bin \
+	/usr/include/admin \
+	/usr/snadm/lib \
+	/usr/snadm/lib/64 \
+	/var/ai \
+	/var/ai/image-server \
+	/var/ai/image-server/cgi-bin \
+	/var/installadm \
+	/var/installadm/ai-webserver \
+	/var/installadm/ai-webserver/AI_data \
+	/var/installadm/ai-webserver/AI_files
+
+# prepend the ROOT prefix
+
+ROOTDIRS=	$(TARGETDIRS:%=$(ROOT)%)
+
+# conditional assignments
+#
+# Target directories with non-default values for owner and group must
+# be referenced here, using their fully-prefixed names, and the non-
+# default values assigned.  If a directory is mentioned above and not
+# mentioned below, it has default values for attributes.
+#
+# The default values for OWNER, GROUP, and DIRMODE are specified in
+# /usr/src/Makefile.master.
+#
+$(ROOT.SYS:%=$(ROOT)%) $(ROOT.BIN:%=$(ROOT)%) :=	OWNER= root
+
+$(ROOT.SYS:%=$(ROOT)%) :=	GROUP= sys
+

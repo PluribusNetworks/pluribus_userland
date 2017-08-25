@@ -20,8 +20,6 @@ COMPONENT_NAME=		caiman
 COMPONENT_SRC=		$(COMPONENT_NAME)
 PUB_SUFFIX=		.pluribusnetworks.com
 
-GIT=git
-GIT_REPO=anon@src.omniti.com:~omnios/core/caiman
 DMAKE=/usr/bin/dmake
 FETCH=$(WS_TOOLS)/userland-fetch
 SOURCE_DIR=$(COMPONENT_DIR)/caiman
@@ -31,16 +29,7 @@ DEBUG=no
 COMPONENT_REVISION=$(shell cd $(COMPONENT_SRC); git rev-list HEAD --count)
 
 $(SOURCE_DIR)/.downloaded: 
-	@[ -d $(SOURCE_DIR) ] || \
-	$(GIT) clone $(GIT_REPO) $(SOURCE_DIR)
-	@cd $(SOURCE_DIR); $(GIT) log -1 --format=%H > .downloaded
-
-update:
-	@[ -d $(SOURCE_DIR) ] || \
-	$(GIT) clone $(GIT_REPO) $(SOURCE_DIR)
-	cd $(SOURCE_DIR); $(GIT) pull $(GIT_REPO); \
-	  [ "$$($(GIT) log -1 --format=%H)" == "$$(cat .downloaded)" ] || \
-	  $(GIT) log -1 --format=%H > .downloaded
+	/usr/bin/cp -rp@ $(COMPONENT_DIR)/caiman_src/caiman $(COMPONENT_DIR)
 
 download:: $(SOURCE_DIR)/.downloaded
 

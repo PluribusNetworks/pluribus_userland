@@ -1,0 +1,140 @@
+<!--
+CDDL HEADER START
+
+The contents of this file are subject to the terms of the
+Common Development and Distribution License (the "License").
+You may not use this file except in compliance with the License.
+
+You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+or http://www.opensolaris.org/os/licensing.
+See the License for the specific language governing permissions
+and limitations under the License.
+
+When distributing Covered Code, include this CDDL HEADER in each
+file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+If applicable, add the following below this CDDL HEADER, with the
+fields enclosed by brackets "[]" replaced with your own identifying
+information: Portions Copyright [yyyy] [name of copyright owner]
+
+CDDL HEADER END
+
+Copyright (c) 2010, 2011, Oracle and/or its affiliates. All rights reserved.
+-->
+
+<!DOCTYPE service_bundle SYSTEM "/usr/share/lib/xml/dtd/service_bundle.dtd.1">
+<service_bundle type="profile" name="system configuration">
+    <service name="system/config-user" version="1">
+      <instance name="default" enabled="true">
+        <property_group name="user_account">
+          <propval name="login" value="jack"/>
+          <propval name="password" value="9Nd/cwBcNWFZg"/>
+          <propval name="description" value="default_user"/>
+          <propval name="shell" value="/usr/bin/bash"/>
+          <propval name="gid" value="10"/>
+          <propval name="type" value="normal"/>
+          <propval name="roles" value="root"/>
+          <propval name="profiles" value="System Administrator"/>
+        </property_group>
+        <property_group name="root_account">
+            <propval name="password" value="$5$dnRfcZse$Hx4aBQ161Uvn9ZxJFKMdRiy8tCf4gMT2s2rtkFba2y4"/>
+            <propval name="type" value="role"/>
+        </property_group>
+      </instance>
+    </service>
+
+    <service version="1" name="system/identity">
+      <instance enabled="true" name="node">
+        <property_group name="config">
+           <propval name="nodename" value="solaris"/>
+        </property_group>
+      </instance>
+    </service>
+
+    <service name="system/console-login" version="1">
+      <instance name="default" enabled="true">
+        <property_group name="ttymon">
+          <propval name="terminal_type" value="sun"/>
+        </property_group>
+      </instance>
+    </service>
+
+    <service name="system/keymap" version="1">
+      <instance name="default" enabled="true">
+        <property_group name="keymap">
+          <propval name="layout" value="US-English"/>
+        </property_group>
+      </instance>
+    </service>
+
+    <service name="system/timezone" version="1">
+      <instance name="default" enabled="true">
+        <property_group name="timezone">
+          <propval name="localtime" value="UTC"/>
+        </property_group>
+      </instance>
+    </service>
+
+    <service name="system/environment" version="1">
+      <instance name="init" enabled="true">
+        <property_group name="environment">
+          <propval name="LANG" value="en_US.UTF-8"/>
+        </property_group>
+      </instance>
+    </service>
+
+    <service name="network/physical" version="1">
+        <instance name="default" enabled="true">
+          <property_group name="netcfg" type="application">
+              <propval name="active_ncp" type="astring" value="DefaultFixed"/>
+          </property_group>
+        </instance>
+    </service>
+
+    <service name="network/install" version="1" type="service">
+        <instance name="default" enabled="true">
+            <property_group name="install_ipv4_interface" type="application">
+                <propval name="name" type="astring" value="net0/v4"/>
+                <propval name="address_type" type="astring" value="static"/>
+                <propval name="static_address" type="net_address_v4" value="x.x.x.x/n"/>
+                <propval name="default_route" type="net_address_v4" value="x.x.x.x"/>
+            </property_group>
+
+            <property_group name="install_ipv6_interface" type="application">
+                <propval name="name" type="astring" value="net0/v6"/>
+                <propval name="address_type" type="astring" value="addrconf"/>
+                <propval name="stateless" type="astring" value="yes"/>
+                <propval name="stateful" type="astring" value="yes"/>
+            </property_group>
+        </instance>
+    </service>
+
+    <service name="network/dns/client" version="1">
+        <property_group name="config">
+            <property name="nameserver">
+                <net_address_list>
+                    <value_node value="x.x.x.x"/>
+                </net_address_list>
+            </property>
+            <property name="search">
+                <astring_list>
+                    <value_node value="example.com"/>
+                </astring_list>
+            </property>
+        </property_group>
+        <instance name="default" enabled="true"/>
+    </service>
+
+    <service version="1" name="system/name-service/switch">
+        <property_group name="config">
+            <propval name="default" value="files"/>
+            <propval name="host" value="files dns mdns"/>
+            <propval name="printer" value="user files"/>
+        </property_group>
+        <instance enabled="true" name="default"/>
+    </service>
+
+    <service version="1" name="system/name-service/cache">
+        <instance enabled="true" name="default"/>
+    </service>
+</service_bundle>
+

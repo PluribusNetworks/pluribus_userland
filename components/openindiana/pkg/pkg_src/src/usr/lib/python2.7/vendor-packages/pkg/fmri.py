@@ -122,8 +122,11 @@ class PkgFmri(object):
 
                 if veridx != None:
                         try:
-                                self.version = Version(fmri[veridx + 1:],
-                                    build_release)
+                                if fmri[veridx + 1:] == "latest":
+                                        self.version = None
+                                else:
+                                        self.version = Version(fmri[veridx + 1:],
+                                            build_release)
                         except VersionError, iv:
                                 raise IllegalFmri(fmri, IllegalFmri.BAD_VERSION,
                                     nested_exc=iv)

@@ -1,0 +1,3 @@
+include $(SRC)/Makefile.master.64
+TARGETMACH=     $(MACH64)
+

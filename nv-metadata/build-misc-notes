@@ -279,3 +279,15 @@ pkg image-update
 ./build.sh developer/bcel
 ./build.sh developer/ant
 ./build.sh developer/maven
+./build.sh scientific/openblas
+./build.sh python/numpy
+./build.sh python/pyrex
+./build.sh wget
+./build.sh which
+./build.sh ggrep
+./build.sh gawk
+./build.sh sed
+./build.sh gtar
+./build.sh patch
+./build.sh x11/constype
+./build.sh x11/libpciaccess

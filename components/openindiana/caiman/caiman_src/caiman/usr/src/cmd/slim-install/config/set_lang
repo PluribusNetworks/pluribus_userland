@@ -1,0 +1,219 @@
+#!/usr/bin/ksh93 
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+#
+# Copyright (c) 2009, 2011, Oracle and/or its affiliates. All rights reserved.
+#
+
+export PATH=/usr/bin:/usr/sbin
+
+# exit on any errors
+set -o errexit
+# enable gmacs mode for editing "read" values
+set -o gmacs
+
+# global variables
+integer i j
+
+# external file contains fixedlist
+typeset -r fixedlistfile='/usr/share/gui-install/langs_localized'
+
+#
+# If the first argument is: "default" the default choice will be 
+# selected without prompting the user.
+#
+pickup_default_choice=false
+[[ ${#*} -eq 1 && "$1" == "default" ]] && pickup_default_choice=true
+
+# Read integer value. Don't alter the choice for invalid input.
+# Added for "compatibilty" to "/usr/bin/kbd -s". 
+# Note: This is different from other curses/ncurses/GTK+/Motif behaviour.
+# (Callers should really just use "read -v")
+function readintval
+{
+	nameref intval="$1" # integer return value
+	typeset prompt="$2"
+	typeset strval=""
+	
+	# Read input
+	read "strval?${prompt}" || return 1
+	
+	# Just return with success (and keep the default value of "intval")
+	# if user just hit return
+	if [[ "${strval}" = "" ]] ; then
+		return 0
+	fi
+
+	# Is strval a number ?
+	[[ "${strval}" = ~(Elr)[[:digit:]]* ]] || return 1
+
+	# convert value
+	(( intval=${strval} ))
+
+	return 0
+}
+
+# Configure locale via environment/LANG property
+# of environment:init smf service.
+function set_locale
+{
+	typeset lang="$1"
+
+	svccfg -s environment:init setprop environment/LANG = "$lang"
+	# Remove /etc/default/init file. It's re-generated
+	# during refresh of environment:init smf service.
+	rm /etc/default/init
+
+	svcadm refresh environment:init
+
+	return 0
+}
+
+# list of suported languages
+typeset languages=(
+        typeset -a fixedlist
+	typeset -a list
+        integer list_len        # number of languages
+        integer default=0
+)
+
+# read fixedlist from definition file
+if [ -f "${fixedlistfile}" ]; then
+	# definition file is available
+	(( i=0 ))
+	cat "${fixedlistfile}" | while true; do
+		typeset lang=""
+		typeset name=""
+
+		IFS=':' read lang name || break
+
+		# skip comment line
+		expr "${lang}" : '#' > /dev/null && continue
+
+		languages.fixedlist[i]=( name="${name}" lang="${lang}" )
+		(( i++ ))
+	done
+else
+	# definition file is not available - use static legacy list
+        languages.fixedlist=(
+                [0]=(  name="English"				lang="en_US.UTF-8"	)
+        )
+fi
+
+languages.list_len=${#languages.fixedlist[@]}
+
+# remove entries which are not supported
+for (( j=0, i=0 ; i < languages.list_len ; i++ )) ; do
+        nameref node=languages.fixedlist[$i]
+
+	# check whether we have a module for this locale ("C" and "POSIX"
+	# are always supported)
+        if [[ ! -f "/usr/lib/locale/${node.lang}/LC_COLLATE/LCL_DATA" && \
+	      "${node.lang}" != ~(Elr)(POSIX|C) ]] ; then
+		continue
+	fi
+
+	# "English" is the default
+	if [[ "${node.name}" = "English" ]] ; then
+		(( languages.default=j+1 ))
+	fi
+	
+	languages.list[j]=( name="${node.name}" lang="${node.lang}" )
+	(( j++ ))
+done
+languages.list_len=${#languages.list[@]}
+
+if [[ ${languages.list_len} -eq 0 ]]; then
+	# No language is found.  Default to C.
+	printf "No language is found.  Defaulting to C locale.\n"
+	exit 0
+fi
+
+
+if [[ ${languages.list_len} -eq 1 ]]; then
+	# Only 1 language is available.  Use that language.
+	printf "Only %s found. Selected: %s\n" "${languages.list[0].name}" "${languages.list[0].name}"
+	set_locale "${languages.list[0].lang}"
+	exit 0
+fi
+
+# English is supposed to be the default, but it is not found.
+if [[ ${languages.default} -eq 0 ]]; then
+	if [ ${pickup_default_choice} == true  ] ; then
+		printf "English is not found.  Defaulting to C locale.\n"
+		exit 0
+	else
+		# Adjust default to the first item on the list
+                languages.default=1
+	fi
+fi
+
+# Start with a newline before presenting the choices
+print
+
+integer choice=${languages.default}
+if [ ${pickup_default_choice} != true ] ; then
+	# list supported languages
+	integer LANGUAGES_PER_PAGE=21
+	if [[ ${languages.list_len} -gt ${LANGUAGES_PER_PAGE} ]]; then
+		# list languages in two columns
+		integer percolumn
+		
+		(( percolumn=(${languages.list_len} + 1) / 2 ))
+
+		for (( i=0 ; i < percolumn ; i++ )) ; do
+			nameref node1=languages.list[i]
+			nameref node2=languages.list[i+percolumn]
+			
+			[[ "${node1.name}" != "" ]] && printf "%2d. %-30s" i+1 "${node1.name}"
+			if [[ "${node2.name}" != "" ]]; then
+				printf "%2d. %-30s\n" i+percolumn+1 "${node2.name}"
+			else
+				print
+			fi
+		done
+	else
+		# list languages in one column
+		for (( i=0 ; i < languages.list_len ; i++ )) ; do
+			nameref node=languages.list[i]
+
+			[[ "${node.name}" != "" ]] && printf "%2d. %-30s\n" i+1 "${node.name}"
+		done
+	fi
+
+	# Prompt user to select language and check for valid entry
+	while true ; do
+		readintval choice $"To select the language you wish to use, enter a number [default is ${languages.default}]: " || continue
+
+		# check for valid option
+		(( choice >= 1 && choice <= languages.list_len )) && break
+	done
+
+	printf "User selected: %s\n" "${languages.list[choice-1].name}"
+else
+	printf "Default selected: %s\n" "${languages.list[choice-1].name}"
+fi
+
+# let environment:init smf service populate LANG environment variable
+# with the selected language
+set_locale "${languages.list[choice-1].lang}"
+
+exit 0

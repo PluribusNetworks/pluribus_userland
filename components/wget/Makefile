@@ -23,19 +23,20 @@
 include ../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		wget
-COMPONENT_VERSION=	1.17
+COMPONENT_VERSION=	1.18
 COMPONENT_PROJECT_URL=	http://www.gnu.org/software/wget/
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
-COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
+COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
 COMPONENT_ARCHIVE_HASH=	\
-    sha256:3e04ad027c5b6ebd67c616eec13e66fbedb3d4d8cbe19cc29dadde44b92bda55
+    sha256:b5b55b75726c04c06fe253daec9329a6f1a3c0c1878e3ea76ebfebc139ea9cc1
 COMPONENT_ARCHIVE_URL=	http://ftp.gnu.org/gnu/wget/$(COMPONENT_ARCHIVE)
 COMPONENT_BUGDB=	utility/wget
 
-include ../../make-rules/prep.mk
-include ../../make-rules/configure.mk
-include ../../make-rules/ips.mk
+include $(WS_TOP)/make-rules/prep.mk
+include $(WS_TOP)/make-rules/configure.mk
+include $(WS_TOP)/make-rules/ips.mk
 
+CC += -I/usr/include
 CONFIGURE_ENV += OPENSSL_CFLAGS="-I/usr/include"
 CONFIGURE_ENV.32 += OPENSSL_LIBS="-L/usr/lib -R/usr/lib -lssl -lcrypto"
 CONFIGURE_ENV.64 += OPENSSL_LIBS="-L/usr/lib/$(MACH64) -R/usr/lib/$(MACH64) -lssl -lcrypto"
@@ -49,27 +50,38 @@ CONFIGURE_OPTIONS +=	--with-ssl=openssl
 CONFIGURE_OPTIONS +=	--infodir=$(CONFIGURE_INFODIR)
 CONFIGURE_OPTIONS +=	PATH="$(PATH):/usr/perl5/bin"
 
-# Wget test suite will skip majority of tests with few Perl modules
-# missing on system. By uncommenting following lines it will pass 68
-# tests  out of 70 total tests (2 tests are skipped).
-#URI=URI-1.60
-#WWW=libwww-perl-5.837
-#COMPONENT_TEST_ENV = "http_proxy="
-#COMPONENT_PRE_TEST_ACTION = ( \
-	cd $(COMPONENT_SRC)/tests; \
-	wget http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/$(URI).tar.gz; \
-	wget http://search.cpan.org/CPAN/authors/id/G/GA/GAAS/$(WWW).tar.gz; \
-	gtar --get $(URI)/URI $(URI)/URI.pm \
-	     --strip-components=1 -f $(URI).tar.gz; \
-	gtar --get $(WWW)/lib/HTTP $(WWW)/lib/LWP $(WWW)/lib/LWP.pm \
-	     --strip-components=2 -f $(WWW).tar.gz; )
+# Some tests fail, see http://savannah.gnu.org/bugs/?48281
+# Keep just the final test report
+COMPONENT_TEST_TRANSFORMS += '-ne "/^PASS/p" '
+COMPONENT_TEST_TRANSFORMS += '-ne "/^FAIL/p" '
+COMPONENT_TEST_TRANSFORMS += '-ne "/^===/p" '
+COMPONENT_TEST_TRANSFORMS += '-ne "/^\# /p" '
+COMPONENT_TEST_TRANSFORMS += '-ne "/^See/p" '
+COMPONENT_TEST_TRANSFORMS += '-ne "/^Please/p" '
 
-build:		$(BUILD_32)
+# Master test results are the same for 32-bit and 64-bit, so override
+# here, rather than create multiple identical master files.
+COMPONENT_TEST_MASTER = $(COMPONENT_TEST_RESULTS_DIR)/results-all.master
 
-install:	$(INSTALL_32)
+# Fixup all '<assert.h>' includes since gcc searches /usr/include last
+# and the idioticlly named assert.h in /usr/include/idn prevents
+# inclusion of the correct system assert.h
+COMPONENT_POST_CONFIGURE_ACTION = (cd $(COMPONENT_SRC); \
+	find . \( -name "*.c" -o -name "*.h" \) | while read f; do \
+		gsed 's@<assert.h>@"/usr/include/assert.h"@' -i $$f; \
+	done)
 
-test:		$(TEST_32)
+COMPONENT_PRE_CONFIGURE_ACTION = ($(CLONEY) $(SOURCE_DIR) $(@D))
 
-BUILD_PKG_DEPENDENCIES =	$(BUILD_TOOLS)
+build:		$(BUILD_32_and_64)
 
-include ../../make-rules/depend.mk
+install:	$(INSTALL_32_and_64)
+
+test:		$(TEST_32_and_64)
+
+REQUIRED_PACKAGES += library/libidn
+REQUIRED_PACKAGES += library/pcre
+REQUIRED_PACKAGES += library/security/openssl
+REQUIRED_PACKAGES += library/zlib
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += system/library

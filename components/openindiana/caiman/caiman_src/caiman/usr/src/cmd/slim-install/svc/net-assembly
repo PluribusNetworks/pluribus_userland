@@ -1,0 +1,408 @@
+#!/sbin/sh
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+#
+# Copyright (c) 2009, 2012, Oracle and/or its affiliates. All rights reserved.
+#
+
+# Make sure that the libraries essential to this stage of booting can be found.
+LD_LIBRARY_PATH=/lib; export LD_LIBRARY_PATH
+
+AUTOINSTALL=0
+
+#
+# Text Installer script
+#
+TI_SMF_SETUP="svc:/system/install-setup:default"
+CLI_LOGIN="svc:/system/console-login:default"
+MANIFEST_LOC="svc:/application/manifest-locator:default"
+SVCADM=/usr/sbin/svcadm
+TEXT_FLAG="true"
+
+PRTCONF=/usr/sbin/prtconf
+SED=/usr/bin/sed
+CUT=/usr/bin/cut
+GREP=/usr/bin/grep
+MKDIR=/usr/bin/mkdir
+WGET=/usr/bin/wget
+DHCPINFO=/sbin/dhcpinfo
+TMPFS_MOUNT=/usr/lib/fs/tmpfs/mount
+
+# WGET Options
+# waiting time between retrials is in accordance with the arithmatic progression
+# with first term=0, last term=9, common difference=1
+# these provide for a (60*10 + 45) 645 second window where the image server
+# can be down or otherwise not responsive before the client gives up; while
+# still allowing wget to fail and drop the system to console login for
+# debugging if necessary
+TIMEOUT=60
+TRIES=10
+WAITRETRY=10
+
+# Image Info file (needed for x86 AI, and both for Text Installs)
+IMAGE_INFO=".image_info"
+
+# Sparc installation configuration
+INSTALL_CONF_FILE="install.conf"
+INSTALL_CONF_SPEC="/tmp/$INSTALL_CONF_FILE"
+NETBOOT="/etc/netboot"
+WANBOOT_CONF="$NETBOOT/wanboot.conf"
+SYSTEM_CONF="$NETBOOT/system.conf"
+
+# DHCP Options
+BOOTSERVER="BootSrvA"
+
+. /lib/svc/share/media_include.sh
+. /lib/svc/share/smf_include.sh
+. /lib/svc/share/fs_include.sh
+
+#
+# Exit with SMF_EXIT_OK if not invoked in an Automated Installer
+# environment
+#
+if [ ! is_autoinstall ] ; then
+	exit $SMF_EXIT_OK
+fi
+
+ISA_INFO=$(/sbin/uname -p)
+
+echo "Preparing network image for use" > /dev/msglog
+
+#
+# For SPARC mount wanbootfs which contains wanboot.conf file
+# associated with this client. root_file option defined there
+# points to the boot archive and has following format:
+# root_file=<ai_image>/boot/platform/sun4v/boot_archive
+# We need to extract <ai_image> part, since this is the
+# location of solaris*.zlib archives.
+#
+# For X86, get the install media from the menu.lst 
+#
+if [ "$ISA_INFO" = "sparc" ]; then
+	# check if wanboot provided wanbootfs
+	BOOTFS_DISK="/devices/ramdisk-bootfs:a"
+
+	# create mountpoint for wanbootfs
+	$MKDIR "$NETBOOT"
+
+	if [ $? -ne 0 ] ; then
+		echo "Could not create $NETBOOT directory" > \
+		    /dev/msglog
+
+		exit $SMF_EXIT_ERR_FATAL
+	fi
+
+	# mount wanbootfs which is hsfs(7FS) filesystem
+	$MOUNT -F hsfs -o ro "$BOOTFS_DISK" "$NETBOOT" > \
+	    /dev/msglog 2>&1
+
+	if [ $? -ne 0 ] ; then
+		echo "Could not mount wanbootfs filesystem" > \
+		    /dev/msglog
+
+		exit $SMF_EXIT_ERR_FATAL
+	fi
+
+	# check, if wanboot.conf is present
+	if [ ! -f $WANBOOT_CONF ] ; then
+		echo "$WANBOOT_CONF file not found" > /dev/msglog
+
+		exit $SMF_EXIT_ERR_FATAL
+	fi
+
+	# concatentate host files from system and wanbootfs
+	if [[ -f ${NETBOOT}/etc/hosts ]]; then
+		/usr/bin/cat ${NETBOOT}/etc/hosts >> /etc/inet/hosts
+	fi
+
+	# extract path to directory containing AI image
+	ai_image_dir=$($GREP "^root_file" $WANBOOT_CONF | \
+	    $CUT -d '=' -f 2 | \
+	    $SED -e s-boot/platform/sun4v/boot_archive--)
+
+	if [ -z "$ai_image_dir" ] ; then
+		echo "Could not obtain location of AI image" > \
+		    /dev/msglog
+
+		exit $SMF_EXIT_ERR_FATAL
+	fi
+
+	#
+	# extract address of AI server from root_server option
+	# It is in following format:
+	# root_server=http://<ai_server>:<port>/<path_to_wanboot-cgi>
+	#
+	ai_server=$($GREP "^root_server" $WANBOOT_CONF | \
+	    $CUT -d '=' -f 2 | $CUT -d '/' -f 1-3)
+
+	if [ -z "$ai_server" ] ; then
+		echo "Could not obtain address of AI server" > \
+		    /dev/msglog
+
+		exit $SMF_EXIT_ERR_FATAL
+	fi
+
+	MEDIA="$ai_server$ai_image_dir"
+	
+	#
+	# Check bootargs:
+	#  install: If the install flag is present in the bootargs, then
+	#           it will be an AI install. Set TEXT_FLAG to "false".
+	#  livessh: If bootargs contain livessh or livessh=enable, set
+	#               LIVESSH_ENABLE="enable".
+	#           If bootargs contain livessh=<anything_but_enable>,
+	#               set LIVESSH_ENABLE="disable"
+	#
+	LIVESSH_ENABLE=""
+	set -- `$PRTCONF -vp | $GREP "bootargs" | $CUT -f 2 -d\'`
+	while (( $# > 0 )) ; do
+		case $1 in
+
+		install)
+			TEXT_FLAG="false"
+			shift
+			;;
+		livessh*)
+			LIVESSH_ENABLE="disable"
+			if [ "$1" = "livessh" ]; then
+				LIVESSH_ENABLE="enable"
+			else
+				case $(print $1 | $CUT -f 1 -d=) in
+
+				livessh)
+					value=$(print $1 | $CUT -f 2 -d=)
+					if [ "$value" = "enable" ]; then
+						LIVESSH_ENABLE="enable"
+					fi
+					;;
+				*)
+					;;
+				esac
+			fi
+			shift
+			;;
+		*)
+			shift
+			;;
+		esac
+	done
+
+
+else
+	# Get the install media data to use in http url
+	MEDIA=`/sbin/devprop -s install_media`
+	# if the AI server is the $serverIP keyword then the boot server
+	# needs to be substituted
+	if [ -n "$(print $MEDIA | $GREP '$serverIP')" ]; then
+		if [ -z $($DHCPINFO $BOOTSERVER) ] ; then
+			echo "Could not obtain address of AI server from " \
+			    "DHCP server" > /dev/msglog
+
+			exit $SMF_EXIT_ERR_FATAL
+		fi
+		MEDIA=$(print $MEDIA | \
+		    $SED "s/\$serverIP/$($DHCPINFO $BOOTSERVER)/")
+
+	fi
+
+	if [ -z "$MEDIA" ]; then
+		echo "Could not obtain address of AI server from GRUB menu" > \
+		    /dev/msglog
+
+		exit $SMF_EXIT_ERR_FATAL
+	fi
+
+
+	#
+	# Check if the install flag is present in the bootargs.
+	# If it is present then it will be an AI install,
+	# so set TEXT_FLAG to "false"
+	#
+	INSTALL_FLAG=`/sbin/devprop -s install`
+	if [ "$INSTALL_FLAG" == "true" ] ;then 
+	    TEXT_FLAG="false"
+	fi
+fi
+
+#
+# Translate to valid url - it is dummy operation for now
+# since it is assumed that complete and valid URL was provided
+#
+url=$MEDIA
+if [ -z "$url" ]
+then
+	echo "Could not determine source of install image" > \
+	    /dev/msglog
+	exit $SMF_EXIT_ERR_FATAL
+fi
+
+# Mount /tmp to download files
+$TMPFS_MOUNT swap /tmp
+if [ $? -ne 0 ]
+then
+	echo "Mounting /tmp FAILED!" > /dev/msglog
+	exit $SMF_EXIT_ERR_FATAL
+fi
+
+config_file=""
+# download the install.conf file to get the service name for SPARC
+if [[ "$ISA_INFO" == "sparc" && ! -f "$SYSTEM_CONF" ]]; then
+	config_file="$INSTALL_CONF_FILE"
+fi
+
+# Download compressed archives and configuration information all into tmp
+for file in $SOLARIS_ZLIB $SOLARISMISC_ZLIB $IMAGE_INFO $config_file; do
+
+	print "Downloading $file" > /dev/msglog
+        $WGET --continue --tries=$TRIES --waitretry=$WAITRETRY \
+            --timeout=$TIMEOUT ${url}/$file -O /tmp/$file >/dev/msglog 2>&1
+
+        # if wget exits with failure, then exit
+        if [ $? -ne 0 ]; then
+		print "Could not obtain $url/$file from install server" \
+		    > /dev/msglog
+		print "Please verify that the install server is correctly" \
+		    "configured and reachable from the client" > /dev/msglog
+		exit $SMF_EXIT_ERR_FATAL
+	fi
+done
+
+# Lofi mount downloaded archives to /usr and /mnt/misc respectively
+
+#
+# Can not mount solaris.zlib using just the mount command,
+# because the mount command enforces nosetuid, and /usr
+# needs to have the setuid capability.
+#
+# Additionally:
+# Must use lofiadm in combination with the mount command,
+# as with the changes to make lofi work from within a zone,
+# a properly populated /dev tree is required to use simply
+# "mount" - this applies to both .zlib files.
+#
+
+usr_lofi_dev=$(/usr/sbin/lofiadm -a /tmp/$SOLARIS_ZLIB)
+if [ $? -ne 0 -o -z "$usr_lofi_dev" ]
+then
+	echo "Unable to add lofi device for $SOLARIS_ZLIB" > /dev/msglog
+	exit $SMF_EXIT_ERR_FATAL
+fi
+
+$MOUNT -F hsfs -o ro $usr_lofi_dev /usr
+if [ $? -ne 0 ]
+then
+	echo "Unable to mount /usr filesystem" > /dev/msglog
+	exit $SMF_EXIT_ERR_FATAL
+fi
+
+misc_lofi_dev=$(/usr/sbin/lofiadm -a /tmp/$SOLARISMISC_ZLIB)
+if [ $? -ne 0 -o -z "$misc_lofi_dev" ]; then
+	echo "Unable to add lofi device for $SOLARISMISC_ZLIB" > /dev/msglog
+	exit $SMF_EXIT_ERR_FATAL
+fi
+
+$MOUNT -F hsfs -o ro ${misc_lofi_dev} /mnt/misc
+if [ $? -ne 0 ]
+then
+	echo "Unable to mount /mnt/misc" > /dev/msglog
+	exit $SMF_EXIT_ERR_FATAL
+fi
+
+$MOUNT -F lofs -o ro /mnt/misc/opt /opt
+if [ $? -ne 0 ]
+then
+	echo "Unable to mount /opt" > /dev/msglog
+	exit $SMF_EXIT_ERR_FATAL
+fi
+
+echo "Done mounting image" > /dev/msglog
+
+#
+# If requested, enable remote access via ssh
+#
+if [ $ISA_INFO = "sparc" ] ; then
+	# For SPARC, only check the setting in the conf file if
+	# livessh was not specified as a bootarg.
+	if [ -z "$LIVESSH_ENABLE" ] ; then
+		conf_file=$SYSTEM_CONF
+		if [ -f $INSTALL_CONF_SPEC ]; then
+			conf_file=$INSTALL_CONF_SPEC
+		fi
+		LIVESSH_ENABLE=$($GREP "^livessh" $conf_file | \
+		    $CUT -d'=' -f2)
+	fi
+else
+	LIVESSH_ENABLE=`/sbin/devprop -s livessh`
+fi
+
+if [ "$LIVESSH_ENABLE" = "enable" ]; then
+	# generate ssh keys
+	/lib/svc/method/sshd -c
+
+	# enabled ssh server
+	/usr/sbin/svcadm enable network/ssh
+fi
+
+#
+# TEXT_FLAG is used to tell if we are using the text install over net boot
+#
+if [ "$TEXT_FLAG" == "true" ]; then
+	
+	$SVCADM disable -s $CLI_LOGIN 
+	if [ "$?" != "0" ]; then
+		echo "svcadm failed to disable client login" > /dev/msglog
+		exit $SMF_EXIT_ERR_FATAL
+	fi
+	#Disable manifest locator
+	$SVCADM disable -s $MANIFEST_LOC	
+	if [ "$?" != "0" ]; then
+		echo "svcadm failed to disable manifest locator" > /dev/msglog
+		exit $SMF_EXIT_ERR_FATAL
+	fi
+
+	# Enable the text install SMF scripts
+	$SVCADM enable  $TI_SMF_SETUP 
+	if [ "$?" != "0" ]; then
+		echo "svcadm failed to enable Text Install SMF script" > /dev/msglog
+		exit $SMF_EXIT_ERR_FATAL
+	fi
+fi
+
+#
+# All SMF services are imported and sevice profiles are applied to the
+# boot archive during image construction time.  However, the link
+# for the platform.xml service profile is not created because
+# we are unable to determine the platform on which the image will
+# be booted on during build time.
+#
+# The link for platform.xml file must be created during boot time
+# depending on platform type.
+#
+apply_platform_profile
+
+# Remove the SMF repository backup as it is not required in installation and
+# just chews up ramdisk space.  RFE 6896186 would remove the need to do this.
+# Removing the SMF repository backup was attempted once in the 
+# filesystem/root-minimal service already.  Doing it here again in case
+# the file is created after the filesystem/root-minimal service is done.
+/usr/bin/rm -f /etc/svc/repository-boot*
+
+exit 0

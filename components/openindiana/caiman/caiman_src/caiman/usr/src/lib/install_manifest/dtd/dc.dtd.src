@@ -1,0 +1,71 @@
+<!--
+ CDDL HEADER START
+
+ The contents of this file are subject to the terms of the
+ Common Development and Distribution License (the "License").
+ You may not use this file except in compliance with the License.
+
+ You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+ or http://www.opensolaris.org/os/licensing.
+ See the License for the specific language governing permissions
+ and limitations under the License.
+
+ When distributing Covered Code, include this CDDL HEADER in each
+ file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+ If applicable, add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your own identifying
+ information: Portions Copyright [yyyy] [name of copyright owner]
+
+ CDDL HEADER END
+
+ Copyright (c) 2010, 2011, Oracle and/or its affiliates. All rights reserved.
+
+-->
+
+<!ELEMENT dc (distro)>
+
+<!ENTITY % boot_mods SYSTEM "boot_mods.dtd.@DTD_VERSION_BOOT_MODS@">
+%boot_mods;
+
+<!ENTITY % target SYSTEM "target.dtd.@DTD_VERSION_TARGET@">
+%target;
+
+<!ENTITY % execution SYSTEM "execution.dtd.@DTD_VERSION_EXECUTION@">
+%execution;
+
+<!ENTITY % configuration SYSTEM "configuration.dtd.@DTD_VERSION_CONFIGURATION@">
+%configuration;
+
+<!ENTITY % software SYSTEM "software.dtd.@DTD_VERSION_SOFTWARE@">
+%software;
+
+<!--
+	If no special distro args, then we don't have to have a
+	distro_spec element. We do require target, execution. Software
+	and configuration are optional, although without software
+	we cannot create a media image. The optional software elements
+	are due to the VM image not requiring a software specification.
+	Compression settings are specified as an argument to the 
+	associated execution checkpoint element.
+-->
+
+<!ELEMENT distro (distro_spec?, target+, software*, execution, configuration*)>
+<!ATTLIST distro name CDATA #REQUIRED>
+<!ATTLIST distro add_timestamp (true|false) "false">
+<!ATTLIST distro http_proxy CDATA #IMPLIED>
+
+<!ELEMENT distro_spec (img_params*)>
+
+<!ELEMENT img_params (media_im|vm_im)>
+
+<!ELEMENT media_im (boot_mods?, max_size?)>
+
+
+<!--
+	max_size refers to the maximum size an image area can get,
+	if the user wants to define this.
+-->
+
+<!ELEMENT max_size (size)>
+
+<!ELEMENT vm_im EMPTY>

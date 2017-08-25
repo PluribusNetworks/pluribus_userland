@@ -1,0 +1,244 @@
+#!/bin/sh
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+# Copyright (c) 2009, 2011, Oracle and/or its affiliates. All rights reserved.
+
+. /lib/svc/share/smf_include.sh
+. /usr/lib/installadm/installadm-common
+
+# Make sure working directory is / to prevent unmounting problems.
+cd /
+
+# Apache configuration files
+AI_HTTPD_CONF=/var/installadm/ai-webserver/ai-httpd.conf
+LISTEN_ADDRESSES=/var/installadm/ai-webserver/listen-addresses.conf
+COMPATIBILITY_PORTS=/var/installadm/ai-webserver/compatibility-configuration/ports.conf
+
+# required commands
+AIMDNSD=/usr/lib/installadm/aimdnsd.py
+AIMDNSD_PID=/var/run/aimdnsd
+APACHE2=/usr/apache2/2.2/bin/apachectl
+AWK=/usr/bin/awk
+CAT=/usr/bin/cat
+CUT=/usr/bin/cut
+CP=/usr/bin/cp
+DIFF=/usr/bin/diff
+GREP=/bin/grep
+KILL=/usr/bin/kill
+HTTPD=/usr/apache2/2.2/bin/httpd
+INETD_START_PROP=inetd_start/exec
+INSTALLADM=/usr/sbin/installadm
+PS=/usr/bin/ps
+PGREP=/usr/bin/pgrep
+PYTHON=/usr/bin/python2.7
+SVC_MODULE=/usr/lib/python2.7/vendor-packages/osol_install/auto_install/service.py
+SVC_CFG_MODULE=/usr/lib/python2.7/vendor-packages/osol_install/auto_install/service_config.py
+SVCCFG=/usr/sbin/svccfg
+SVCPROP=/usr/bin/svcprop
+TFTPBOOT=/tftpboot
+TFTP_SERVICE='svc:/network/tftp/udp6'
+UPGRADE_SCRIPT=/usr/sbin/installadm-convert
+NETBOOT_ERR=$(cat <<EOF
+The ${TFTP_SERVICE} service has been configured to use the ${TFTPBOOT}
+\ndirectory; The Automated Installer is incompatible with this setting.
+\nPlease use svccfg to change the ${INETD_START_PROP} property of the
+\n${TFTP_SERVICE} service to migrate to the ${NETBOOTDIR} directory.\n
+EOF
+)
+
+# Automated Install SMF variables
+PORT='all_services/port'
+DEBUG_PROP='install/debug'
+
+# Global SMF property values
+SMF_PORT=$($SVCPROP -p $PORT $SMF_FMRI 2>/dev/null)
+export PYLOG_LEVEL=$($SVCPROP -p $DEBUG_PROP $SMF_FMRI 2>/dev/null)
+
+#
+# setup_compatibility_file
+#	Sets up the compatibility file with the additional ports needed for
+#	older services.  The ${AI_HTTPD_CONF} file contains a line that includes
+#	the ${COMPATIBILITY_PORTS} file which this function creates.
+#
+#	Args
+#		None
+#	Globals
+#		COMPATIBILITY_PORTS - Location of the file to set up.
+#	Returns
+#		0 - New ${COMPATIBILITY_PORTS} file has been put into place.
+#		1 - Existing ${COMPATIBILITY_PORTS} file was not touched.
+#
+function setup_compatibility_file {
+	# Ensure that the apache webserver services old clients by creating
+	# a compatibilitly file with the ports from the old services.
+	$PYTHON $SVC_CFG_MODULE create-compatibility-file ${SMF_PORT}
+
+    return $?
+}
+
+#
+# setup_main_ports
+#	Sets up the listen_address file with the ip addresses and SMF port
+#	needed for the services.  The ${AI_HTTPD_CONF} file contains a line
+#	that includes the ${LISTEN_ADDRESSES} file which this function creates.
+#
+#	Args
+#		None
+#	Globals
+#		LISTEN_ADDRESSES - Location of the file to set up.
+#	Returns
+#		0 - New ${LISTEN_ADDRESSES} file has been put into place.
+#       1 - Existing ${LISTEN_ADDRESSES} file was not touched.
+#
+function setup_main_ports
+{
+	$PYTHON $SVC_CFG_MODULE create-main-ports-file ${SMF_PORT}
+
+    return $?
+}
+
+
+case "$1" in
+'start')
+	# Code to execute on start
+	
+	# Ensure that no old, incompatible services exist
+	old_services=$(${SVCCFG} -s ${SMF_FMRI} listpg | ${GREP} "^AI" | ${SED} 's#AI\(.*\) .*#\1#')
+	if [ ! -z "$old_services" ]; then
+		echo "The following services are incompatible with this"
+		echo "version of $SMF_FMRI:"
+		echo $old_services
+		echo "Please run $UPGRADE_SCRIPT to upgrade them"
+		exit $SMF_EXIT_ERR_FATAL
+	fi
+
+	
+	# Ensure that tftp/udp6 is setup to use /etc/netboot
+	start_exec_prop=$(${SVCPROP} -p ${INETD_START_PROP} ${TFTP_SERVICE})
+	inetd_start=$(echo ${start_exec_prop} |awk '{ print $NF }')
+	if [ $inetd_start != ${NETBOOTDIR} ]; then
+		if [[ -d ${TFTPBOOT} && -n $(ls ${TFTPBOOT}) ]]; then
+		    echo ${NETBOOT_ERR}
+		    exit $SMF_EXIT_ERR_FATAL
+		fi
+	fi
+
+	# ensure that the default port is set
+	if [ "X${SMF_PORT}" == "X" ]; then
+		echo "The default port is not set for the service."
+		exit ${SMF_EXIT_ERR_CONFIG}
+	fi
+
+	# First run aimdns daemon to register mDNS records for every
+	# service that is listed as enabled. 
+	if [ -f ${AIMDNSD_PID} ] ; then
+		# only if aimdns daemon is not running do we start another
+		if [[ ! "$($PS -p $($CAT $AIMDNSD_PID) -o args=)" == \
+		     ~(E)"$AIMDNSD\$" ]]; then
+			$AIMDNSD &
+		fi
+	else
+		# no PID file found start aimdns daemon
+		$AIMDNSD &
+	fi
+
+	# Start up the apache web server using our http config file
+	if [ -f ${AI_HTTPD_CONF} ] ; then
+		setup_main_ports
+		setup_compatibility_file
+		${APACHE2} -f ${AI_HTTPD_CONF} -k start
+		if [ $? -ne 0 ] ; then
+			echo "Unable to start apache process"
+			exit $SMF_EXIT_ERR_CONFIG
+		fi	
+	else
+		echo "Unable to start apache process due to missing" \
+				"config file ${AI_HTTPD_CONF}"
+		exit $SMF_EXIT_ERR_CONFIG
+	fi
+	$PYTHON $SVC_MODULE mount-all || exit $SMF_EXIT_ERR_FATAL
+	;;
+
+'stop')
+	# Code to execute on stop
+
+	# stop aimdns daemon
+	if [ -f ${AIMDNSD_PID} ] ; then
+		${KILL} $($CAT $AIMDNSD_PID)
+	fi
+
+	# stop apache server
+	if [ -f ${AI_HTTPD_CONF} ] ; then
+		${APACHE2} -f ${AI_HTTPD_CONF} -k stop
+		if [ $? -ne 0 ] ; then
+			echo "Unable to stop apache process"
+			exit $SMF_EXIT_ERR_CONFIG
+		fi
+		# wait for the apache servers to exit or the stop timeout is reached
+		while [[ $($PGREP -f "${HTTPD} -f ${AI_HTTPD_CONF}") ]]; do
+			sleep 1
+		done
+	else
+		echo "Unable to stop apache process due to missing" \
+				"config file ${AI_HTTPD_CONF}"
+		exit $SMF_EXIT_ERR_CONFIG
+	fi
+	$PYTHON $SVC_MODULE unmount-all || exit $SMF_EXIT_ERR_FATAL
+	;;
+
+refresh)
+	# ensure that the default port is set
+	if [ "X${SMF_PORT}" == "X" ]; then
+		echo "The default port is not set for the service."
+		exit ${SMF_EXIT_ERR_CONFIG}
+	fi
+
+	# if the aimdns daemon is running, refresh it, otherwise start it up.
+	if [ -f ${AIMDNSD_PID} ] ; then
+		${KILL} -1 $($CAT $AIMDNSD_PID)
+	else
+		$AIMDNSD &
+	fi
+	
+	# Mount services in /etc/netboot as needed
+	$PYTHON $SVC_MODULE mount-all || exit $SMF_EXIT_ERR_FATAL
+
+	setup_main_ports
+	typeset -i ret1=$?
+	setup_compatibility_file
+	typeset -i ret2=$?
+	if [[ $ret1 -eq 0 || $ret2 -eq 0 ]] ; then
+		echo "Port configuration has changed, restarting webserver."
+		${APACHE2} -f ${AI_HTTPD_CONF} -k restart
+	else
+		echo "Port configuration has not changed, not restarting" \
+			"webserver."
+	fi
+	;;
+
+*)
+	echo "Usage: $0 { start | stop | refresh }"
+	exit 1
+	;;
+
+
+esac
+exit $SMF_EXIT_OK

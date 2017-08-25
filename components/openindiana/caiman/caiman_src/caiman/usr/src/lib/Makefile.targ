@@ -1,0 +1,342 @@
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+
+#
+# Copyright (c) 2007, 2011, Oracle and/or its affiliates. All rights reserved.
+#
+
+#
+# included to define local library targets
+#
+
+# install rules
+
+$(ROOTBIN)/%: %
+	$(INS.file)
+
+$(ROOTLIB)/%: %
+	$(INS.file)
+
+$(ROOTSBIN)/%: %
+	$(INS.file)
+
+$(ROOTUSRSBIN)/%: %
+	$(INS.file)
+
+$(ROOTUSRSHAREINSTALL)/%: %
+	$(INS.file)
+
+$(ROOTETC)/%: %
+	$(INS.file)
+
+$(ROOTADMINLIB):
+	$(INS.dir)
+
+$(ROOTADMINLIB64):
+	$(INS.dir)
+
+$(ROOTADMINLIB)/%: $$(PNAME)/$(ARCH)/%
+	$(INS.file)
+
+$(ROOTADMINLIB64)/%: $$(PNAME)/$(ARCH)/%
+	$(INS.file)
+
+$(ROOTADMINLIB)/libp/%: libp/%
+	$(INS.file)
+
+$(ROOTADMINLIB)/$(PLIB): $(ROOTADMINLIB)/libp
+
+$(ROOTADMINLIB)/libp:
+	$(INS.dir)
+
+$(ROOTINC)/%: %
+	$(INS.file)
+
+$(ROOTINCADMIN)/%: %
+	$(INS.file)
+
+$(ROOTADMINLIB)/%: $$(PNAME)/$(ARCH)/%
+	$(INS.file)
+
+$(ROOTOPTINSTALLTESTBIN)/%: %
+	$(INS.file)
+
+$(ROOTUSRLIB):
+	$(INS.dir)
+
+$(ROOTUSRLIB)/%: $$(PNAME)/$(ARCH)/%
+	$(INS.file)
+
+$(ROOTUSRLIB)/%: %
+	$(INS.file)
+
+$(ROOTUSRLIB64):
+	$(INS.dir)
+
+$(ROOTUSRLIB64)/%: $$(PNAME)/$(ARCH)/%
+	$(INS.file)
+
+$(ROOTUSRLIB64)/%: %
+	$(INS.file)
+
+$(ROOTUSRLIBBOOT):
+	$(INS.dir)
+
+$(ROOTUSRLIBMSGS):
+	$(INS.dir)
+
+$(ROOTUSRLIBMSGS)/%: %
+	$(INS.file)
+
+$(ROOTPYTHON):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDOR):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDOR)/%: $$(PNAME)/$(ARCH)/%
+	$(INS.file)
+
+$(ROOTPYTHONVENDOR)/%: %
+	$(INS.file)
+
+$(ROOTPYTHONVENDORINSTALL):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORINSTALL64):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORINSTALL)/%: $$(PNAME)/$(ARCH)/%
+	$(INS.file)
+
+$(ROOTPYTHONVENDORINSTALL64)/%: $$(PNAME)/$(ARCH)/%
+	$(INS.file)
+
+$(ROOTPYTHONVENDORSOLINSTALL):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALL64):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALL)/%: $$(PNAME)/$(ARCH)/%
+	$(INS.file)
+
+$(ROOTPYTHONVENDORSOLINSTALL64)/%: $$(PNAME)/$(ARCH)/%
+	$(INS.file)
+
+$(ROOTPYTHONVENDORSOLINSTALLBOOT):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLCONFIGURATION):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLDATACACHE):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLENGINE):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLENGINETEST):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLICT):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLMANIFEST):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLMANINPUT):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLTARGET):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLTARGETLIBADM):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLTARGETLIBBE):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLTARGETLIBDEVINFO):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLTARGETLIBDISKMGT):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLTARGETLIBNVPAIR):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLTARGETSHADOW):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORINSTALLTRANSFER):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORBOOTMGMT):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORBOOTMGMTBKND):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORBOOTMGMTBKNDAUTOGEN):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORBOOTMGMTBKNDBOOTVARS):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORBOOTMGMTBKNDBOOTVARSSPARC):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORBOOTMGMTBKNDBOOTVARSX86):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORBOOTMGMTBKNDFW):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORBOOTMGMTBKNDLOADER):
+	$(INS.dir)
+
+$(ROOTPYTHONTERMUI):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORINSTALL)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALL)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLBOOT)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLCONFIGURATION)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLDATACACHE)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLENGINE)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLENGINETEST)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLICT)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLMANIFEST)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLMANINPUT)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLTARGET)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLTARGETLIBADM)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLTARGETLIBBE)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLTARGETLIBDEVINFO)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLTARGETLIBDISKMGT)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLTARGETLIBNVPAIR)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLTARGETSHADOW)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORINSTALLTRANSFER)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORBOOTMGMT)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORBOOTMGMTBKND)/%: %
+	$(INS.pyfile)
+			      			  
+$(ROOTPYTHONVENDORBOOTMGMTBKNDAUTOGEN)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORBOOTMGMTBKNDBOOTVARS)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORBOOTMGMTBKNDBOOTVARSSPARC)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORBOOTMGMTBKNDBOOTVARSX86)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORBOOTMGMTBKNDFW)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORBOOTMGMTBKNDLOADER)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONTERMUI)/%: %
+	$(INS.pyfile)
+
+$(ROOTRNGSCHEMA)/%: %
+	$(INS.file)
+
+objs profs pics libp:
+	-@mkdir $@ 2>/dev/null ; $(CHMOD) 777 $@
+	-@mkdir $@/$(ARCH) 2>/dev/null ; $(CHMOD) 777 $@/$(ARCH)
+
+objs/$(ARCH)/%.o pics/$(ARCH)/%.o: $(SRCDIR)/%.c
+	$(COMPILE.c) -o $@ $<
+
+objs/$(ARCH)/$(LIBRARY): objs .WAIT $(OBJS)
+	$(BUILD.AR)
+
+$(DYNLIB): pics .WAIT $(PICS)
+	$(LD) $(LDBITS) -G -z text $(SOFLAGS) -o $@ $(PICS)
+
+$(DYNLIBLINK): pics
+
+LIBLINKS=	$(DYNLIBLINK) $(ROOTADMINLIBDYNLIBLINK) $(ROOTUSRLIBDYNLIBLINK) \
+		$(ROOTADMINLIBDYNLIBLINK64) $(ROOTUSRLIBDYNLIBLINK64)
+
+$(LIBLINKS):
+	$(RM) $@; $(SYMLINK) ./$(BASEDYNLIB) $@
+
+$(CPYTHONLIB): pics .WAIT $(PICS)
+	$(LD) $(LDBITS) -G -z text $(SOFLAGS) -o $@ $(PICS)
+
+$(PLIB): profs libp $(PROFS)
+	$(BUILD.AR)
+
+$(LINTLIB): $$(SRCS)
+	$(LINT.c) -o $(LIBNAME) $(SRCS)
+
+lint_SRCS:
+	$(LINT.c) $(SRCS)
+
+clobber: $(SUBDIRS) clean
+	$(RM) -r $(LIBS) $(PLIB) $(CLOBBERFILES) objs pics 
+
+clean: $(SUBDIRS)
+	$(RM) $(OBJECTS) $(OBJS) $(PROFS) $(PICS) $(LINTOUT) $(LINTLIB) \
+		$(CLEANFILES)

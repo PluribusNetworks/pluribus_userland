@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<!DOCTYPE service_bundle SYSTEM "/usr/share/lib/xml/dtd/service_bundle.dtd.1">
+<!--
+ CDDL HEADER START
+
+ The contents of this file are subject to the terms of the
+ Common Development and Distribution License (the "License").
+ You may not use this file except in compliance with the License.
+
+ You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+ or http://www.opensolaris.org/os/licensing.
+ See the License for the specific language governing permissions
+ and limitations under the License.
+
+ When distributing Covered Code, include this CDDL HEADER in each
+ file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+ If applicable, add the following below this CDDL HEADER, with the
+ fields enclosed by brackets "[]" replaced with your own identifying
+ information: Portions Copyright [yyyy] [name of copyright owner]
+
+ CDDL HEADER END
+
+ Copyright (c) 2008, 2011, Oracle and/or its affiliates. All rights reserved.
+
+ NOTE:  This service manifest is not editable; its contents will
+ be overwritten by package or patch operations, including
+ operating system upgrade.  Make customizations in a different
+ file.
+
+-->
+
+<service_bundle type='manifest' name='install:filesystem-root-assembly'>
+
+<service
+	name='system/filesystem/root-assembly'
+	type='service'
+	version='1'>
+
+	<!--
+	  We depend on filesystem/root-minimal to remount
+	  root r/w and populate /devices.  Also to enable net and disable
+	  media instance if network boot is being done.	 
+	-->
+	<dependency
+		name='live-fs-root-minimal'
+		type='service'
+		grouping='require_all'
+		restart_on='none' >
+		<service_fmri value='svc:/system/filesystem/root-minimal' />
+	</dependency>
+
+	<!--
+	  network/physical:default brings up network on PXE/wanboot NIC.
+	  This is later needed in case of network booted installer
+	  for downloading compressed archives from server containing
+	  the rest of root filesystem (e.g. /usr).
+	-->
+
+	<dependency
+		name='network-physical-default'
+		type='service'
+		grouping='optional_all'
+		restart_on='none' >
+		<service_fmri value='svc:/network/physical:default' />
+	</dependency>
+
+	<!--
+	  filesystem/root runs after us to initialize devfs and mount libc
+	-->
+	<dependent
+		name='fs-root'
+		grouping='require_all'
+		restart_on='none'>
+		<service_fmri value='svc:/system/filesystem/root:default' />
+	</dependent>
+
+	<!--
+	  Postpone printing the hostname after we are done with media assembly
+	  task and with keyboard layout and language settings.
+	-->
+	<dependent
+		name='identity-node'
+		grouping='require_all'
+		restart_on='none' >
+		<service_fmri value='svc:/system/identity:node' />
+	</dependent>
+
+	<!--
+	  media instance is used for all boots from CD or USB
+	-->
+	<instance name='media' enabled='true'>
+
+	<exec_method
+		type='method'
+		name='start'
+		exec='/lib/svc/method/media-assembly'
+		timeout_seconds='0' />
+
+	<exec_method
+		type='method'
+		name='stop'
+		exec=':true'
+		timeout_seconds='0' />
+
+	<property_group name='startd' type='framework'>
+		<propval name='duration' type='astring' value='transient' />
+	</property_group>
+
+	</instance>
+
+	<!--
+	  net instance is used for all boots from network
+	-->
+	<instance name='net' enabled='true'>
+
+	<exec_method
+		type='method'
+		name='start'
+		exec='/lib/svc/method/net-assembly'
+		timeout_seconds='0' />
+
+	<exec_method
+		type='method'
+		name='stop'
+		exec=':true'
+		timeout_seconds='0' />
+
+	<property_group name='startd' type='framework'>
+		<propval name='duration' type='astring' value='transient' />
+	</property_group>
+
+	</instance>
+
+	<stability value='Unstable' />
+
+	<template>
+		<common_name>
+			<loctext xml:lang='C'>
+				Installation file system assembly
+			</loctext>
+		</common_name>
+	</template>
+</service>
+
+</service_bundle>

@@ -2285,13 +2285,15 @@ class ImageInterface(object):
                 except StopIteration:
                         return False
 
-        def add_publisher(self, pub, refresh_allowed=True):
+        def add_publisher(self, pub, refresh_allowed=True, search_first=False):
                 """Add the provided publisher object to the image
                 configuration."""
                 try:
                         self.__img.add_publisher(pub,
                             refresh_allowed=refresh_allowed,
                             progtrack=self.__progresstracker)
+                        if search_first:
+                                self.set_preferred_publisher(pub.prefix, pub.alias)
                 finally:
                         self.__img.cleanup_downloads()
 
@@ -2435,7 +2437,7 @@ class ImageInterface(object):
                 """Sets the preferred publisher for the image."""
                 self.__img.set_preferred_publisher(prefix=prefix, alias=alias)
 
-        def update_publisher(self, pub, refresh_allowed=True):
+        def update_publisher(self, pub, refresh_allowed=True, search_first=False):
                 """Replaces an existing publisher object with the provided one
                 using the _source_object_id identifier set during copy.
 
@@ -2457,6 +2459,9 @@ class ImageInterface(object):
                 finally:
                         self.__img.cleanup_downloads()
                         self.__activity_lock.release()
+
+                if search_first:
+                        self.set_preferred_publisher(pub.prefix, pub.alias)
 
         def __update_publisher(self, pub, refresh_allowed=True):
                 """Private publisher update method; caller responsible for

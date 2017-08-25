@@ -869,7 +869,7 @@ class Publisher(object):
 
         def __init__(self, prefix, alias=None, client_uuid=None, disabled=False,
             meta_root=None, repositories=None, selected_repository=None,
-            transport=None, sticky=True):
+            repository=None, transport=None, sticky=True):
                 """Initialize a new publisher object."""
 
                 if client_uuid is None:
@@ -889,13 +889,20 @@ class Publisher(object):
                 self.transport = transport
                 self.meta_root = meta_root
                 self.sticky = sticky
+                self.repository = repository
+
+                if repository is not None:
+                    repositories = [repository]
+                    selected_repository = repository
 
                 if repositories:
                         for r in repositories:
                                 self.add_repository(r)
+                        self.repository = repositories[0]
 
                 if selected_repository:
                         self.selected_repository = selected_repository
+                        self.repository = selected_repository
 
         def __cmp__(self, other):
                 if other is None:

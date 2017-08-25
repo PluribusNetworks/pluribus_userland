@@ -1,0 +1,108 @@
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+#
+# Copyright (c) 2010, 2011, Oracle and/or its affiliates. All rights reserved.
+#
+set name=pkg.fmri value=pkg:/system/install@$(PKGVERS)
+set name=pkg.description \
+    value="Core software libraries and commands used for system installation"
+set name=pkg.summary value="System install libraries and commands"
+set name=info.classification \
+    value="org.opensolaris.category.2008:System/Administration and Configuration"
+set name=variant.arch value=$(ARCH)
+set name=variant.opensolaris.zone value=global value=nonglobal
+dir path=usr group=sys
+dir path=usr/lib
+dir path=usr/lib/python2.7
+dir path=usr/lib/python2.7/vendor-packages
+dir path=usr/lib/python2.7/vendor-packages/osol_install
+dir path=usr/lib/python2.7/vendor-packages/terminalui
+dir path=usr/share group=sys
+dir path=usr/share/auto_install group=sys
+dir path=usr/share/auto_install/sc_profiles group=sys
+dir path=usr/share/lib group=sys
+dir path=usr/share/lib/xml group=sys
+dir path=usr/share/lib/xml/rng group=sys
+dir path=var group=sys
+dir path=var/log group=sys
+dir path=var/log/install group=sys
+dir path=var/sadm group=sys
+dir path=var/sadm/system group=sys
+dir path=var/sadm/system/logs group=sys
+file path=usr/lib/python2.7/vendor-packages/osol_install/64/libzoneinfo.so
+file path=usr/lib/python2.7/vendor-packages/osol_install/__init__.py mode=0444
+file path=usr/lib/python2.7/vendor-packages/osol_install/__init__.pyc \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/osol_install/install_utils.py
+file path=usr/lib/python2.7/vendor-packages/osol_install/install_utils.pyc
+file path=usr/lib/python2.7/vendor-packages/osol_install/libzoneinfo.so
+file path=usr/lib/python2.7/vendor-packages/terminalui/__init__.py mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/__init__.pyc mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/action.py mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/action.pyc mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/base_screen.py \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/base_screen.pyc \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/color_theme.py \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/color_theme.pyc \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/edit_field.py mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/edit_field.pyc \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/error_window.py \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/error_window.pyc \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/help_screen.py \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/help_screen.pyc \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/i18n.py mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/i18n.pyc mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/inner_window.py \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/inner_window.pyc \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/list_item.py mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/list_item.pyc mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/main_window.py \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/main_window.pyc \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/screen_list.py \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/screen_list.pyc \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/scroll_window.py \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/scroll_window.pyc \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/window_area.py \
+    mode=0444
+file path=usr/lib/python2.7/vendor-packages/terminalui/window_area.pyc \
+    mode=0444
+file path=usr/share/auto_install/sc_profiles/enable_sci.xml group=sys \
+    mode=0444
+license cr_Sun license=cr_Sun
+depend fmri=library/python-2/numpy-27 type=require
+depend fmri=library/python-2/pyrex-27 type=require

@@ -1,0 +1,243 @@
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+
+#
+# Copyright (c) 2007, 2011, Oracle and/or its affiliates. All rights reserved.
+#
+
+$(ROOT)/%: %
+	$(INS.file)
+
+$(ROOTBIN)/%: %
+	$(INS.file)
+
+$(ROOTEXECATTR):
+	$(INS.dir)
+
+$(ROOTEXECATTR)/%: exec_attr.%
+	$(INS.rename)
+
+$(ROOTLIBSVCMANIFEST)/%: %
+	$(INS.file)
+
+$(ROOTPROFATTR):
+	$(INS.dir)
+
+$(ROOTPROFATTR)/%: prof_attr.%
+	$(INS.rename)
+
+$(ROOTUSERATTR):
+	$(INS.dir)
+
+$(ROOTUSERATTR)/%: user_attr.%
+	$(INS.rename)
+
+$(ROOTETCSVCPROFILE)/%: %
+	$(INS.file)
+
+$(ROOTMANAPP)/%: %
+	$(INS.file)
+
+$(ROOTMANSYS)/%: %
+	$(INS.file)
+
+$(ROOTMANSYSDEV)/%: %
+	$(INS.file)
+
+$(ROOTMANSYSFIL)/%: %
+	$(INS.file)
+
+$(ROOTMANSYSSVC)/%: %
+	$(INS.file)
+
+$(ROOTMANSYSINS)/%: %
+	$(INS.file)
+
+$(ROOTUSRLIBMSGS)/%: %
+	$(INS.file)
+
+$(ROOTPYTHONVENDOR):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORINSTALL):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORINSTALLDC):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORINSTALLDCCHKPT):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORINSTALLDCCHKPTXSLT):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORINSTALLAI):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLAI):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLAICHKPT):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORINSTALLPROF):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLTI):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLJS2AI):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSOLINSTALLGUI):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSCI):
+	$(INS.dir)
+
+$(ROOTPYTHONVENDORSCIPROF):
+	$(INS.dir)
+
+$(ROOTSBIN)/%: %
+	$(INS.file)
+
+$(ROOTPYTHONVENDORINSTALL)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORINSTALLDC)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORINSTALLDCCHKPT)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORINSTALLAI)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLTI)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLAI)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLAICHKPT)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSCI)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSCIPROF)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORINSTALLPROF)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLJS2AI)/%: %
+	$(INS.pyfile)
+
+$(ROOTPYTHONVENDORSOLINSTALLGUI)/%: %
+	$(INS.pyfile)
+
+$(ROOTDC):
+	$(INS.dir)
+
+$(ROOTDC)/%: %
+	$(INS.file)
+
+$(ROOTDC_PROFILE):
+	$(INS.dir)
+
+$(ROOTDC_PROFILE)/%: %
+	$(INS.file)
+
+$(ROOTDC_SORT):
+	$(INS.dir)
+
+$(ROOTDC_SORT)/%: %
+	$(INS.file)
+
+$(ROOTAUTOINST):
+	$(INS.dir)
+
+$(ROOTAUTOINST)/%: %
+	$(INS.file)
+
+$(ROOTAUTOINSTMANIFEST)/%: %
+	$(INS.file)
+
+$(ROOTAUTOINSTSCPROFILES)/%: %
+	$(INS.file)
+
+$(ROOTPYTHONVENDORINSTALLDCCHKPTXSLT)/%: %
+	$(INS.file)
+
+$(ROOTGUIINST):
+	$(INS.dir)
+
+$(ROOTGUIINST)/%: %
+	$(INS.file)
+
+$(ROOTUSRBIN)/%: %
+	$(INS.file)
+
+$(ROOTUSRSBIN)/%: %
+	$(INS.file)
+
+$(ROOTUSRSHARESCHELPC)/%: %
+	$(INS.file)
+
+$(ROOTUSRSHARESCXSLT)/%: %
+	$(INS.file)
+
+$(ROOTUSRSHARETIHELPC)/%: %
+	$(INS.file)
+
+$(ROOTUSRLIBINSTALLADM)/%: %
+	$(INS.file)
+
+$(ROOTUSRLIBINSTALL)/%: %
+	$(INS.file)
+
+$(ROOTVARSADM)/%: %
+	$(INS.file)
+
+$(ROOTVARAIWEB)/%: %
+	$(INS.file)
+
+$(ROOTVARAICGI)/%: %
+	$(INS.file)
+
+$(ROOTLIBSVCMETHOD)/%: %
+	$(INS.file)
+
+$(ROOTLIBSVCSHARE)/%: %
+	$(INS.file)
+
+$(LINTLIB): $$(SRCS)
+	$(LINT.c) -o $(LIBRARY:lib%.a=%) $(SRCS) > $(LINTOUT) 2>&1
+
+lint_PROG:
+	$(LINT.c) $(PROG).c
+
+lint_SRCS:
+	$(LINT.c) $(SRCS)
+
+clobber: clean
+	-$(RM) $(PROG) $(CLOBBERFILES)

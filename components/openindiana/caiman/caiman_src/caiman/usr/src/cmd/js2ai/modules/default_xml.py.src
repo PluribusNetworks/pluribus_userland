@@ -1,0 +1,99 @@
+#!/usr/bin/python2.7
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+# Copyright (c) 2011, Oracle and/or its affiliates. All rights reserved.
+#
+"""
+Class to handle activies associated with reading and modifying default xml
+used by the installer
+
+"""
+
+import sys
+
+from solaris_install.js2ai.common import _
+from solaris_install.js2ai.common import fetch_xpath_node
+from lxml import etree
+from StringIO import StringIO
+
+DEFAULT_XML_EMPTY = \
+"""<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  Copyright (c) 2008, 2011, Oracle and/or its affiliates. All rights reserved.
+
+-->
+<!DOCTYPE auto_install SYSTEM "file:///usr/share/auto_install/ai.dtd.@DTD_VERSION_AI@">
+<auto_install>
+    <ai_instance>
+        <target/>
+        <software type="IPS"/>
+    </ai_instance>
+</auto_install>
+"""
+
+
+class XMLDefaultData(object):
+    """The default xml data object that all work on the profiles is performed
+    against
+
+    """
+    _tree = None
+    _name = None
+
+    def __init__(self, default_xml_filename):
+        parser = etree.XMLParser()
+        if default_xml_filename is None:
+            self._tree = etree.parse(StringIO(DEFAULT_XML_EMPTY))
+            self._name = "DEFAULT_XML_EMPTY"
+        else:
+            self._tree = etree.parse(default_xml_filename)
+            self._name = default_xml_filename
+
+        if len(parser.error_log) != 0:
+            # We got parsing errors
+            for err in parser.error_log:
+                sys.stderr.write(err)
+
+        xpath = "/auto_install/ai_instance"
+        self._ai_instance = fetch_xpath_node(self._tree, xpath)
+        if self._ai_instance is None:
+            tree = etree.parse(StringIO(DEFAULT_XML_EMPTY))
+            sys.stderr.write(etree.tostring(self._tree, pretty_print=True))
+            expected_layout = etree.tostring(tree, pretty_print=True)
+            raise ValueError(_("<ai_instance> not found: "
+                               "%(filename)s does not conform to the expected "
+                               "layout of:\n\n%(layout)s") %
+                               {"filename": default_xml_filename, \
+                                "layout": expected_layout})
+
+    @property
+    def name(self):
+        """The name for this object.  If the xml tree is derived from a
+        filename, the name will equal that filename.
+
+        """
+        return self._name
+
+    @property
+    def tree(self):
+        """The xml tree that represents this object"""
+        return self._tree

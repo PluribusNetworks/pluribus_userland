@@ -1,0 +1,216 @@
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+#
+# Copyright (c) 2010, 2011, Oracle and/or its affiliates. All rights reserved.
+#
+
+set name=pkg.fmri value=pkg:/install/installadm@$(PKGVERS)
+set name=pkg.description value="Automatic Installation Server Setup Tools"
+set name=pkg.summary value="installadm utility"
+set name=info.classification \
+    value="org.opensolaris.category.2008:System/Administration and Configuration"
+set name=variant.arch value=$(ARCH)
+set name=variant.opensolaris.zone value=global value=nonglobal
+dir path=lib
+dir path=lib/svc
+dir path=lib/svc/manifest group=sys
+dir path=lib/svc/manifest/system group=sys
+dir path=lib/svc/manifest/system/install group=sys
+dir path=lib/svc/method
+dir path=usr group=sys
+dir path=usr/lib
+dir path=usr/lib/installadm
+dir path=usr/lib/python2.7
+dir path=usr/lib/python2.7/vendor-packages
+dir path=usr/lib/python2.7/vendor-packages/osol_install
+dir path=usr/lib/python2.7/vendor-packages/osol_install/auto_install
+dir path=usr/sbin
+dir path=usr/share group=sys
+dir path=usr/share/auto_install group=sys
+dir path=usr/share/man
+dir path=usr/share/man/man1m
+dir path=usr/share/xml
+dir path=var group=sys
+dir path=var/ai group=sys
+dir path=var/ai/image-server group=sys
+dir path=var/ai/image-server/cgi-bin group=sys
+dir path=var/ai/image-server/images group=sys
+dir path=var/ai/image-server/logs group=sys
+dir path=var/ai/profile group=webservd mode=0700 owner=webservd
+dir path=var/ai/service group=sys
+dir path=var/installadm group=sys
+dir path=var/installadm/ai-webserver group=sys
+dir path=var/installadm/ai-webserver/AI_data group=sys
+dir path=var/installadm/ai-webserver/AI_files group=sys
+dir path=var/installadm/ai-webserver/compatibility-configuration group=sys
+file path=lib/svc/manifest/system/install/server.xml group=sys
+file path=lib/svc/method/svc-install-server mode=0555
+file path=usr/lib/installadm/aimdns.py
+file path=usr/lib/installadm/aimdnsd.py
+file path=usr/lib/installadm/check-server-setup
+file path=usr/lib/installadm/installadm-common
+file path=usr/lib/installadm/setup-image
+file path=usr/lib/installadm/setup-service
+file path=usr/lib/installadm/setup-sparc
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/AI_database.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/AI_database.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/client_control.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/client_control.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/common_profile.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/common_profile.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/create_client.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/create_client.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/create_profile.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/create_profile.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/create_service.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/create_service.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/data_files.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/data_files.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/delete_client.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/delete_client.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/delete_manifest.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/delete_manifest.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/delete_profile.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/delete_profile.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/delete_service.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/delete_service.pyc \
+    group=sys
+file path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/dhcp.py \
+    group=sys
+file path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/dhcp.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/export.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/export.pyc \
+    group=sys
+file path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/grub.py \
+    group=sys
+file path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/grub.pyc \
+    group=sys
+file path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/image.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/image.pyc \
+    group=sys
+file path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/list.py \
+    group=sys
+file path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/list.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/publish_manifest.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/publish_manifest.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/rename_service.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/rename_service.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/service.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/service.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/set_criteria.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/set_criteria.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/set_service.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/set_service.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/validate_profile.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/validate_profile.pyc \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/verifyXML.py \
+    group=sys
+file \
+    path=usr/lib/python2.7/vendor-packages/osol_install/auto_install/verifyXML.pyc \
+    group=sys
+file path=usr/sbin/installadm mode=0555
+file path=usr/sbin/installadm-convert mode=0555
+file path=usr/share/auto_install/criteria_schema.rng group=sys
+file path=usr/share/man/man1m/installadm.1m mode=0444
+file path=var/ai/image-server/cgi-bin/cgi_get_manifest.py mode=0555
+file path=var/installadm/ai-webserver/AI.db
+file path=var/installadm/ai-webserver/ai-httpd.conf
+license cr_Sun license=cr_Sun
+depend fmri=database/sqlite-3 type=require
+depend fmri=network/service/isc-dhcp type=require
+depend fmri=service/network/dns/mdns type=require
+depend fmri=service/network/tftp type=require
+depend fmri=web/server/apache-22 type=require
