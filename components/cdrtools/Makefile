@@ -1,4 +1,4 @@
-
+#
 # CDDL HEADER START
 #
 # The contents of this file are subject to the terms of the
@@ -18,44 +18,34 @@
 #
 # CDDL HEADER END
 #
-
+# Copyright (c) 2011, 2012, Oracle and/or its affiliates. All rights reserved.
 #
-# Copyright (c) 2011, 2013, Oracle and/or its affiliates. All rights reserved.
-#
-
 include ../../make-rules/shared-macros.mk
 
-COMPONENT_NAME=		ncftp
-COMPONENT_VERSION=	3.2.6
-COMPONENT_PROJECT_URL=	http://www.ncftp.com/ncftp/
-COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
-COMPONENT_ARCHIVE=	$(COMPONENT_SRC)-src.tar.gz
+COMPONENT_NAME=         cdrtools
+COMPONENT_VERSION=      3.00
+COMPONENT_SRC=          $(COMPONENT_NAME)-$(COMPONENT_VERSION)
+COMPONENT_PROJECT_URL= 	http://sourceforge.net/projects/cdrtools/
+COMPONENT_ARCHIVE=      $(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH=	\
-    sha256:129e5954850290da98af012559e6743de193de0012e972ff939df9b604f81c23
-COMPONENT_ARCHIVE_URL=	ftp://ftp.ncftp.com/ncftp/$(COMPONENT_ARCHIVE)
-COMPONENT_BUGDB=	utility/ncftp-client
+    sha256:6326762da8b8281c9a910c66fe698cd4d1bc5f33c37b59e8f1c83343c25f3e98
+COMPONENT_ARCHIVE_URL=  $(COMPONENT_PROJECT_URL)files/$(COMPONENT_ARCHIVE)/download
+PATH=			$(SPRO_VROOT)/bin:/usr/bin:/usr/gnu/bin
+COMPONENT_BUGDB=	utility/cdrtools
 
 include ../../make-rules/prep.mk
-include ../../make-rules/configure.mk
+include ../../make-rules/justmake.mk
 include ../../make-rules/ips.mk
 
-COMPONENT_PRE_CONFIGURE_ACTION = \
-	($(CLONEY) $(SOURCE_DIR) $(@D))
+COMPONENT_INSTALL_ARGS +=  GMAKE_NOWARN=true
+COMPONENT_BUILD_ARGS += GMAKE_NOWARN=true
 
-CONFIGURE_OPTIONS = --prefix=$(CONFIGURE_PREFIX)
-CONFIGURE_OPTIONS += --srcdir=$(BUILD_DIR_32) 
+build:          $(BUILD_32)
 
-ASLR_MODE = $(ASLR_ENABLE)
+install:        $(INSTALL_32)
 
-include ../../make-rules/shared-targets.mk
+test:		$(NO_TESTS)
 
-# common targets
-build:		$(BUILD_32)
-
-install:	$(INSTALL_32)
-
-BUILD_PKG_DEPENDENCIES =	$(BUILD_TOOLS)
-
-test:	$(NO_TESTS)
+BUILD_PKG_DEPENDENCIES =        $(BUILD_TOOLS)
 
 include ../../make-rules/depend.mk

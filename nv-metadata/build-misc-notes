@@ -291,3 +291,7 @@ pkg image-update
 ./build.sh patch
 ./build.sh x11/constype
 ./build.sh x11/libpciaccess
+./build.sh cdrtools
+./build.sh libpcap
+./build.sh xdg-user-dirs
+./build.sh ncftp
