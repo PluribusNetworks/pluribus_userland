@@ -1,0 +1,17 @@
+# See https://omnios.omniti.com/wiki.php/KayakClientOptions
+BuildRpool c0t0d0 c0t1d0
+SetHostname instalz
+SetTimezone UTC
+UseDNS 4.2.2.1 example.com
+#
+# Substitute your interface name for "e1000g0" below
+Postboot '/sbin/ipadm create-if e1000g0'
+Postboot '/sbin/ipadm create-addr -T dhcp e1000g0/v4'
+#
+# For static networking, edit the following for your environment
+#   and remove the second ipadm line above.
+# Postboot '/sbin/ipadm create-addr -T static -a 192.168.1.2/24 e1000g0/v4'
+# Postboot '/sbin/route -p add default 192.168.1.1'
+#
+# Uncomment to disable automatic reboot
+# NO_REBOOT=1

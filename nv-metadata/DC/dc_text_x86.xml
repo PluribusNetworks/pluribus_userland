@@ -255,6 +255,7 @@
         <name>pkg:/diagnostic/powertop</name>
         <name>pkg:/diagnostic/scanpci</name>
         <name>pkg:/diagnostic/top</name>
+        <name>pkg:/diagnostic/diskinfo</name>
         <name>pkg:/developer/debug/mdb</name>
         <name>pkg:/system/boot/grub</name>
         <name>pkg:/system/boot/network</name>
@@ -466,7 +467,6 @@
         <name>pkg:/compatibility/ucb</name>
         <name>pkg:/consolidation/man/man-incorporation</name>
         <name>pkg:/consolidation/osnet/osnet-message-files</name>
-        <name>pkg:/consolidation/osnet/osnet-redistributable</name>
         <name>pkg:/consolidation/sunpro/sunpro-incorporation</name>
         <name>pkg:/CPQary3</name>
         <name>pkg:/developer/acpi</name>

@@ -1,0 +1,18 @@
+set name=pkg.fmri value=pkg:/$(COMPONENT_FMRI)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
+set name=pkg.summary value="$(COMPONENT_SUMMARY)"
+set name=info.classification value="$(COMPONENT_CLASSIFICATION)"
+set name=info.upstream-url value=$(COMPONENT_PROJECT_URL)
+set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
+
+license files/schilix.license license=J.Schilling.licence
+license files/caldera.license license=Caldera.licence
+
+dir group=bin mode=0755 owner=root path=usr/ccs
+dir group=bin mode=0755 owner=root path=usr/ccs/bin
+dir group=bin mode=0755 owner=root path=usr/ccs/lib
+dir group=bin mode=0755 owner=root path=usr/lib
+link path=usr/ccs/lib/cpp target=../../lib/cpp
+file group=bin mode=0755 owner=root path=usr/lib/cpp
+depend fmri=consolidation/sunpro/sunpro-incorporation type=require
+depend fmri=system/library type=require
+
