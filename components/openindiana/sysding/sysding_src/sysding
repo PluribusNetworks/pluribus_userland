@@ -29,6 +29,19 @@
 # FIXME: setup_ipmp for OI hipster
 ###
 
+run_initial_boot() {
+	if [ -f /.initialboot ]
+	then
+		. /.initialboot
+		if [ $? -eq 0 ]
+		then
+			rm /.initialboot
+		else
+			mv /.initialboot /.initialboot.failed
+		fi
+	fi
+}
+
 runcheck() {
     [ -f /etc/.UNCONFIGURED ] && return
     # prevent that we will be called twice 
@@ -536,6 +549,9 @@ typeset status
 
 rebootargs=""
 status=0
+
+# Run any initial-boot processing
+run_initial_boot
 
 # first check if we have been called in the past
 runcheck

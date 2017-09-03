@@ -5,15 +5,19 @@ all:
 install: all
 	$(INSTALL) -d $(DESTDIR)/lib/svc/manifest/system
 	$(INSTALL) -d $(DESTDIR)/lib/svc/method
-	$(INSTALL) -m 444 sysinstall.xml $(DESTDIR)/lib/svc/manifest/network
-	$(INSTALL) -m 555 sysinstall $(DESTDIR)/lib/svc/method/sysinstall
+	$(INSTALL) -d $(DESTDIR)/usr/bin
+	$(INSTALL) -m 555 sysinstall $(DESTDIR)/usr/bin/sysinstall
+	$(INSTALL) -m 444 sysinstall.xml $(DESTDIR)/lib/svc/manifest/system/sysinstall.xml
+	$(INSTALL) -m 555 svc-sysinstall $(DESTDIR)/lib/svc/method/svc-sysinstall
 
 ipspkg:
 	rm -rf proto_install
-	mkdir -p proto_install/lib/svc/manifest/network
+	mkdir -p proto_install/lib/svc/manifest/system
 	mkdir -p proto_install/lib/svc/method
+	mkdir -p proto_install/usr/bin
 	ln sysinstall.xml proto_install/lib/svc/manifest/system/sysinstall.xml
-	ln sysinstall proto_install/lib/svc/method/sysinstall
+	ln svc-sysinstall proto_install/lib/svc/method/svc-sysinstall
+	ln sysinstall proto_install/usr/bin/sysinstall
 	pkgsend generate proto_install | pkgfmt >sysinstall.p5m.1
 	pkgmogrify sysinstall.p5m.1 sysinstall.mog | pkgfmt >sysinstall.p5m.2
 	pkgdepend generate -md proto_install sysinstall.p5m.2 | pkgfmt >sysinstall.p5m.3

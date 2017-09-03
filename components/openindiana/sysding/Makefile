@@ -21,7 +21,7 @@ COMPONENT_VERSION=	0.5.11
 COMPONENT_LICENSE=	CDDL
 COMPONENT_LICENSE_FILE=	$(COMPONENT_NAME).license
 COMPONENT_PROJECT_URL=	http://openindiana.org
-COMPONENT_CLASSIFICATION=	System/Administration and Configuration
+COMPONENT_CLASSIFICATION=	"System/Administration and Configuration"
 COMPONENT_FMRI=	service/management/sysding
 
 COMPONENT_REVISION=$(shell cd $(COMPONENT_SRC); git rev-list HEAD --count)

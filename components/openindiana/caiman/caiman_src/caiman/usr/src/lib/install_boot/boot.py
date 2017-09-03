@@ -953,11 +953,13 @@ class ISOImageBootMenu(BootMenu):
         """
         return os.path.join(self.pkg_img_path, "etc/release")
 
-    def _add_chainloader_entry(self):
+    def _add_chainloader_entry(self, default=False):
         """ Adds a chainloader entry to the boot configuration.
         """
         instance = ChainDiskBootInstance(chaininfo=tuple([0]))
         instance.title = "Boot from Hard Disk"
+        if default:
+            instance.default = True
         self.config.add_boot_instance(instance)
 
     def build_custom_entries(self):
@@ -1198,17 +1200,15 @@ class LiveCDISOImageBootMenu(ISOImageBootMenu):
                      "-B livemode=vesa",
                      "-B livemode=text",
                      "-B livessh=enable"]
+
+        # Create a chainloader boot from HD entry
+        self._add_chainloader_entry(default=True)
+
         for i, title in enumerate(lcd_titles):
             instance = SolarisODDBootInstance(self.pkg_img_path)
             instance.title = title
-            # Make the first entry the default
-            if i == 0:
-                instance.default = True
             instance.kargs = lcd_kargs[i]
             self.config.add_boot_instance(instance)
-
-        # Create a chainloader boot from HD entry
-        self._add_chainloader_entry()
 
 
 class TextISOImageBootMenu(ISOImageBootMenu):
@@ -1230,9 +1230,7 @@ class TextISOImageBootMenu(ISOImageBootMenu):
         """
         super(TextISOImageBootMenu, self).init_boot_config(autogen)
         # Text Install Specific global bootloader configuration:
-        # - Hide the boot menu.
         # - Disable graphical boot splash
-        self.config.boot_loader.setprop(BootLoader.PROP_QUIET, True)
         self.config.boot_loader.setprop(
             BootLoader.PROP_CONSOLE,
             BootLoader.PROP_CONSOLE_TEXT)
@@ -1241,12 +1239,12 @@ class TextISOImageBootMenu(ISOImageBootMenu):
         """ Constructs the default boot entries and inserts them into the
             bootConfig object's boot_instances list
         """
-        ti_titles = [self.boot_title,
-                     self.boot_title + " ttya",
-                     self.boot_title + " ttyb"]
-        ti_kargs = [None,
-                    "-B console=ttya",
-                    "-B console=ttyb"]
+        ti_titles = [self.boot_title + " ttya",
+                     self.boot_title + " ttyb",
+                     self.boot_title]
+        ti_kargs = ["-B console=ttya,livessh=enable",
+                    "-B console=ttyb,livessh=enable",
+                    "-B livessh=enable"]
         for i, title in enumerate(ti_titles):
             instance = SolarisODDBootInstance(self.pkg_img_path)
             instance.title = title

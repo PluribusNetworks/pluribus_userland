@@ -50,9 +50,7 @@
             timeout - boot loader timeout value before the default boot entry
                       is automatically activated.
           -->
-          <!-- Uncomment before using
-          <boot_mods title="myentry" timeout="5">
-          -->
+          <boot_mods title="Pluribus Networks OS" timeout="15">
             <!--
               Boot entries to add to the default boot menu in the image. Each
               entry is either prepended or appended sequentially to the boot
@@ -89,9 +87,7 @@
               <kernel_args></kernel_args>
             </boot_entry>
             -->
-          <!-- Uncomment before using
           </boot_mods>
-          -->
         </media_im>
       </img_params>
     </distro_spec>
@@ -167,10 +163,10 @@
         <name>pkg:/driver/i86pc/smbus</name>
         <name>pkg:/driver/i86pc/tpm2</name>
         <name>pkg:/driver/ipmi</name>
-        <name>pkg:/driver/storage/nvme</name>
         <name>pkg:/system/network</name>
         <name>pkg:/system/extended-system-utilities</name>
         <name>pkg:/service/management/sysding</name>
+        <name>pkg:/service/management/sysinstall</name>
         <name>pkg:/service/fault-management</name>
         <name>pkg:/compress/bzip2</name>
         <name>pkg:/compress/gzip</name>
@@ -243,7 +239,6 @@
         <name>pkg:/database/sqlite-3</name>
         <name>pkg:/security/sudo</name>
         <name>pkg:/metapackages/perl-modules-core</name>
-        <name>pkg:/system/install/text-install</name>
         <name>pkg:/system/install/media/internal</name>
         <name>pkg:/install/beadm</name>
         <name>pkg:/release/name</name>
@@ -257,11 +252,13 @@
         <name>pkg:/diagnostic/top</name>
         <name>pkg:/diagnostic/diskinfo</name>
         <name>pkg:/developer/debug/mdb</name>
+        <name>pkg:/developer/debug/mdb/module/module-fibre-channel</name>
+        <name>pkg:/developer/acpi</name>
+        <name>pkg:/developer/driver/ftsafe</name>
         <name>pkg:/system/boot/grub</name>
         <name>pkg:/system/boot/network</name>
         <name>pkg:/system/boot/real-mode</name>
         <name>pkg:/system/data/hardware-registry</name>
-        <name>pkg:/system/dtrace</name>
         <name>pkg:/system/flash/fwflash</name>
         <name>pkg:/system/fru-id</name>
         <name>pkg:/system/fru-id/platform</name>
@@ -274,26 +271,26 @@
         <name>pkg:/system/kernel/power</name>
         <name>pkg:/system/kernel/rsmops</name>
         <name>pkg:/system/kernel/suspend-resume</name>
-        <name>pkg:/system/kernel/ultra-wideband</name>
         <name>pkg:/system/library/install/libinstzones</name>
         <name>pkg:/system/library/libfcoe</name>
-        <name>pkg:/system/library/math/header-math</name>
+        <name>pkg:/system/library/math</name>
         <name>pkg:/system/library/platform</name>
         <name>pkg:/system/library/policykit</name>
         <name>pkg:/system/library/processor</name>
-        <name>pkg:/system/library/security/crypto/pkcs11_kms</name>
         <name>pkg:/system/library/security/libsasl</name>
         <name>pkg:/system/library/security/rpcsec</name>
         <name>pkg:/system/library/storage/ima</name>
         <name>pkg:/system/library/storage/ima/header-ima</name>
         <name>pkg:/system/library/storage/libmpapi</name>
         <name>pkg:/system/library/storage/libmpscsi_vhci</name>
-        <name>pkg:/system/library/storage/scsi-plugin</name>
+        <name>pkg:/system/library/storage/scsi-plugins</name>
         <name>pkg:/system/library/svm-rcm</name>
+        <name>pkg:/system/library/dbus</name>
+        <name>pkg:/system/library/usb/libusb</name>
+        <name>pkg:/system/library/usb/libusbugen</name>
         <name>pkg:/system/man</name>
         <name>pkg:/system/management/intel-amt</name>
         <name>pkg:/system/management/pcitool</name>
-        <name>pkg:/system/manual</name>
         <name>pkg:/system/monitoring/arcstat</name>
         <name>pkg:/system/network/ipqos</name>
         <name>pkg:/system/network/ipqos/ipqos-config</name>
@@ -307,16 +304,14 @@
         <name>pkg:/system/security/kerberos-5</name>
         <name>pkg:/system/storage/fibre-channel/port-utility</name>
         <name>pkg:/system/storage/luxadm</name>
-        <name>pkg:/system/storage/mms</name>
-        <name>pkg:/system/storage/parted</name>
         <name>pkg:/system/storage/sasinfo</name>
         <name>pkg:/system/tnf</name>
         <name>pkg:/system/trusted</name>
         <name>pkg:/system/trusted/global-zone</name>
         <name>pkg:/system/xopen/xcu6</name>
-        <name>pkg:/system/zones/brand/lx</name>
         <name>pkg:/system/zones/brand/s10</name>
         <name>pkg:/system/zones/brand/sn1</name>
+        <name>pkg:/system/zones/brand/ipkg</name>
         <name>pkg:/system/zones/internal</name>
         <name>pkg:/text/doctools</name>
         <name>pkg:/system/fault-management/eversholt-utilities</name>
@@ -335,8 +330,6 @@
         <name>pkg:/service/network/wpa</name>
         <name>pkg:/service/network/slp</name>
         <name>pkg:/service/network/network-servers</name>
-        <name>pkg:/service/network/dhcp</name>
-        <name>pkg:/service/network/dhcp/datastore/binfiles</name>
         <name>pkg:/service/file-system/nfs</name>
         <name>pkg:/service/file-system/smb</name>
         <name>pkg:/service/hal</name>
@@ -344,10 +337,11 @@
         <name>pkg:/media/cdrw</name>
         <name>pkg:/naming/ldap</name>
         <name>pkg:/network/bridging</name>
-        <name>pkg:/network/dhcp/dhcpmgr</name>
         <name>pkg:/library/libadt_jni</name>
         <name>pkg:/library/libtecla</name>
         <name>pkg:/library/security/tcp-wrapper</name>
+        <name>pkg:/driver/storage/blkdev</name>
+        <name>pkg:/driver/storage/nvme</name>
         <name>pkg:/driver/storage/aac</name>
         <name>pkg:/driver/storage/adpu320</name>
         <name>pkg:/driver/storage/ahci</name>
@@ -364,7 +358,6 @@
         <name>pkg:/driver/storage/mpt_sas</name>
         <name>pkg:/driver/storage/mr_sas</name>
         <name>pkg:/driver/storage/nv_sata</name>
-        <name>pkg:/driver/storage/pcata</name>
         <name>pkg:/driver/storage/pmcs</name>
         <name>pkg:/driver/storage/pvscsi</name>
         <name>pkg:/driver/storage/sbp2</name>
@@ -375,7 +368,6 @@
         <name>pkg:/driver/storage/smp</name>
         <name>pkg:/driver/storage/sv</name>
         <name>pkg:/driver/storage/vioblk</name>
-        <name>pkg:/driver/serial/pcser</name>
         <name>pkg:/driver/serial/usbftdi</name>
         <name>pkg:/driver/serial/usbsacm</name>
         <name>pkg:/driver/serial/usbser_edge</name>
@@ -384,7 +376,6 @@
         <name>pkg:/driver/serial/usbsprl</name>
         <name>pkg:/driver/network/afe</name>
         <name>pkg:/driver/network/amd8111s</name>
-        <name>pkg:/driver/network/arbel</name>
         <name>pkg:/driver/network/arn</name>
         <name>pkg:/driver/network/atge</name>
         <name>pkg:/driver/network/ath</name>
@@ -417,19 +408,15 @@
         <name>pkg:/driver/network/iwn</name>
         <name>pkg:/driver/network/ixgb</name>
         <name>pkg:/driver/network/ixgbe</name>
-        <name>pkg:/driver/network/llc2</name>
         <name>pkg:/driver/network/mwl</name>
         <name>pkg:/driver/network/mxfe</name>
         <name>pkg:/driver/network/myri10ge</name>
         <name>pkg:/driver/network/nge</name>
         <name>pkg:/driver/network/ntxn</name>
         <name>pkg:/driver/network/nxge</name>
-        <name>pkg:/driver/network/pcan</name>
         <name>pkg:/driver/network/pcn</name>
-        <name>pkg:/driver/network/pcwl</name>
         <name>pkg:/driver/network/platform</name>
         <name>pkg:/driver/network/qlc</name>
-        <name>pkg:/driver/network/qlc/qlc-mdb</name>
         <name>pkg:/driver/network/ral</name>
         <name>pkg:/driver/network/rds</name>
         <name>pkg:/driver/network/rge</name>
@@ -455,6 +442,11 @@
         <name>pkg:/driver/network/xge</name>
         <name>pkg:/driver/network/yge</name>
         <name>pkg:/driver/network/zyd</name>
+        <name>pkg:/driver/network/bnx</name>
+        <name>pkg:/driver/network/ce</name>
+        <name>pkg:/driver/pcmcia</name>
+        <name>pkg:/driver/usb/ugen</name>
+        <name>pkg:/driver/xvm/pv</name>
         <name>pkg:/driver/i86pc/fipe</name>
         <name>pkg:/driver/i86pc/gpio</name>
         <name>pkg:/driver/i86pc/ichwd</name>
@@ -463,30 +455,37 @@
         <name>pkg:/driver/i86pc/smbus</name>
         <name>pkg:/driver/i86pc/tpm2</name>
         <name>pkg:/driver/misc/virtio</name>
+        <name>pkg:/BRCMbnx</name>
         <name>pkg:/BRCMbnxe</name>
         <name>pkg:/compatibility/ucb</name>
-        <name>pkg:/consolidation/man/man-incorporation</name>
         <name>pkg:/consolidation/osnet/osnet-message-files</name>
         <name>pkg:/consolidation/sunpro/sunpro-incorporation</name>
-        <name>pkg:/CPQary3</name>
+        <name>pkg:/consolidation/ips/ips-incorporation</name>
         <name>pkg:/developer/acpi</name>
+        <name>pkg:/diagnostic/acpidump</name>
+        <name>pkg:/developer/debug/mdb/module/module-qlc</name>
         <name>pkg:/driver/firewire</name>
         <name>pkg:/driver/graphics/agpgart</name>
         <name>pkg:/driver/x11/winlock</name>
         <name>pkg:/driver/x11/xsvc</name>
-        <name>pkg:/install/installadm</name>
+        <name>pkg:/driver/i86pc/fipe</name>
+        <name>pkg:/driver/i86pc/ioat</name>
+        <name>pkg:/driver/i86pc/platform</name>
         <name>pkg:/system/install</name>
         <name>pkg:/system/library/boot-management</name>
         <name>pkg:/system/library/libdbus</name>
         <name>pkg:/system/library/libdbus-glib</name>
         <name>pkg:/system/library/libpcap</name>
+        <name>pkg:/system/boot/wanboot/internal</name>
         <name>pkg:/network/ftp/ncftp</name>
+        <name>pkg:/network/telnet</name>
         <name>pkg:/media/cdrtools</name>
         <name>pkg:/library/xdg/xdg-user-dirs</name>
         <name>pkg:/library/security/libgpg-error</name>
         <name>pkg:/library/security/gpgme</name>
         <name>pkg:/library/sdl</name>
         <name>pkg:/library/readline</name>
+        <name>pkg:/library/libffi</name>
         <name>pkg:/library/python/python-dbus</name>
         <name>pkg:/library/python/python-dbus-26</name>
         <name>pkg:/library/python/python-dbus-27</name>
@@ -507,8 +506,6 @@
         <name>pkg:/library/gmime</name>
         <name>pkg:/library/expat</name>
         <name>pkg:/library/file-monitor/gamin</name>
-        <name>pkg:/iomemory-vsl</name>
-        <name>pkg:/iomemory-vsl4</name>
         <name>pkg:/data/iso-codes</name>
         <name>pkg:/library/libedit</name>
       </software_data>

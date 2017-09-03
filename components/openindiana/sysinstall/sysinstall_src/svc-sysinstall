@@ -1,0 +1,32 @@
+#!/sbin/sh
+#
+
+. /lib/svc/share/smf_include.sh
+
+#
+# This will allow the executed script to determine whether it is
+# called from SMF service.
+#
+export SMF_FMRI
+
+case "$1" in
+'start')
+	#
+	# Disable service if not automated install
+	#
+	if [ -f /usr/share/auto_install ]
+	then
+		((exec /usr/bin/sysinstall)&)
+	else
+		svcadm disable $SMF_FMRI
+	fi
+	;;
+
+*)
+	echo "Usage: $0 start"
+	exit 1
+	;;
+
+esac
+exit $SMF_EXIT_OK
+

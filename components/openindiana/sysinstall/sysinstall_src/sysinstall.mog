@@ -1,16 +1,19 @@
 set name=pkg.fmri value=pkg://pluribusnetworks.com/system/management/sysinstall@1.0.0,0.8
 set name=pkg.description value="Software used to perform system installation tasks"
 set name=pkg.summary value="System administration applications"
-set name=info.classification value="org.opensolaris.category.2008:System/Administration and Configuration"
+set name=info.classification value="org.opensolaris.category.2008:System/Install"
 set name=variant.arch value=i386
 
 <transform file dir -> default owner root>
 <transform file dir path=etc -> edit group bin sys>
 <transform file dir path=usr -> edit group bin sys>
+<transform file dir path=usr/bin -> edit group bin sys>
 <transform file dir path=^usr/share/man -> edit group sys bin>
 <transform file dir path=lib/svc/manifest -> edit group bin sys>
-<transform file path=lib/svc/method/sysinstall -> edit mode 0644 0754>
-<transform file path=lib/svc/method/sysinstall -> edit group bin sys>
-<transform file path=lib/svc/method/sysinstall.xml -> edit group bin sys>
-<transform file path=lib/svc/method/sysinstall.xml -> edit mode 0644 0444>
+<transform file path=usr/bin/sysinstall -> edit mode 0644 0754>
+<transform file path=usr/bin/sysinstall -> edit group bin sys>
+<transform file path=lib/svc/method/svc-sysinstall -> edit mode 0644 0754>
+<transform file path=lib/svc/method/svc-sysinstall -> edit group bin sys>
+<transform file path=lib/svc/manifest/sysinstall.xml -> edit group bin sys>
+<transform file path=lib/svc/manifest/sysinstall.xml -> edit mode 0644 0444>
 <transform set name=pkg.fmri -> edit value pkg://[^/]+/ pkg://openindiana.org/>

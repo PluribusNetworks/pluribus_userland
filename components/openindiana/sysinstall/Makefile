@@ -21,7 +21,7 @@ COMPONENT_VERSION=	1.0.0
 COMPONENT_LICENSE=	CDDL
 COMPONENT_LICENSE_FILE=	$(COMPONENT_NAME).license
 COMPONENT_PROJECT_URL=	http://openindiana.org
-COMPONENT_CLASSIFICATION=	System/Administration and Configuration
+COMPONENT_CLASSIFICATION=	System/Install
 COMPONENT_FMRI=	service/management/sysinstall
 
 COMPONENT_REVISION=$(shell cd $(COMPONENT_SRC); git rev-list HEAD --count)
