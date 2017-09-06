@@ -16,16 +16,16 @@
 # Copyright 2017 Pluribus Networks Inc.  All rights reserved.
 #
 
-REBOOT=true
+POWEROFF=true
 opt=$1
-[ "x$opt" = "-n" ] && REBOOT=false
+[ "x$opt" = "-n" ] && POWEROFF=false
 CONFIG=sysinstall.conf
 SERVER_URL=""
 ALTROOT=/mnt
 ROOTPW="$5$z4qjnS.X$P3bQSLNmyaUaLfiTaJwf.LUyu8kCXmV2fphn55YKt00"
 HOSTNAME="netvisor"
-TZ=GMT
-LANG=C
+TZ=US/Pacific
+LANG=en_US.UTF-8
 KEYBOARD_LAYOUT=US-English
 LOG_SEWTUP=0
 OSCONSOLE=text
@@ -34,9 +34,13 @@ PARTNUM=1
 LOCAL_CFG_PATH=""
 SWAP_SIZE=0
 DUMP_SIZE=0
+ROOTBE=netvisor
+CREATE_FACTORY_RESET=n
 
 BE_PRINT_ERR=true
 export BE_PRINT_ERR
+TERM=sun-color
+export TERM
 
 RUNNING_IN_SMF=false
 [ "x$SMF_FMRI" != "x" ] && RUNNING_IN_SMF=true
@@ -332,7 +336,7 @@ set_timezone() {
 }
 
 set_lang() {
-	log "Setting language: ${1}"
+	log "Setting language: $1"
 	sed -i -e "s:^LANG=.*:LANG=${1}:" $ALTROOT/etc/default/init
 }
 
@@ -375,6 +379,13 @@ apply_changes() {
 	rm -f $ALTROOT/etc/hostname.*
 	rm -f $ALTROOT/etc/dhcp.*
 
+	if [ ! -f $ALTROOT/etc/default/init ]
+	then
+		echo "TZ=US/Pacific" > $ALTROOT/etc/default/init
+		echo "CMASK=022" >> $ALTROOT/etc/default/init
+		echo "LANG=en_US.UTF-8" >> $ALTROOT/etc/default/init
+	fi
+
 	#
 	# Set GRUB related stuff
 	#
@@ -412,18 +423,18 @@ make_bootable() {
 	disk2=$2
 
 	log "Making boot environment bootable"
-	zpool set bootfs=$RPOOL/ROOT/netvisor rpool
+	zpool set bootfs=$RPOOL/ROOT/$ROOTBE rpool
 
 	# Must do beadm activate first because we're bootstrapping from
 	# GRUB.
-	beadm activate netvisor || return 1
+	beadm activate $ROOTBE || return 1
 
 	# Now populate boot archive
 	log "Generating boot archive"
 	bootadm update-archive -R $ALTROOT || return 1
 
 	# Our factory-reset snapshot
-	zfs snapshot $RPOOL/ROOT/netvisor@factory-reset
+	[ "$CREATE_FACTORY_RESET" = "y" ] && zfs snapshot $RPOOL/ROOT/${ROOTBE}@factory-reset
 
 	# Update grub onto boot sectors
 	log "Installing GRUB"
@@ -436,17 +447,17 @@ make_bootable() {
 }
 
 get_console_dev() {
-	OSCONSOLE=`prtconf -v /devices | sed -n '/console/{n;p;}' | \
-	    cut -f 2 -d \'`
-	if [ -z "$OSCONSOLE" ]
+	OSCONSOLE=`prtconf -v /devices | sed -n '/console/{n;p;}' | cut -f 2 -d \'`
+	if [ "x$OSCONSOLE" = "x" ]
 	then
 		OSCONSOLE=`prtconf -v /devices | sed -n '/output-device/{n;p;}' | cut -f 2 -d \'`
-		[ "$OSCONSOLE" = "screen" ] && OSCONSOLE=text
+		if [ "$OSCONSOLE" = "screen" -o "x$OSCONSOLE" = "x" ]
+		then
+			OSCONSOLE=text
+		fi
 	fi
-	if /usr/sbin/prtconf -F >/dev/null 2>&1
-	then
-		HAVE_DISPLAY=yes
-	fi
+	/usr/sbin/prtconf -F >/dev/null 2>&1
+	[ $? -eq 0 ] && HAVE_DISPLAY=yes
 	log "Detected OSCONSOLE = $OSCONSOLE"
 }
 
@@ -474,7 +485,7 @@ generate_grub_menu() {
 	cd $GRUBDIR
 	get_console_dev
 
-	active_be=netvisor
+	active_be=$ROOTBE
 	[ ! -f $MENU ] && cp $ALTROOT/boot/grub/$MENU $MENU
 
 	#
@@ -532,7 +543,7 @@ generate_grub_menu() {
                 echo "#========================= $count ===========================
 title $TITLE_MONITOR $vers-$branch
 findroot (pool_rpool,0,a)
-bootfs $RPOOL/ROOT/netvisor
+bootfs $RPOOL/ROOT/$ROOTBE
 kernel\$ /platform/i86pc/kernel/\$ISADIR/unix -B \$ZFS-BOOTFS
 module\$ /platform/i86pc/\$ISADIR/boot_archive
 " >> $TMP
@@ -546,7 +557,7 @@ module\$ /platform/i86pc/\$ISADIR/boot_archive
 		echo "#========================= $count ===========================
 title $TITLE_CONSOLE $vers-$branch
 findroot (pool_rpool,0,a)
-bootfs $RPOOL/ROOT/netvisor
+bootfs $RPOOL/ROOT/$ROOTBE
 kernel\$ /platform/i86pc/kernel/\$ISADIR/unix -B \$ZFS-BOOTFS,console=${SERIAL_TTY},${SERIAL_TTY}-mode=\"${SERIAL_BAUD},8,n,1,-\"
 module\$ /platform/i86pc/\$ISADIR/boot_archive
 " >> $TMP
@@ -574,7 +585,7 @@ keyboard_layout=${1:-US-English}
 SCRATCH=/tmp/di.$$
 DEFAULT_ROOT_DISK=""
 DEFAULT_MIRROR_DISK=""
-ZFS_DATASET_LIST="pn_illumos.img.bz2;ROOT/netvisor;/;noauto"
+ZFS_DATASET_LIST="pn_illumos.img.bz2;ROOT/$ROOTBE;/;noauto"
 RPOOL=rpool
 
 #
@@ -585,7 +596,7 @@ discover_config
 
 if [ "x$DEFAULT_ROOT_DISK" = "x" ]
 then
-	diskinfo -PH | grep -v 'NVMe' > $SCRATCH
+	/usr/bin/diskinfo -PH | grep -v 'NVMe' > $SCRATCH
 	NUM=`wc -l /tmp/di.$$ | awk '{print $1}'`
 	DEFAULT_ROOT_DISK=`awk 'BEGIN {N=1} {if (N==1) { print $1; } N = N + 1; }'  /tmp/di.$$`
 
@@ -624,6 +635,25 @@ zfs set compression=on $RPOOL
 zfs create $RPOOL/ROOT
 zfs set canmount=off $RPOOL/ROOT
 zfs set mountpoint=legacy $RPOOL/ROOT
+#
+# This is defined in sysinstall.conf
+# Minimally should include export and export/home
+#
+for ds_spec in $ADDITIONAL_DATASETS
+do
+	_OIFS="$IFS"
+	IFS=";"
+	set -- $ds_spec
+	IFS="$_OIFS"
+	ds=$1
+	mntpt=$2
+	log "Creating additional dataset $RPOOL/$ds"
+	zfs create $RPOOL/$ds
+	[ $? -ne 0 ] && bomb "ZFS dataset creation failed"
+	zfs set mountpoint=$mntpt $RPOOL/$ds
+	[ $? -ne 0 ] && bomb "ZFS dataset mountpoint setting failed"
+done
+
 
 # Now import the root dataset and any additional ones
 log "Fetching ZFS datasets"
@@ -641,46 +671,39 @@ do
 	log "Fetching $ds ..."
 	if [ -f ${LOCAL_CFG_PATH}/$ds ]
 	then
-		cat ${LOCAL_CFG_PATH}/$ds | pv -B 128m -w 78 | bzip2 -dc | zfs receive -u $RPOOL/$target
+		sz=`stat -c %s ${LOCAL_CFG_PATH}/$ds`
+		cat ${LOCAL_CFG_PATH}/$ds | pv -s $sz -B 128m -w 78 2>/dev/console | bzip2 -dc | zfs receive -u $RPOOL/$target
 
 	elif [ "x$SERVER_URL" != "x" ]
 	then
-		curl -s ${SERVER_URL}/${ds} | pv -B 128m -w 78 | bzip2 -dc | zfs receive -u $RPOOL/$target
+		sz=`curl -sI ${SERVER_URL}/${ds} | grep Content-Length | awk '{ print $2 }' | sed 's///'`
+		curl -s ${SERVER_URL}/${ds} | pv -s $sz -B 128m -w 78 2>/dev/console | bzip2 -dc | zfs receive -u $RPOOL/$target
 	else
 		bomb "ZFS dataset $ds not found"
 	fi
 	[ $? -ne 0 ] && bomb "!!Failed to receive ZFS dataset $ds"
 	zfs set canmount=$canmount $RPOOL/$target
 	zfs set mountpoint=$mntpt $RPOOL/$target
-	[[ $target == ROOT/* ]] && root_found=1
+	[[ $target == ROOT/$ROOTBE ]] && root_found=1
 done
 
 [ $root_found -ne 1 ] && bomb "No ROOT dataset specified. Required for a bootable system!"
 
 log "Preparing boot environment"
-beadm mount netvisor $ALTROOT
+mkdir -p $ALTROOT
+#
+# We can't call beadm mount $ROOTBE $ALTROOT here
+# This needs a fix in libbe to call mount properly
+# so that it does not depend on the type of rootfs
+# which in livecd is UFS.
+# So we use a tiny helper that calls mount() correctly.
+#
+/usr/bin/mnt_zfs $RPOOL/ROOT/$ROOTBE $ALTROOT
 
 # Create any additional directories
 for dir in $ADDITIONAL_DIRECTORIES
 do
 	mkdir -p $ALTROOT/$dir
-done
-
-#
-# This is defined in sysinstall.conf
-# Minimally should include export and export/home
-#
-for ds_spec in $ADDITIONAL_DATASETS
-do
-	_OIFS="$IFS"
-	IFS=";"
-	set -- $ds_spec
-	IFS="$_OIFS"
-	ds=$1
-	mntpt=$2
-	log "Creating additional dataset $RPOOL/$ds"
-	zfs create $RPOOL/$ds
-	zfs set mountpoint=$mntpt $RPOOL/$ds
 done
 
 cp $ALTROOT/lib/svc/seed/global.db $ALTROOT/etc/svc/repository.db
@@ -693,12 +716,12 @@ chown root:sys $ALTROOT/etc/svc/repository.db
 
 log "Creating swap and dump"
 make_swap_dump
-zfs destroy $RPOOL/ROOT/netvisor@img
+zfs destroy $RPOOL/ROOT/$ROOTBE@img
 
 apply_changes $HOSTNAME $TZ $LANG $KEYBOARD_LAYOUT
 
 # Remove hostid file so that new one generates during reboot
-rm $ALTROOT/etc/hostid
+rm -f $ALTROOT/etc/hostid
 
 # Fixup path_to_inst to default
 echo "#path_to_inst_bootstrap_1" > $ALTROOT/etc/path_to_inst
@@ -708,9 +731,19 @@ make_bootable "$rootdev" "$mirrordev"
 generate_grub_menu
 log "Done. BE Setup complete."
 copy_install_log
-beadm unmount netvisor
+#
+# beadm unmount $ROOTBE
+#
+umount $ALTROOT
 
-if [ "$REBOOT" = "true" ]
+if [ "$POWEROFF" = "true" ]
 then
-	reboot -p
+	log "################################################################"
+	log "#                                                              #"
+	log "#     INSTALLATION COMPLETE. PRESS ANY KEY TO POWER OFF        #"
+	log "#                                                              #"
+	log "################################################################"
+
+	read dmy < /dev/console
+	/usr/sbin/poweroff
 fi

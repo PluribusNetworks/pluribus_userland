@@ -71,6 +71,7 @@ class PkgImgMod(Checkpoint):
 
         self.dist_iso_sort = arg.get("dist_iso_sort")
         self.run_script = arg.get("run_script", None)
+        self.logger.info("Run script: %s" % str(self.run_script))
 
         # instance attributes
         self.doc = None
@@ -106,7 +107,7 @@ class PkgImgMod(Checkpoint):
            proc = subprocess.Popen([self.run_script, self.pkg_img_path],
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.STDOUT,
-                                   envp=None, close_fds=True, shell=True)
+                                   env=None, close_fds=True, shell=False)
            while True:
                line = proc.stdout.readline()
                if len(line) == 0:
@@ -145,6 +146,9 @@ class PkgImgMod(Checkpoint):
         shutil.rmtree("sbin", ignore_errors=True)
         shutil.rmtree("kernel", ignore_errors=True)
         shutil.rmtree("lib", ignore_errors=True)
+
+	# Run a custom script, if provided to update the pkg_img_path
+	self.modify_script()
 
     def strip_x86_platform(self):
         """ class method to clean up the package image path for x86 systems
@@ -366,9 +370,6 @@ class PkgImgMod(Checkpoint):
         self.logger.info("=== Executing Pkg Image Modification Checkpoint ===")
 
         self.parse_doc()
-
-	# Run a custom script, if provided to update the pkg_img_path
-	self.modify_script()
 
         # clean up the root of the package image path
         self.strip_root()

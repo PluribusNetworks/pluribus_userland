@@ -16,4 +16,10 @@ set name=variant.arch value=i386
 <transform file path=lib/svc/method/svc-sysinstall -> edit group bin sys>
 <transform file path=lib/svc/manifest/sysinstall.xml -> edit group bin sys>
 <transform file path=lib/svc/manifest/sysinstall.xml -> edit mode 0644 0444>
+<transform file path=usr/share/sysinstall/cleanup_pkg_img -> edit group bin sys>
+<transform file path=usr/share/sysinstall/cleanup_pkg_img -> edit mode 0644 0755>
+<transform file path=usr/share/sysinstall/patch_pkg_img -> edit group bin sys>
+<transform file path=usr/share/sysinstall/patch_pkg_img -> edit mode 0644 0755>
+<transform file path=usr/share/sysinstall/sysinstall.conf -> edit group bin sys>
+<transform file path=usr/share/sysinstall/sysinstall.conf -> edit mode 0644 0444>
 <transform set name=pkg.fmri -> edit value pkg://[^/]+/ pkg://openindiana.org/>

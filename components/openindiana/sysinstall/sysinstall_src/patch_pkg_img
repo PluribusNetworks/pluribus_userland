@@ -1,0 +1,9 @@
+#!/bin/sh
+
+PKG_IMG_ROOT=$1
+
+cat $PKG_IMG_ROOT/lib/svc/method/media-assembly | nawk '
+/^	\/usr\/bin\/kbd -s/ { print "   /usr/bin/kbd -s US-English" }
+/^	\/usr\/sbin\/set_lang/ { print "        #" }' > $PKG_IMG_ROOT/lib/svc/method/media-assembly.new
+cp $PKG_IMG_ROOT/lib/svc/method/media-assembly.new $PKG_IMG_ROOT/lib/svc/method/media-assembly
+rm $PKG_IMG_ROOT/lib/svc/method/media-assembly.new

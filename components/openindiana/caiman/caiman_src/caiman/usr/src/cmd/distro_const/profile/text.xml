@@ -110,16 +110,16 @@
 
   <!--
 	Text mode menu
-  -->
   <service name='system/install-setup' version='1' type='service'>
     <instance name='default' enabled='true'/>
   </service>
+  -->
 
   <!--
-	Disable console login by default
+	Enable console login by default
   -->
   <service name='system/console-login' version='1' type='service'>
-    <instance name='default' enabled='false'/>
+    <instance name='default' enabled='true'/>
   </service>
 
   <!--

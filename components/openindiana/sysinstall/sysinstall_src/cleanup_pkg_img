@@ -1,0 +1,21 @@
+#!/bin/sh
+
+PKG_IMG_ROOT=$1
+
+if [ "x$PKG_IMG_ROOT" = "x" ]
+then
+	echo "Usage: $0 <pkg_img_root>"
+	exit 1
+fi
+
+#
+# Delete most locales except for a few basic ones.
+# The all-locales package gets pulled in via a dependency
+# chain which is quite hard to change. All locales are
+# not needed for a Live Install ISO.
+#
+(cd $PKG_IMG_ROOT/usr/lib/locale
+ ls | egrep -v 'en_US.*|C|POSIX' | while read loc
+ do
+	rm -r $loc
+ done)

@@ -50,7 +50,7 @@
             timeout - boot loader timeout value before the default boot entry
                       is automatically activated.
           -->
-          <boot_mods title="Pluribus Networks OS" timeout="15">
+          <boot_mods title="Pluribus Networks, Inc., Netvisor(R) Installer" timeout="15">
             <!--
               Boot entries to add to the default boot menu in the image. Each
               entry is either prepended or appended sequentially to the boot
@@ -193,6 +193,7 @@
         <name>pkg:/library/idnkit</name>
         <name>pkg:/library/security/openssl</name>
         <name>pkg:/library/security/openssl-tpm2.0-engine</name>
+	<name>pkg:/library/security/trousers</name>
         <name>pkg:/developer/linker</name>
         <name>pkg:/developer/dtrace</name>
         <name>pkg:/service/network/network-clients</name>
@@ -443,7 +444,6 @@
         <name>pkg:/driver/network/yge</name>
         <name>pkg:/driver/network/zyd</name>
         <name>pkg:/driver/network/bnx</name>
-        <name>pkg:/driver/network/ce</name>
         <name>pkg:/driver/pcmcia</name>
         <name>pkg:/driver/usb/ugen</name>
         <name>pkg:/driver/xvm/pv</name>
@@ -462,7 +462,6 @@
         <name>pkg:/consolidation/sunpro/sunpro-incorporation</name>
         <name>pkg:/consolidation/ips/ips-incorporation</name>
         <name>pkg:/developer/acpi</name>
-        <name>pkg:/diagnostic/acpidump</name>
         <name>pkg:/developer/debug/mdb/module/module-qlc</name>
         <name>pkg:/driver/firewire</name>
         <name>pkg:/driver/graphics/agpgart</name>
@@ -607,11 +606,10 @@
             the hostname here will override the default.
           -->
           <kwargs>
-            <arg name="root_password"></arg>
+            <arg name="root_password">test123</arg>
             <arg name="is_plaintext">true</arg>
-            <!-- uncomment before using
-            <arg name="hostname">hostname</arg>
-            -->
+            <arg name="hostname">pluribus</arg>
+            <arg name="run_script">/usr/share/sysinstall/patch_pkg_img</arg>
           </kwargs>
       </checkpoint>
       <checkpoint name="ba-init"
@@ -661,6 +659,7 @@
             <arg name="dist_iso_sort">
                 /usr/share/distro_const/sort/text_x86.sort</arg>
             <arg name="compression_type">lzma</arg>
+            <arg name="run_script">/usr/share/sysinstall/cleanup_pkg_img</arg>
           </kwargs>
       </checkpoint>
       <checkpoint name="create-iso"

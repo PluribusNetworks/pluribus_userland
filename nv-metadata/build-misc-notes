@@ -295,3 +295,6 @@ pkg image-update
 ./build.sh libpcap
 ./build.sh xdg-user-dirs
 ./build.sh ncftp
+./build.sh libusb/ugen
+./build.sh libusb/wrapper
+./build.sh atk
