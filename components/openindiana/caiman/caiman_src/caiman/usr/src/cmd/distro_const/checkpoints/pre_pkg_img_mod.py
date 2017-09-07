@@ -65,6 +65,9 @@ class PrePkgImgMod(Checkpoint):
         self.is_plaintext = arg.get("is_plaintext",
                                     self.DEFAULT_ARG.get("is_plaintext"))
         self.hostname = arg.get("hostname")
+        self.logger.info("Hostname: %s" % str(self.hostname))
+        self.run_script = arg.get("run_script", None)
+        self.logger.info("Run script: %s" % str(self.run_script))
 
         # instance attributes
         self.doc = None
@@ -111,6 +114,24 @@ class PrePkgImgMod(Checkpoint):
 
         for profile in svc_profile_list:
             self.svc_profiles.append(profile.source)
+
+    def modify_script(self):
+        """ method to call a custom script to modify the pkg_img_path area
+        """
+        if self.run_script is not None:
+           proc = subprocess.Popen([self.run_script, self.pkg_img_path],
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.STDOUT,
+                                   env=None, close_fds=True, shell=False)
+           while True:
+               line = proc.stdout.readline()
+               if len(line) == 0:
+                   break  # EOF
+               self.logger.info(line)
+           ret = proc.wait()
+           if ret != 0:
+               raise RuntimeError("Script failed: %s, "
+                                  "exit %d" % (self.run_script, ret))
 
     def set_password(self):
         """ class method to set the root password
@@ -289,6 +310,9 @@ class PrePkgImgMod(Checkpoint):
         shutil.move(repo_name, os.path.join(self.pkg_img_path,
             "etc/svc/repository.db"))
 
+        # Run a custom script, if provided to update the pkg_img_path
+        self.modify_script()
+
     def calculate_size(self):
         """ class method to populate the .image_info file with the size of the
         image.
@@ -330,7 +354,7 @@ class AIPrePkgImgMod(PrePkgImgMod, Checkpoint):
     SERVICE_NAME = "solarisdev-%{arch}-%{build}"
 
     def __init__(self, name, arg=DEFAULT_ARG):
-        super(AIPrePkgImgMod, self).__init__(name)
+        super(AIPrePkgImgMod, self).__init__(name, arg)
         self.root_password = arg.get("root_password",
                                      self.DEFAULT_ARG.get("root_password"))
         if self.root_password is None:
@@ -700,7 +724,7 @@ class TextPrePkgImgMod(PrePkgImgMod, Checkpoint):
     DEFAULT_ARG = {"root_password": "", "is_plaintext": "true"}
 
     def __init__(self, name, arg=DEFAULT_ARG):
-        super(TextPrePkgImgMod, self).__init__(name)
+        super(TextPrePkgImgMod, self).__init__(name, arg)
         self.root_password = arg.get("root_password",
                                      self.DEFAULT_ARG.get("root_password"))
         if self.root_password is None:

@@ -1,0 +1,44 @@
+#!/bin/sh
+
+#
+# This file and its contents are supplied under the terms of the
+# Common Development and Distribution License ("CDDL"), version 1.0.
+# You may only use this file in accordance with the terms of version
+# 1.0 of the CDDL.
+#
+# A full copy of the text of the CDDL should have accompanied this
+# source.  A copy of the CDDL is also available via the Internet at
+# http://www.illumos.org/license/CDDL.
+#
+# COPYRIGHT 2017 Pluribus Networks Inc. All Rights Reserved.
+#
+
+PKG_IMG_ROOT=$1
+
+. /usr/share/sysinstall/sysinstall.conf
+/usr/share/sysinstall/cleanup_pkg_img $PKG_IMG_ROOT
+
+mkdir -p $PKG_IMG_ROOT/local_config/
+for ds_spec in $ZFS_DATASET_LIST
+do
+	_OIFS="$IFS"
+	IFS=";"
+	set -- $ds_spec
+	IFS="$_OIFS"
+	ds=$1
+
+	echo "Copying dataset $ds into PKG image area"
+	cp $ZFS_DATASET_IMAGES/$ds $PKG_IMG_ROOT/local_config/
+	if [ $? -ne 0 ]
+	then
+		echo "Error copying dataset $ds"
+		exit 1
+	fi
+done
+
+cp /usr/share/sysinstall/sysinstall.conf $PKG_IMG_ROOT/local_config/
+
+#
+# Indicate that this is an automated install image
+#
+touch $PKG_IMG_ROOT/usr/share/auto_install

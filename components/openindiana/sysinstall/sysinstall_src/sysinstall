@@ -222,6 +222,10 @@ discover_config() {
 		return 0
 	fi
 
+	#
+	# Now we need to probe network so start DHCP first
+	#
+	force_dhcp
 	BOOTSRVA=`/sbin/dhcpinfo BootSrvA`
 	CFG_IP=""
 	[ -f ${LOCAL_CFG_PATH}/config_ip ] && CFG_IP=`cat ${LOCAL_CFG_PATH}/config_ip`
@@ -580,7 +584,6 @@ module\$ /platform/i86pc/\$ISADIR/boot_archive
 #
 console_log /tmp/sysinstall.log
 get_console_dev
-force_dhcp
 keyboard_layout=${1:-US-English}
 SCRATCH=/tmp/di.$$
 DEFAULT_ROOT_DISK=""
@@ -716,7 +719,7 @@ chown root:sys $ALTROOT/etc/svc/repository.db
 
 log "Creating swap and dump"
 make_swap_dump
-zfs destroy $RPOOL/ROOT/$ROOTBE@img
+zfs destroy $RPOOL/ROOT/${ROOTBE}@img
 
 apply_changes $HOSTNAME $TZ $LANG $KEYBOARD_LAYOUT
 
@@ -725,6 +728,9 @@ rm -f $ALTROOT/etc/hostid
 
 # Fixup path_to_inst to default
 echo "#path_to_inst_bootstrap_1" > $ALTROOT/etc/path_to_inst
+
+# Cleanup zpool.cache if any
+rm -f $ALTROOT/etc/zfs/zpool.cache
 
 make_bootable "$rootdev" "$mirrordev"
 [ $? -ne 0 ] && bomb "Boot activation failed"
@@ -740,7 +746,7 @@ if [ "$POWEROFF" = "true" ]
 then
 	log "################################################################"
 	log "#                                                              #"
-	log "#     INSTALLATION COMPLETE. PRESS ANY KEY TO POWER OFF        #"
+	log "#     INSTALLATION COMPLETE. PRESS ENTER TO POWER OFF          #"
 	log "#                                                              #"
 	log "################################################################"
 

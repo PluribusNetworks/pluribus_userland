@@ -298,3 +298,4 @@ pkg image-update
 ./build.sh libusb/ugen
 ./build.sh libusb/wrapper
 ./build.sh atk
+./build.sh openindiana/sysinstall

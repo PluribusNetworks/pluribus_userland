@@ -651,7 +651,7 @@
             <arg name="dist_iso_sort">
                 /usr/share/distro_const/sort/text_x86.sort</arg>
             <arg name="compression_type">lzma</arg>
-            <arg name="run_script">/usr/share/sysinstall/cleanup_pkg_img</arg>
+            <arg name="run_script">/usr/share/sysinstall/setup_autoinstall</arg>
           </kwargs>
       </checkpoint>
       <checkpoint name="create-iso"
