@@ -137,6 +137,12 @@ class PkgImgMod(Checkpoint):
                                        "etc/.pwd.lock")):
             os.remove(self.pkg_img_path + "/etc/.pwd.lock")
 
+        # This avoids ttymon errors because of the log file getting
+        # symlinked into /mnt/misc
+        if os.path.exists(os.path.join(self.pkg_img_path,
+                                       "/var/saf/zsmon/log")):
+            os.remove(os.path.join(self.pkg_img_path, "/var/saf/zsmon/log"))
+
         os.chdir(self.pkg_img_path)
 
         # sbin, kernel and lib are contained within the boot_archive

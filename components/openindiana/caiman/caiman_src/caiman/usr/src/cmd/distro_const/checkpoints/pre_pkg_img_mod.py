@@ -33,6 +33,7 @@ import platform
 import re
 import shutil
 import tempfile
+import subprocess
 
 from distutils.text_file import TextFile
 

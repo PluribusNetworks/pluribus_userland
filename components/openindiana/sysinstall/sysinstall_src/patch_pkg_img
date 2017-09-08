@@ -15,8 +15,17 @@
 
 PKG_IMG_ROOT=$1
 
-cat $PKG_IMG_ROOT/lib/svc/method/media-assembly | nawk '
-/^	\/usr\/bin\/kbd -s/ { print "   /usr/bin/kbd -s US-English" }
-/^	\/usr\/sbin\/set_lang/ { print "        #" }' > $PKG_IMG_ROOT/lib/svc/method/media-assembly.new
+cat $PKG_IMG_ROOT/lib/svc/method/media-assembly | nawk ' BEGIN { matched=0; }
+/^	\/usr\/bin\/kbd -s/ { print "	/usr/bin/kbd -s US-English"; matched = 1; }
+/^	\/usr\/sbin\/set_lang/ { print "	#"; matched = 1; }
+{ if (matched == 0) {
+	print $0;
+  }
+  matched = 0;
+}' > $PKG_IMG_ROOT/lib/svc/method/media-assembly.new
 cp $PKG_IMG_ROOT/lib/svc/method/media-assembly.new $PKG_IMG_ROOT/lib/svc/method/media-assembly
 rm $PKG_IMG_ROOT/lib/svc/method/media-assembly.new
+
+rm -f $PKG_IMG_ROOT/var/saf/zsmon/log
+
+

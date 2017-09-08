@@ -27,3 +27,4 @@ dir path=usr group=sys
 dir path=usr/bin
 file path=usr/bin/diskinfo mode=0555
 file path=usr/bin/mnt_zfs mode=0555
+file path=usr/bin/takeover-console mode=0555

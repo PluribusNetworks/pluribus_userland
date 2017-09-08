@@ -1,4 +1,4 @@
-#/usr/bin/ksh
+#!/usr/bin/ksh
 
 #
 # This file and its contents are supplied under the terms of the
@@ -28,7 +28,6 @@ TZ=US/Pacific
 LANG=en_US.UTF-8
 KEYBOARD_LAYOUT=US-English
 LOG_SEWTUP=0
-OSCONSOLE=text
 HAVE_DISPLAY=""
 PARTNUM=1
 LOCAL_CFG_PATH=""
@@ -36,6 +35,11 @@ SWAP_SIZE=0
 DUMP_SIZE=0
 ROOTBE=netvisor
 CREATE_FACTORY_RESET=n
+#
+# Empty OSCONSOLE means auto-detect
+# This can be overridden in sysinstall.conf
+#
+OSCONSOLE=""
 
 BE_PRINT_ERR=true
 export BE_PRINT_ERR
@@ -93,18 +97,39 @@ bomb() {
 	log ======================================================
 	log "$*"
 	log ======================================================
+	log
 	if [[ -n "$INSTALL_LOG" ]]
 	then
-		log "For more information, check $INSTALL_LOG"
-		log ======================================================
-	fi
-	if [ "$RUNNING_IN_SMF" = "true" ]
+		log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+		log "!                                                              !"
+		log "!     INSTALLATION FAILED. PLEASE SAVE INSTALL LOG.            !"
+		log "!     INSTRUCTIONS:                                            !"
+		log "!                                                              !"
+		log "!     1) Press ENTER                                           !"
+		log "!     2) At 'Login: ' prompt type root and press ENTER         !"
+		log "!     3) At 'password: ' prompt type test123 and press ENTER   !"
+		log "!     4) scp $INSTALL_LOG <username>@<some host>:/<path>"
+		log "!                                                              !"
+		log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+		if [ "$RUNNING_IN_SMF" = "true" ]
+		then
+			svcadm disable $SMF_FMRI
+		fi
+	elif [ "$RUNNING_IN_SMF" = "true" ]
 	then
-		cat "$INSTALL_LOG" > /dev/console
-		while [ `/bin/true` ]
-		do
-			sleep 5
-		done
+		log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+		log "!                                                              !"
+		log "!     INSTALLATION FAILED. PRESS ENTER TO POWER OFF.           !"
+		log "!                                                              !"
+		log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+		read dmy < /dev/console
+		/usr/sbin/shutdown -y -g 0 -i 5
+	else
+		log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+		log "!                                                              !"
+		log "!     INSTALLATION FAILED.                                     !"
+		log "!                                                              !"
+		log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	fi
 	exit 1
 }
@@ -114,20 +139,39 @@ post_boot() {
 	echo "$*" >> $ALTROOT/.initialboot
 }
 
+post_boot_final() {
+	if [[ -f $ALTROOT/.initialboot_additional ]]
+	then
+		cat $ALTROOT/.initialboot_additional >> $ALTROOT/.initialboot
+		rm $ALTROOT/.initialboot_additional
+	fi
+}
+
 force_dhcp() {
-	log "Forcing all interfaces into DHCP..."
-	/sbin/ifconfig -a plumb 2> /dev/null
-	# for the logs
-	for iface in `/sbin/dladm show-phys -o device -p` ; do
-		/sbin/ifconfig $iface dhcp &
-	done
-	count=0
-	while [[ -z $(/sbin/dhcpinfo BootSrvA) ]]; do
-		log "Waiting for dhcpinfo..."
-		sleep 1
-		count=$((count + 1))
-		[ $count -eq 10 ] && break
-	done
+	wait=$1
+	if [ "$wait" != "waitonly" ]
+	then
+		log "Forcing all interfaces into DHCP..."
+		/sbin/ifconfig -a plumb 2> /dev/null
+		# for the logs
+		for iface in `/sbin/dladm show-phys -o device -p`
+		do
+			log "Starting DHCP on $iface ..."
+			/sbin/ifconfig $iface dhcp &
+		done
+	fi
+
+	if [ "$wait" != "nowait" ]
+	then
+		count=0
+		while [[ -z $(/sbin/dhcpinfo BootSrvA) ]]
+		do
+			log "Waiting for dhcpinfo..."
+			sleep 1
+			count=$((count + 1))
+			[ $count -eq 10 ] && break
+		done
+	fi
 	sleep 1
 }
 
@@ -200,12 +244,18 @@ EOF
 
 	ptab=`cat "$tmp2"`
 	log "Created default partition table on $dev"
-	log "$ptab"
+	echo "$ptab" >> $INSTALL_LOG
 	rm -f "$tmp1" "$tmp2"
 }
 
 discover_config() {
 	log "Config discovery ..."
+
+	#
+	# Start DHCP but do not wait for DHCP options
+	#
+	force_dhcp nowait
+
 	for loc in /.cdrom/local_config /local_config
 	do
 		if [ -d $loc ]
@@ -223,9 +273,9 @@ discover_config() {
 	fi
 
 	#
-	# Now we need to probe network so start DHCP first
+	# Now we need to probe network so wait for BootSrvA option first
 	#
-	force_dhcp
+	force_dhcp waitonly
 	BOOTSRVA=`/sbin/dhcpinfo BootSrvA`
 	CFG_IP=""
 	[ -f ${LOCAL_CFG_PATH}/config_ip ] && CFG_IP=`cat ${LOCAL_CFG_PATH}/config_ip`
@@ -249,25 +299,27 @@ discover_config() {
 get_memsize() {
 	# Aim for 25% of physical memory (minimum 1G)
 	# prtconf always reports in megabytes
-	local mem=`/usr/sbin/prtconf | /bin/awk '/^Memory size/ { print $3 }'`
+	mem=`/usr/sbin/prtconf | /bin/awk '/^Memory size/ { print $3 }'`
 	if [[ $mem -lt 4096 ]]
 	then
-		local vsize=1
+		vsize=1
 	else
-		local quart=`echo "scale=1;$mem/4096" | /bin/bc`
-		local vsize=`printf %0.f $quart`
+		quart=`echo "scale=1;$mem/4096" | /bin/bc`
+		vsize=`printf %0.f $quart`
 	fi
 	echo $vsize
 }
 
 get_rpool_free() {
-	local zfsavail=`/sbin/zfs list -H -o avail $RPOOL`
+	zfsavail=`/sbin/zfs list -H -o avail $RPOOL`
 	if [[ ${zfsavail:(-1)} = "G" ]]
 	then
-		local avail=`printf %0.f ${zfsavail::-1}`
+		zfsavail=`echo $zfsavail | sed 's/G//'`
+		avail=`printf %0.f ${zfsavail}`
 	elif [[ ${zfsavail:(-1)} = "T" ]]
 	then
-		local gigs=`echo "scale=1;${zfsavail::-1}*1024" | /bin/bc`
+		zfsavail=`echo $zfsavail | sed 's/T//'`
+		gigs=`echo "scale=1;${zfsavail}*1024" | /bin/bc`
 		avail=`printf %0.f $gigs`
 	else
 		# If we get here, there's too little space left to be usable
@@ -277,11 +329,11 @@ get_rpool_free() {
 }
 
 make_swap_dump() {
-	local size=`get_memsize`
-	local totalvols=""
-	local usable=""
-	local finalsize=""
-	local savecore=""
+	size=`get_memsize`
+	totalvols=""
+	usable=""
+	finalsize=""
+	savecore=""
 
 	# We're creating both swap and dump volumes of the same size unless
 	# specified otherwise
@@ -419,6 +471,12 @@ apply_changes() {
 	then
 		set_keyboard_layout $4
 	fi
+
+	#
+	# Rerun grub-gen.ksh on reboot
+	#
+	post_boot /usr/bin/grub-gen.ksh
+	post_boot mkdir -p /var/nvOS/log/cores
 	return 0
 }
 
@@ -451,18 +509,26 @@ make_bootable() {
 }
 
 get_console_dev() {
-	OSCONSOLE=`prtconf -v /devices | sed -n '/console/{n;p;}' | cut -f 2 -d \'`
-	if [ "x$OSCONSOLE" = "x" ]
+	console=`prtconf -v /devices | sed -n '/console/{n;p;}' | cut -f 2 -d \'`
+	if [ "x$console" = "x" ]
 	then
-		OSCONSOLE=`prtconf -v /devices | sed -n '/output-device/{n;p;}' | cut -f 2 -d \'`
-		if [ "$OSCONSOLE" = "screen" -o "x$OSCONSOLE" = "x" ]
+		console=`prtconf -v /devices | sed -n '/output-device/{n;p;}' | cut -f 2 -d \'`
+		if [ "$console" = "screen" ]
 		then
-			OSCONSOLE=text
+			console=text
 		fi
 	fi
 	/usr/sbin/prtconf -F >/dev/null 2>&1
 	[ $? -eq 0 ] && HAVE_DISPLAY=yes
-	log "Detected OSCONSOLE = $OSCONSOLE"
+
+	if [ "x$console" != "x" ]
+	then
+		OSCONSOLE=$console
+		log "Detected OSCONSOLE = $OSCONSOLE"
+	else
+		OSCONSOLE=text
+		log "Console device probed empty. Using default OSCONSOLE = $OSCONSOLE"
+	fi
 }
 
 generate_grub_menu() {
@@ -487,7 +553,7 @@ generate_grub_menu() {
 	fi
 	PDIR=`pwd`
 	cd $GRUBDIR
-	get_console_dev
+	[ "x$OSCONSOLE" = "x" ] && get_console_dev
 
 	active_be=$ROOTBE
 	[ ! -f $MENU ] && cp $ALTROOT/boot/grub/$MENU $MENU
@@ -495,7 +561,7 @@ generate_grub_menu() {
 	#
 	# Fetch version info from BE
 	#
-	for pkg_line in `chroot_exec $ALTROOT /usr/bin/pkg info -l pn-nvos`
+	for pkg_line in `/usr/bin/pkg -R $ALTROOT info -l pn-nvos`
 	do
 		if [[ "$pkg_line" =~ "Version:" ]]; then
 			vers=`echo $pkg_line | sed -e \
@@ -557,15 +623,18 @@ module\$ /platform/i86pc/\$ISADIR/boot_archive
 	if [ "$OSCONSOLE" != "text" ]
 	then
 		SERIAL_TTY=$OSCONSOLE
-		SERIAL_BAUD=9600
-		echo "#========================= $count ===========================
+	else
+		SERIAL_TTY=ttya
+	fi
+	SERIAL_BAUD=9600
+	echo "#========================= $count ===========================
 title $TITLE_CONSOLE $vers-$branch
 findroot (pool_rpool,0,a)
 bootfs $RPOOL/ROOT/$ROOTBE
 kernel\$ /platform/i86pc/kernel/\$ISADIR/unix -B \$ZFS-BOOTFS,console=${SERIAL_TTY},${SERIAL_TTY}-mode=\"${SERIAL_BAUD},8,n,1,-\"
 module\$ /platform/i86pc/\$ISADIR/boot_archive
 " >> $TMP
-	fi
+	count=$((count + 1))
 
 	if [ ! -e "$BACKUP" ]; then
 		/usr/bin/cp $MENU $BACKUP
@@ -735,6 +804,7 @@ rm -f $ALTROOT/etc/zfs/zpool.cache
 make_bootable "$rootdev" "$mirrordev"
 [ $? -ne 0 ] && bomb "Boot activation failed"
 generate_grub_menu
+post_boot_final
 log "Done. BE Setup complete."
 copy_install_log
 #
@@ -751,5 +821,9 @@ then
 	log "################################################################"
 
 	read dmy < /dev/console
-	/usr/sbin/poweroff
+	/usr/sbin/shutdown -y -g 0 -i 5
+	if [ "$RUNNING_IN_SMF" = "true" ]
+	then
+		svcadm disable $SMF_FMRI
+	fi
 fi

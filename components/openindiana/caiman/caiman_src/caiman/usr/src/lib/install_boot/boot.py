@@ -1244,7 +1244,7 @@ class TextISOImageBootMenu(ISOImageBootMenu):
                      self.boot_title]
         ti_kargs = ["-B console=ttya,livessh=enable",
                     "-B console=ttyb,livessh=enable",
-                    "-B livessh=enable"]
+                    "-B console=text,livessh=enable"]
         for i, title in enumerate(ti_titles):
             instance = SolarisODDBootInstance(self.pkg_img_path)
             instance.title = title

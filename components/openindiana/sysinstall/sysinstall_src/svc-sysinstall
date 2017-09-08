@@ -26,7 +26,7 @@ case "$1" in
 	#
 	# Disable service if not automated install
 	#
-	if [ -f /usr/share/auto_install ]
+	if [ -f /usr/share/auto_sysinstall ]
 	then
 		((exec /usr/bin/sysinstall)&)
 	else

@@ -161,7 +161,6 @@
         <name>pkg:/driver/crypto/dprov</name>
         <name>pkg:/driver/crypto/tpm</name>
         <name>pkg:/driver/i86pc/smbus</name>
-        <name>pkg:/driver/i86pc/tpm2</name>
         <name>pkg:/driver/i86pc/fipe</name>
         <name>pkg:/driver/i86pc/gpio</name>
         <name>pkg:/driver/i86pc/ichwd</name>
