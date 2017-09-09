@@ -425,6 +425,35 @@ set_boot_props() {
 	chmod 0444 /${RPOOL}/boot/grub/bootsign/pool_$RPOOL
 }
 
+flag_dhcp_interfaces() {
+	#
+	# The NICs which got DHCP IP in this live env are also
+	# flagged as DHCP in the installed environment.
+	#
+	/usr/sbin/ipadm show-addr | nawk '{
+		sl = index($1, "/");
+		al = index($4, "/")
+        	if (sl > 0) {
+			obj = substr($1, 0, sl-1);
+		} else {
+			obj = $1;
+		}
+		if (al > 0) {
+			addr = substr($4, 0, al-1);
+		} else {
+			addr = $4;
+		}
+		if (obj != "ADDROBJ" && obj != "lo0" && $2 == "dhcp" && $3 == "ok" && addr != "0.0.0.0") {
+			printf("%s\n", obj);
+		}
+	}' > /tmp/ifs
+	for if in `cat /tmp/ifs`
+	do
+		echo "$HOSTNAME" > $ALTROOT/etc/hostname.$if
+		touch $ALTROOT/etc/dhcp.$if
+	done
+}
+
 apply_changes() {
 	log "Basic BE setup"
 	set_root_pwd
@@ -472,11 +501,35 @@ apply_changes() {
 		set_keyboard_layout $4
 	fi
 
+	# Detect which interfaces got DHCP and mark them as DHCP
+	# in altroot
+	flag_dhcp_interfaces
+
 	#
-	# Rerun grub-gen.ksh on reboot
+	# Misc cleanup
 	#
-	post_boot /usr/bin/grub-gen.ksh
-	post_boot mkdir -p /var/nvOS/log/cores
+	log "Cleaning up installed Boot Environment"
+	rm -f $ALTROOT/var/log/syslog.* 
+	rm -f $ALTROOT/var/log/Xorg.0.log* 
+	rm -f $ALTROOT/var/log/authlog.* 
+	rm -f $ALTROOT/var/log/postrun.log 
+	rm -f $ALTROOT/var/adm/messages.*
+	rm -f $ALTROOT/var/adm/wtmpx.*
+	rm -f $ALTROOT/var/adm/lastlog.*
+	rm -f $ALTROOT/var/adm/sulog
+	rm -f $ALTROOT/var/mail/root
+	rm -rf $ALTROOT/root/.ssh/*
+	rm -rf $ALTROOT/root/.gconf
+	rm -rf $ALTROOT/root/.cache
+	rm -f $ALTROOT/root/.bash_history
+	rm -f $ALTROOT/root/.sh_history
+	rm -f $ALTROOT/root/.gitconfig
+	echo > $ALTROOT/var/adm/wtmpx
+	echo > $ALTROOT/var/adm/lastlog
+	echo > $ALTROOT/var/log/authlog
+	echo > $ALTROOT/var/log/syslog
+	echo > $ALTROOT/var/adm/messages
+	echo > $ALTROOT/var/adm/nscd.log
 	return 0
 }
 

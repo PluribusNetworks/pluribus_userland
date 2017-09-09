@@ -9,3 +9,9 @@ tools/parfait
 tools/pkglint
 
 components/meta-packages/history/build
+
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.zip
+*.tgz
