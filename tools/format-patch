@@ -1,0 +1,22 @@
+#!/bin/sh
+
+#
+# Get the tip unless a commit is specified
+#
+COMMIT=$1
+COMMIT_IS_TIP=0
+if [ "x$COMMIT" = "x" ]
+then
+	COMMIT=`git log -1 | awk '/^commit/ { print $2 }'`
+	COMMIT_IS_TIP=1
+fi
+
+git format-patch -k -1 --stdout $COMMIT > /tmp/git_commit.patch
+
+
+if [ $COMMIT_IS_TIP -eq 1 ]
+then
+	echo "Git patch for TIP is in /tmp/git_commit.patch"
+else
+	echo "Git patch for $COMMIT is in /tmp/git_commit.patch"
+fi
