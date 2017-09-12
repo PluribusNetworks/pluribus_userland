@@ -35,6 +35,8 @@ SWAP_SIZE=0
 DUMP_SIZE=0
 ROOTBE=netvisor
 CREATE_FACTORY_RESET=n
+CLEAR_IF_FLAGS=0
+
 #
 # Empty OSCONSOLE means auto-detect
 # This can be overridden in sysinstall.conf
@@ -380,10 +382,13 @@ set_hostname() {
 	log "Setting hostname: ${1}"
 	/bin/hostname "$1"
 	echo "$1" > $ALTROOT/etc/nodename
-	head -n 26 $ALTROOT/etc/hosts > /tmp/hosts
-	echo "::1\t\t$1" >> /tmp/hosts
-	echo "127.0.0.1\t$1" >> /tmp/hosts
-	cat /tmp/hosts > $ALTROOT/etc/hosts
+	echo "$1" > $ALTROOT/etc/hostname
+	#
+	# Replace localhost entries
+	#
+	cat $ALTROOT/etc/hosts | sed "s/::1.*/::1		$1 localhost loghost/
+	s/^127.0.0.1.*/127.0.0.1	$1 localhost loghost/" > /tmp/hosts
+	cp /tmp/hosts $ALTROOT/etc/hosts
 }
 
 set_timezone() {
@@ -461,7 +466,7 @@ apply_changes() {
 	ln -s generic_limited_net.xml $ALTROOT/etc/svc/profile/generic.xml
 	rm -f $ALTROOT/etc/svc/profile/name_service.xml
 	ln -s ns_dns.xml $ALTROOT/etc/svc/profile/name_service.xml
-	rm -f $ALTROOT/etc/hostname.*
+	[ $CLEAR_IF_FLAGS -eq 1 ] && rm -f $ALTROOT/etc/hostname.*
 	rm -f $ALTROOT/etc/dhcp.*
 
 	if [ ! -f $ALTROOT/etc/default/init ]
@@ -530,6 +535,13 @@ apply_changes() {
 	echo > $ALTROOT/var/log/syslog
 	echo > $ALTROOT/var/adm/messages
 	echo > $ALTROOT/var/adm/nscd.log
+	#
+	# Patch manifest-import to work around a possible race.
+	#
+	cat $ALTROOT/lib/svc/method/manifest-import | /usr/bin/sed '/^	# Apply profiles/a
+\	sleep 2
+' > /tmp/mfi
+	[ $? -eq 0 ] && cp /tmp/mfi $ALTROOT/lib/svc/method/manifest-import
 	return 0
 }
 
