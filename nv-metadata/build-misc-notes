@@ -299,3 +299,8 @@ pkg image-update
 ./build.sh libusb/wrapper
 ./build.sh atk
 ./build.sh openindiana/sysinstall
+./build.sh json-glib
+./build.sh libIDL 
+./build.sh ORBit2
+./build.sh desktop/gsettings-desktop-schemas
+./build.sh desktop/gnome2/GConf

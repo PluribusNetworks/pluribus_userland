@@ -1286,3 +1286,8 @@ file path=usr/share/man/man3x11/XwcTextPerCharExtents.3x11
 file path=usr/share/man/man3x11/XwcTextPropertyToTextList.3x11
 file path=usr/share/man/man4/Compose.4
 file path=usr/share/man/man4/XCompose.4
+
+depend type=require fmri=x11/library/libxau
+depend type=require fmri=x11/library/libxcb
+depend type=require fmri=x11/library/libxext
+

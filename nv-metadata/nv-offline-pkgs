@@ -1250,6 +1250,7 @@ web/server/apache-22/module/apache-sed
 x11/library/libice
 x11/library/libx11
 x11/library/libxau
+x11/library/libxcb
 x11/library/libxdmcp
 x11/library/libxext
 x11/library/libxft

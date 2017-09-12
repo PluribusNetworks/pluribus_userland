@@ -10,42 +10,45 @@
 #
 
 #
-# Copyright 2013 Alexander Pyhalov.  All rights reserved.
+# Copyright 2016 Alexander Pyhalov
 #
 
 include ../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= libproxy
 
-COMPONENT_VERSION= 0.3.1
+COMPONENT_VERSION= 0.4.0
 COMPONENT_REVISION= 1
 COMPONENT_SUMMARY= Libproxy is a library that provides automatic proxy configuration management
-COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
-COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.bz2
+COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_NAME)-$(COMPONENT_VERSION)
+COMPONENT_ARCHIVE= $(COMPONENT_NAME)-$(COMPONENT_VERSION).tar.gz
 COMPONENT_ARCHIVE_HASH= \
-  sha256:82e27b1b391fbf36ae1433729b7431739212171fbffc34c55eb75b60e20998fb
+  sha256:59f2029718c257da09ff880d31c43bde76db4181587d01ee6d0f416014494ada
 COMPONENT_ARCHIVE_URL= \
-  http://libproxy.googlecode.com/files/$(COMPONENT_ARCHIVE)
+  https://github.com/$(COMPONENT_NAME)/$(COMPONENT_NAME)/archive/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL = http://code.google.com/p/libproxy/
 
-include ../../make-rules/prep.mk
-include ../../make-rules/configure.mk
-include ../../make-rules/ips.mk
+include $(WS_MAKE_RULES)/prep.mk
+include $(WS_MAKE_RULES)/configure.mk
+include $(WS_MAKE_RULES)/ips.mk
 
-# I believe it increases cross GCC/Sun Studio compatibility
-gcc_OPT=-O2
-
-COMPONENT_PREP_ACTION= ( cd $(@D) && \
-                libtoolize --force &&\
-                aclocal -I . &&\
-                automake -a -c -f &&\
-                autoconf )
-
+COMPONENT_PREP_ACTION= ( cd $(@D) && ./autogen.sh )
 COMPONENT_PRE_CONFIGURE_ACTION =        ($(CLONEY) $(SOURCE_DIR) $(@D)) 
 
-CFLAGS+= -D__EXTENSIONS__
+CFLAGS+= -D__EXTENSIONS__ -D_POSIX_C_SOURCE=200112L
 
-CONFIGURE_OPTIONS.64 += --without-mozjs
+CMAKE= cmake
+CMAKE_BINDIR.32 =       bin
+CMAKE_BINDIR.64 =       bin/$(MACH64)
+CMAKE_LIBDIR.32 =       lib
+CMAKE_LIBDIR.64 =       lib/$(MACH64)
+
+CMAKE_OPTIONS+= -DCMAKE_C_COMPILER=$(CC)
+CMAKE_OPTIONS+= -DCMAKE_CXX_COMPILER=$(CXX)
+CMAKE_OPTIONS+= -DCMAKE_C_FLAGS="$(CFLAGS)"
+CMAKE_OPTIONS+= -DCMAKE_CXX_FLAGS="$(CFLAGS)"
+CMAKE_OPTIONS+= -DSYSCONFDIR=$(CONFDIR)
+CMAKE_OPTIONS+= -DINSTALL_SYSCONFDIR=$(CONFDIR)
 
 CONFIGURE_OPTIONS+= --sysconfdir=/etc
 CONFIGURE_OPTIONS+= --includedir=/usr/include/libproxy
@@ -60,29 +63,23 @@ CONFIGURE_OPTIONS+= --with-wpad
 CONFIGURE_OPTIONS+= --without-networkmanager
 CONFIGURE_OPTIONS+= --without-webkit
 CONFIGURE_OPTIONS+= --without-mozjs
-CONFIGURE_OPTIONS+= $(CONFIGURE_OPTIONS.$(BITS))
 
 CONFIGURE_ENV    += XGETTEXT=/usr/gnu/bin/xgettext
 CONFIGURE_ENV    += MSGFMT=/usr/gnu/bin/msgfmt
 CONFIGURE_ENV    += PERL=$(PERL)
-CONFIGURE_ENV    += PYTHON="$(PYTHON.$(BITS))"
+CONFIGURE_ENV    += PYTHON="$(PYTHON)"
+CONFIGURE_ENV    += am_cv_python_pythondir="$(PYTHON_VENDOR_PACKAGES)"
+CONFIGURE_ENV    += am_cv_python_pyexecdir="$(PYTHON_VENDOR_PACKAGES)"
+
 
 COMPONENT_INSTALL_ENV+= GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
-
-# Need to move python modules to /64 dir
-COMPONENT_POST_INSTALL_ACTION += \
-    ( cd $(PROTOUSRLIBDIR)/python$(PYTHON_VERSION) ; \
-        $(RM) -rf site-packages-$(BITS) ; \
-        $(MV) site-packages site-packages-$(BITS) ; \
-        $(MKDIR) -p site-packages ; \
-        $(MKDIR) -p site-packages/64 ; \
-        if test -d site-packages-64 ; then \
-            $(MV) site-packages-64/* site-packages/64/ ; \
-            $(MV) site-packages-32/* site-packages/ ; \
-	    $(RM) -rf site-packages-64 site-packages-32 ; \
-        fi ; )
-
 
 build: $(BUILD_32_and_64)
 
 install: $(INSTALL_32_and_64)
+
+REQUIRED_PACKAGES += library/libproxy
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += runtime/python-27
+REQUIRED_PACKAGES += x11/library/libx11
+REQUIRED_PACKAGES += x11/library/libxmu
