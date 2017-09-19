@@ -81,11 +81,19 @@
               kernel_args   - Optional kernel arguments passed to the kernel by
                               the boot loader.
             -->
-            <!-- Uncomment before using
             <boot_entry default_entry="false" insert_at="end">
-              <title_suffix>My Title</title_suffix>
-              <kernel_args></kernel_args>
+              <title_suffix>Recovery shell (ttya)</title_suffix>
+              <kernel_args>console=ttya,shellmode=true,livessh=true</kernel_args>
             </boot_entry>
+            <boot_entry default_entry="false" insert_at="end">
+              <title_suffix>Recovery shell (ttyb)</title_suffix>
+              <kernel_args>console=ttyb,shellmode=true,livessh=true</kernel_args>
+            </boot_entry>
+            <boot_entry default_entry="false" insert_at="end">
+              <title_suffix>Recovery shell (monitor)</title_suffix>
+              <kernel_args>console=text,shellmode=true,livessh=true</kernel_args>
+            </boot_entry>
+            <!-- Uncomment before using
             -->
           </boot_mods>
         </media_im>

@@ -17,13 +17,13 @@ include ../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= libproxy
 
-COMPONENT_VERSION= 0.4.0
+COMPONENT_VERSION= 0.4.6
 COMPONENT_REVISION= 1
 COMPONENT_SUMMARY= Libproxy is a library that provides automatic proxy configuration management
 COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_NAME)-$(COMPONENT_VERSION).tar.gz
 COMPONENT_ARCHIVE_HASH= \
-  sha256:59f2029718c257da09ff880d31c43bde76db4181587d01ee6d0f416014494ada
+  sha256:9c9f9e3dc93653ffc5df5d63659ef891d47f2adbee1e975685772a8c0f355828
 COMPONENT_ARCHIVE_URL= \
   https://github.com/$(COMPONENT_NAME)/$(COMPONENT_NAME)/archive/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL = http://code.google.com/p/libproxy/
@@ -32,37 +32,46 @@ include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
 include $(WS_MAKE_RULES)/ips.mk
 
-COMPONENT_PREP_ACTION= ( cd $(@D) && ./autogen.sh )
-COMPONENT_PRE_CONFIGURE_ACTION =        ($(CLONEY) $(SOURCE_DIR) $(@D)) 
+COMPONENT_PRE_CONFIGURE_ACTION =        ($(CLONEY) $(SOURCE_DIR) $(@D); \
+	rm $(@D)/cmake/paths.cmk; cp $(SOURCE_DIR)/cmake/paths.cmk $(@D)/cmake; \
+	rm $(@D)/libmodman/test/CMakeLists.txt; cp $(SOURCE_DIR)/libmodman/test/CMakeLists.txt $(@D)/libmodman/test/; \
+	rm $(@D)/libproxy/url.cpp; cp $(SOURCE_DIR)/libproxy/url.cpp $(@D)/libproxy/; \
+	rm $(@D)/libproxy/modules/config_gnome.cpp; cp $(SOURCE_DIR)/libproxy/modules/config_gnome.cpp  $(@D)/libproxy/modules/; \
+	cd $(@D); $(GSED) 's@bin @bin$${BIN_SUFFIX} @' -i cmake/paths.cmk; \
+	$(GSED) 's@libexec @libexec$${LIBEXEC_SUFFIX} @' -i cmake/paths.cmk; \
+	$(GSED) 's@NOT WIN32 AND NOT APPLE@NOT WIN32 AND NOT APPLE AND NOT SUNOS@' -i libmodman/test/CMakeLists.txt; \
+	$(GSED) '/\#include <cstdlib>/a \#include <unistd.h>' -i libproxy/url.cpp; \
+	$(GSED) '/\#include <signal.h>/a \#include <string.h>' -i libproxy/modules/config_gnome.cpp)
 
-CFLAGS+= -D__EXTENSIONS__ -D_POSIX_C_SOURCE=200112L
-
+CFLAGS+= -D__EXTENSIONS__
 CMAKE= cmake
-CMAKE_BINDIR.32 =       bin
-CMAKE_BINDIR.64 =       bin/$(MACH64)
-CMAKE_LIBDIR.32 =       lib
-CMAKE_LIBDIR.64 =       lib/$(MACH64)
+
+CMAKE_BINSUFFIX.32 =
+CMAKE_BINSUFFIX.64 =$(MACH64)
+CMAKE_LIBSUFFIX.32 =
+CMAKE_LIBSUFFIX.64 =$(MACH64)
 
 CMAKE_OPTIONS+= -DCMAKE_C_COMPILER=$(CC)
 CMAKE_OPTIONS+= -DCMAKE_CXX_COMPILER=$(CXX)
 CMAKE_OPTIONS+= -DCMAKE_C_FLAGS="$(CFLAGS)"
 CMAKE_OPTIONS+= -DCMAKE_CXX_FLAGS="$(CFLAGS)"
-CMAKE_OPTIONS+= -DSYSCONFDIR=$(CONFDIR)
-CMAKE_OPTIONS+= -DINSTALL_SYSCONFDIR=$(CONFDIR)
 
-CONFIGURE_OPTIONS+= --sysconfdir=/etc
-CONFIGURE_OPTIONS+= --includedir=/usr/include/libproxy
-CONFIGURE_OPTIONS+= --libexecdir=/usr/lib
-CONFIGURE_OPTIONS+= --localstatedir=/var/lib
-CONFIGURE_OPTIONS+= --with-gnome
-CONFIGURE_OPTIONS+= --without-dotnet
-CONFIGURE_OPTIONS+= --with-direct
-CONFIGURE_OPTIONS+= --with-envvar
-CONFIGURE_OPTIONS+= --with-file
-CONFIGURE_OPTIONS+= --with-wpad
-CONFIGURE_OPTIONS+= --without-networkmanager
-CONFIGURE_OPTIONS+= --without-webkit
-CONFIGURE_OPTIONS+= --without-mozjs
+CMAKE_OPTIONS+= -DCMAKE_INSTALL_PREFIX=$(CONFIGURE_PREFIX)
+CMAKE_OPTIONS+= -DBIN_SUFFIX=$(CMAKE_BINSUFFIX.$(BITS))
+CMAKE_OPTIONS+= -DLIB_SUFFIX=$(CMAKE_LIBSUFFIX.$(BITS))
+CMAKE_OPTIONS+= -DLIBEXEC_SUFFIX=$(CMAKE_LIBSUFFIX.$(BITS))
+CMAKE_OPTIONS+= -DSUNOS=TRUE
+CMAKE_OPTIONS+= -DCMAKE_SHARED_LINKER_FLAGS="-lsocket -lnsl"
+CMAKE_OPTIONS+= -DCMAKE_EXE_LINKER_FLAGS="-lsocket -lnsl"
+
+# gcc invocation in some link.txt file is missing -m$(BITS) parameter
+# and it makes 64-bit build to fail, this is a quick hack to make it build
+# for now, cmake build system needs a proper fix
+
+COMPONENT_POST_CONFIGURE_ACTION.32=
+COMPONENT_POST_CONFIGURE_ACTION.64= find $(@D) -type f -name link.txt \
+	-exec perl -pi -e 's/gcc\ \ -fPIC/\/gcc\ -m64\ -fPIC/' {} \;
+COMPONENT_POST_CONFIGURE_ACTION=$(COMPONENT_POST_CONFIGURE_ACTION.$(BITS))
 
 CONFIGURE_ENV    += XGETTEXT=/usr/gnu/bin/xgettext
 CONFIGURE_ENV    += MSGFMT=/usr/gnu/bin/msgfmt
@@ -71,8 +80,14 @@ CONFIGURE_ENV    += PYTHON="$(PYTHON)"
 CONFIGURE_ENV    += am_cv_python_pythondir="$(PYTHON_VENDOR_PACKAGES)"
 CONFIGURE_ENV    += am_cv_python_pyexecdir="$(PYTHON_VENDOR_PACKAGES)"
 
+#COMPONENT_INSTALL_ENV+= GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 
-COMPONENT_INSTALL_ENV+= GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
+$(BUILD_DIR)/%/.configured:	$(SOURCE_DIR)/.prep
+	($(RM) -rf $(@D) ; $(MKDIR) $(@D))
+	$(COMPONENT_PRE_CONFIGURE_ACTION)
+	(cd $(@D) ; $(ENV) $(CONFIGURE_ENV) $(CMAKE) $(CMAKE_OPTIONS) ./)
+	$(COMPONENT_POST_CONFIGURE_ACTION)
+	$(TOUCH) $@
 
 build: $(BUILD_32_and_64)
 

@@ -102,6 +102,9 @@ bomb() {
 	log
 	if [[ -n "$INSTALL_LOG" ]]
 	then
+		echo "===================== Dump of install log ========================" > /dev/console
+		cat "$INSTALL_LOG" > /dev/console
+		echo "==================================================================" > /dev/console
 		log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 		log "!                                                              !"
 		log "!     INSTALLATION FAILED. PLEASE SAVE INSTALL LOG.            !"
@@ -134,6 +137,10 @@ bomb() {
 		log "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	fi
 	exit 1
+}
+
+is_shell_mode() {
+	prtconf -v /devices | grep 'shellmode=true' > /dev/null
 }
 
 post_boot() {
@@ -204,10 +211,12 @@ partition_disk() {
 	#fi
 
 	# Erase non-Solaris label, if any
-	dd if=/dev/zero of=$PDSK0 bs=512 count=32
+	[ ! -e $PDSK0 ] && bomb "!! Cannot find device $PDSK0"
+	log "Erasing any disk labels on $PDSK0 ..."
+	dd if=/dev/zero of=$PDSK0 bs=1024 count=72000
 
 	# Default partition table. One Solaris partition for whole disk
-	fdisk -B $P0
+	fdisk -B $P0 || return 1
 
 	# Set it active
 	fdisk -W $tmp1 $P0
@@ -529,6 +538,7 @@ apply_changes() {
 	rm -f $ALTROOT/root/.bash_history
 	rm -f $ALTROOT/root/.sh_history
 	rm -f $ALTROOT/root/.gitconfig
+	rm -f $ALTROOT/etc/ssh/ssh_host*_key*
 	echo > $ALTROOT/var/adm/wtmpx
 	echo > $ALTROOT/var/adm/lastlog
 	echo > $ALTROOT/var/log/authlog
@@ -542,6 +552,13 @@ apply_changes() {
 \	sleep 2
 ' > /tmp/mfi
 	[ $? -eq 0 ] && cp /tmp/mfi $ALTROOT/lib/svc/method/manifest-import
+
+	admin_uid=`egrep '^admin' $ALTROOT/etc/passwd | cut -f3 -d":"`
+	if [ "x$admin_uid" != "x" ]
+	then
+		mkdir -p $ALTROOT/export/home/admin
+		chown ${admin_uid}:10 $ALTROOT/export/home/admin
+	fi
 	return 0
 }
 
@@ -685,7 +702,7 @@ module\$ /platform/i86pc/\$ISADIR/boot_archive
 		count=$((count + 1))
 	fi
 
-	if [ "$OSCONSOLE" != "text" ]
+	if [ "$OSCONSOLE" != "text" -a "$OSCONSOLE" != "bootargs" ]
 	then
 		SERIAL_TTY=$OSCONSOLE
 	else
@@ -713,6 +730,14 @@ module\$ /platform/i86pc/\$ISADIR/boot_archive
 	cd $PDIR
 }
 
+# If text shell is needed stop at this point
+is_shell_mode
+if [ $? -eq 0 ]
+then
+	[ "$RUNNING_IN_SMF" = "true" ] && svcadm disable $SMF_FMRI
+	exit 0
+fi
+
 #
 # Identify the primary disks. Assuming root disks are not NVMe.
 #
@@ -731,15 +756,18 @@ RPOOL=rpool
 discover_config
 . /tmp/$CONFIG
 
+log "zpool destroy $RPOOL (just in case there is an existing $RPOOL)"
+zpool destroy $RPOOL 2> /dev/null
+
 if [ "x$DEFAULT_ROOT_DISK" = "x" ]
 then
-	/usr/bin/diskinfo -PH | grep -v 'NVMe' > $SCRATCH
+	/usr/bin/diskinfo -H | egrep -v 'NVMe|USB' > $SCRATCH
 	NUM=`wc -l /tmp/di.$$ | awk '{print $1}'`
-	DEFAULT_ROOT_DISK=`awk 'BEGIN {N=1} {if (N==1) { print $1; } N = N + 1; }'  /tmp/di.$$`
+	DEFAULT_ROOT_DISK=`awk 'BEGIN {N=1} {if (N==1) { print $2; } N = N + 1; }'  /tmp/di.$$`
 
 	if [ $NUM -gt 1 ]
 	then
-		DEFAULT_MIRROR_DISK=`awk 'BEGIN {N=1} {if (N==2) { print $1; } N = N + 1; }'  /tmp/di.$$`
+		DEFAULT_MIRROR_DISK=`awk 'BEGIN {N=1} {if (N==2) { print $2; } N = N + 1; }'  /tmp/di.$$`
 	fi
 fi
 
@@ -747,22 +775,27 @@ if [ "x$DEFAULT_MIRROR_DISK" != "x" ]
 then
 	echo "Partitioning disks"
 	partition_disk $DEFAULT_ROOT_DISK
+	[ $? -ne 0 ] && bomb "!! Failed to partition disk $DEFAULT_ROOT_DISK"
 	rootdev="${DEFAULT_ROOT_DISK}s0"
 	partition_disk $DEFAULT_MIRROR_DISK
+	[ $? -ne 0 ] && bomb "!! Failed to partition disk $DEFAULT_MIRROR_DISK"
 	mirrordev="${DEFAULT_MIRROR_DISK}s0"
 
 	# Create mirrored rpool
 	log "Creating mirrored $RPOOL on $rootdev $mirrordev"
 	zpool create -f $RPOOL mirror $rootdev $mirrordev
+	[ $? -ne 0 ] && bomb "!! Failed to create zpool $RPOOL"
 else
 	echo "Partitioning disk"
 	partition_disk $DEFAULT_ROOT_DISK
+	[ $? -ne 0 ] && bomb "!! Failed to partition disk $DEFAULT_ROOT_DISK"
 	rootdev="${DEFAULT_ROOT_DISK}s0"
 	mirrordev=""
 
 	# Create non-mirrored rpool
 	log "Creating $RPOOL on $rootdev"
 	zpool create -f $RPOOL $rootdev
+	[ $? -ne 0 ] && bomb "!! Failed to create zpool $RPOOL"
 fi
 
 # Set rpool props
