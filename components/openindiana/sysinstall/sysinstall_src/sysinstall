@@ -36,6 +36,8 @@ DUMP_SIZE=0
 ROOTBE=netvisor
 CREATE_FACTORY_RESET=n
 CLEAR_IF_FLAGS=0
+PLUMB_INTERFACES=""
+DHCP_INTERFACES=""
 
 #
 # Empty OSCONSOLE means auto-detect
@@ -478,6 +480,24 @@ apply_changes() {
 	[ $CLEAR_IF_FLAGS -eq 1 ] && rm -f $ALTROOT/etc/hostname.*
 	rm -f $ALTROOT/etc/dhcp.*
 
+	if [ "x$PLUMB_INTERFACES" != "x" ]
+	then
+		set -A plumb_ifs $PLUMB_INTERFACES
+		for nic in ${plumb_ifs[*]}
+		do
+			echo "" > $ALTROOT/etc/hostname.$nic
+		done
+	fi
+
+	if [ "x$DHCP_INTERFACES" != "x" ]
+	then
+		set -A dhcp_ifs $DHCP_INTERFACES
+		for nic in ${dhcp_ifs[*]}
+		do
+			echo "" > $ALTROOT/etc/dhcp.$nic
+		done
+	fi
+
 	if [ ! -f $ALTROOT/etc/default/init ]
 	then
 		echo "TZ=US/Pacific" > $ALTROOT/etc/default/init
@@ -553,12 +573,14 @@ apply_changes() {
 ' > /tmp/mfi
 	[ $? -eq 0 ] && cp /tmp/mfi $ALTROOT/lib/svc/method/manifest-import
 
-	admin_uid=`egrep '^admin' $ALTROOT/etc/passwd | cut -f3 -d":"`
-	if [ "x$admin_uid" != "x" ]
-	then
-		mkdir -p $ALTROOT/export/home/admin
-		chown ${admin_uid}:10 $ALTROOT/export/home/admin
-	fi
+	#
+	# Fixup SUPATH to avoid conflict with /usr/sbin/sysconfig
+	#
+	egrep -v "^SUPATH" $ALTROOT/etc/default/su > $ALTROOT/etc/default/su.new
+	echo "SUPATH=/usr/bin:/usr/sbin:/sbin" >> $ALTROOT/etc/default/su.new
+	mv $ALTROOT/etc/default/su.new $ALTROOT/etc/default/su
+
+	post_boot 'egrep "^admin" /etc/passwd && chown admin:staff /export/home/admin'
 	return 0
 }
 

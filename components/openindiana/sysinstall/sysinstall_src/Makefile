@@ -13,7 +13,7 @@ install: all
 	$(INSTALL) -m 555 cleanup_pkg_img $(DESTDIR)/usr/share/sysinstall/cleanup_pkg_img
 	$(INSTALL) -m 555 patch_pkg_img $(DESTDIR)/usr/share/sysinstall/patch_pkg_img
 	$(INSTALL) -m 555 setup_autoinstall $(DESTDIR)/usr/share/sysinstall/setup_autoinstall
-	$(INSTALL) -m 444 sysinstall.conf $(DESTDIR)/usr/share/sysinstall/sysinstall.conf
+	$(INSTALL) -m 444 sysinstall.conf.default $(DESTDIR)/usr/share/sysinstall/sysinstall.conf.default
 
 ipspkg:
 	rm -rf proto_install
@@ -27,7 +27,7 @@ ipspkg:
 	ln cleanup_pkg_img proto_install/usr/share/sysinstall/cleanup_pkg_img
 	ln patch_pkg_img proto_install/usr/share/sysinstall/patch_pkg_img
 	ln setup_autoinstall proto_install/usr/share/sysinstall/setup_autoinstall
-	ln sysinstall.conf proto_install/usr/share/sysinstall/sysinstall.conf
+	ln sysinstall.conf.default proto_install/usr/share/sysinstall/sysinstall.conf.default
 	pkgsend generate proto_install | pkgfmt >sysinstall.p5m.1
 	pkgmogrify sysinstall.p5m.1 sysinstall.mog | pkgfmt >sysinstall.p5m.2
 	pkgdepend generate -md proto_install sysinstall.p5m.2 | pkgfmt >sysinstall.p5m.3

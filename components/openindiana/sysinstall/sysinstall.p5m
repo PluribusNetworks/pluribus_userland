@@ -27,4 +27,4 @@ file path=usr/bin/sysinstall mode=0555
 file path=usr/share/sysinstall/cleanup_pkg_img mode=0555
 file path=usr/share/sysinstall/patch_pkg_img mode=0555
 file path=usr/share/sysinstall/setup_autoinstall mode=0555
-file path=usr/share/sysinstall/sysinstall.conf
+file path=usr/share/sysinstall/sysinstall.conf.default

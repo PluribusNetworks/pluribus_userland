@@ -15,6 +15,13 @@
 
 PKG_IMG_ROOT=$1
 
+if [ ! -f /usr/share/sysinstall/sysinstall.conf ]
+then
+	echo "/usr/share/sysinstall/sysinstall.conf Not Found!"
+	echo "Please create a site config from /usr/share/sysinstall/sysinstall.conf.default"
+	exit 1
+fi
+
 . /usr/share/sysinstall/sysinstall.conf
 /usr/share/sysinstall/cleanup_pkg_img $PKG_IMG_ROOT
 
