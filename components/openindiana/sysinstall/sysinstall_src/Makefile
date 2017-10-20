@@ -14,6 +14,9 @@ install: all
 	$(INSTALL) -m 555 patch_pkg_img $(DESTDIR)/usr/share/sysinstall/patch_pkg_img
 	$(INSTALL) -m 555 setup_autoinstall $(DESTDIR)/usr/share/sysinstall/setup_autoinstall
 	$(INSTALL) -m 444 sysinstall.conf.default $(DESTDIR)/usr/share/sysinstall/sysinstall.conf.default
+	$(INSTALL) -m 444 ntp.conf $(DESTDIR)/usr/share/sysinstall/ntp.conf.default
+	$(INSTALL) -m 555 yesterday $(DESTDIR)/usr/share/sysinstall/yesterday
+	$(INSTALL) -m 444 eventhook $(DESTDIR)/usr/share/sysinstall/eventhook
 
 ipspkg:
 	rm -rf proto_install
@@ -28,6 +31,9 @@ ipspkg:
 	ln patch_pkg_img proto_install/usr/share/sysinstall/patch_pkg_img
 	ln setup_autoinstall proto_install/usr/share/sysinstall/setup_autoinstall
 	ln sysinstall.conf.default proto_install/usr/share/sysinstall/sysinstall.conf.default
+	ln ntp.conf proto_install/usr/share/sysinstall/ntp.conf.default
+	ln yesterday proto_install/usr/share/sysinstall/yesterday
+	ln eventhook proto_install/usr/share/sysinstall/eventhook
 	pkgsend generate proto_install | pkgfmt >sysinstall.p5m.1
 	pkgmogrify sysinstall.p5m.1 sysinstall.mog | pkgfmt >sysinstall.p5m.2
 	pkgdepend generate -md proto_install sysinstall.p5m.2 | pkgfmt >sysinstall.p5m.3

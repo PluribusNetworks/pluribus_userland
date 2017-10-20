@@ -27,5 +27,15 @@ cp $PKG_IMG_ROOT/lib/svc/method/media-assembly.new $PKG_IMG_ROOT/lib/svc/method/
 rm $PKG_IMG_ROOT/lib/svc/method/media-assembly.new
 
 rm -f $PKG_IMG_ROOT/var/saf/zsmon/log
+if [ -f /usr/share/sysinstall/ntp.conf ]
+then
+	cp /usr/share/sysinstall/ntp.conf $PKG_IMG_ROOT/etc/inet/ntp.conf
+else
+	cp /usr/share/sysinstall/ntp.conf.default $PKG_IMG_ROOT/etc/inet/ntp.conf
+fi
 
-
+if [ -f /usr/share/sysinstall/eventhook ]
+then
+	cp /usr/share/sysinstall/eventhook $PKG_IMG_ROOT/etc/dhcp
+	chmod 0555 $PKG_IMG_ROOT/etc/dhcp/eventhook
+fi

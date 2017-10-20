@@ -506,6 +506,7 @@
         <name>pkg:/library/expat</name>
         <name>pkg:/data/iso-codes</name>
         <name>pkg:/library/libedit</name>
+        <name>pkg:/service/network/ntp</name>
       </software_data>
     </software>
     <!--

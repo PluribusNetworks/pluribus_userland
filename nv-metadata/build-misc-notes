@@ -304,3 +304,4 @@ pkg image-update
 ./build.sh ORBit2
 ./build.sh desktop/gsettings-desktop-schemas
 ./build.sh desktop/gnome2/GConf
+./build.sh networks/ntp

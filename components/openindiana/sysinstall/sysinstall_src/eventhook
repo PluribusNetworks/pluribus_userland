@@ -1,0 +1,275 @@
+#!/bin/ksh
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License, Version 1.0 only
+# (the "License").  You may not use this file except in compliance
+# with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+# Copyright 2005 Sun Microsystems, Inc.  All rights reserved.
+# Use is subject to license terms.
+#
+# Author: Darren.Moffat@Sun.COM, Moinak.Ghosh@Sun.COM
+
+
+#
+# Simple serialization code. Only one instance
+# of eventhook should be running.
+#
+INTERFACE=$1
+ACTION=$2
+mypid=$$
+mkdir -p /var/tmp/inetcnf
+touch /var/tmp/inetcnf/$mypid
+
+rm -f /var/tmp/inetcnf/interfaces
+touch /var/tmp/inetcnf/interfaces
+
+# Exit if someone else started before us. 
+pid=`ls -tr /var/tmp/inetcnf/ | grep -v interfaces | tail -1`
+if [ "x$pid" != "x" -a "$pid" != "$mypid" ]
+then
+	rm -f /var/tmp/inetcnf/$mypid
+	exit 0
+fi
+
+echo "$INTERFACE" >> /var/tmp/inetcnf/interfaces
+
+if [ -f /var/tmp/inetcnf/.configured -a "$ACTION" = "BOUND" ]
+then
+	rm -f /var/tmp/inetcnf/$mypid
+	exit 0
+fi
+
+PATH=/sbin:/usr/sbin:/usr/bin
+LOG=/var/log/dhcp-eventhook.log
+ehook_comment="#Added by /etc/dhcp/eventhook"
+
+echo "`date`:$@ Start" >> $LOG
+echo "ServerID: `dhcpinfo -i $INTERFACE ServerID`" >> $LOG
+rm /etc/dhcp/${INTERFACE}.dhc
+
+backup_nsswitch()
+{
+	if [ -r /etc/nsswitch.conf ]
+	then
+		if ! grep "^$ehook_comment" /etc/nsswitch.conf \
+			> /dev/null ; then
+			echo "Saving existing nsswitch.conf" >> $LOG
+			mv /etc/nsswitch.conf /etc/nsswitch.conf-pre-eventhook
+		fi
+	fi
+}
+
+configure_nis()
+{
+	ndomain="$1"
+	dns=$2
+	echo "NIS domain = $ndomain" >> $LOG
+
+	echo $ndomain > /etc/defaultdomain
+	svcs svc:/system/identity:domain | grep "^online" > /dev/null
+	[ $? -eq 0 ] && svcadm restart svc:/system/identity:domain
+
+	# Simulate enough of ypinit -c for broadcast binding to work.
+	mkdir -p /var/yp/binding/$ndomain
+
+	# If we can get servers for this domain use them, saving away
+	# the previous set.
+	nisservers=`dhcpinfo -i $INTERFACE NISservs`
+	if [ ! -z "$nisservers" ]; then
+		ypservers=/var/yp/binding/$ndomain/ypservers
+		echo "NIS attempting explicit binding: $ypservers" >> $LOG
+		mv -f $ypservers ${ypservers}.pre-eventhook
+
+		# We need hostnames in ypservers not IP addresses, so
+		# we had better have gotten DNS running or saved these in
+		# files, if we can't resolve a name just fall back to broadcast
+		dhcpinfo -i $INTERFACE NISservs | xargs getent hosts \
+			| cut -f2 > $ypservers
+		dhcpinfo -i $INTERFACE NISservs | xargs getent hosts \
+			| awk '\
+			{ printf("%s # Added by /etc/dhcp/eventhook\n", $0) }' \
+			>> /etc/inet/hosts
+	fi
+
+	if [ $dns -eq 0 ]
+	then
+		backup_nsswitch
+		cp /etc/nsswitch.nis /etc/nsswitch.conf
+	fi
+	svcadm enable -t svc:/network/nis/client
+}
+
+configure_dns()
+{
+	echo $ehook_comment >> /tmp/resolv.conf.$$
+	domain="$1"
+	serv="$2"
+	ndomain="$3"
+
+	if [ -n "$domain" ]
+	then
+		echo "DNS domain = $domain" >> $LOG
+		echo "$domain" | \
+		awk '{ printf("domain %s\n", $1) }' >> /tmp/resolv.conf.$$
+	fi
+
+	if [ -n "$serv" ]
+	then
+		echo "$serv" | \
+		awk '{ printf("nameserver %s\n", $1) }' >> /tmp/resolv.conf.$$
+	fi
+
+	# See if we should preseve a statically configured resolv.conf
+	if [ -r /etc/resolv.conf ]
+	then
+		if ! grep "^$ehook_comment" /etc/resolv.conf \
+			> /dev/null ; then
+			echo "Saving existing resolv.conf" >> $LOG
+			mv /etc/resolv.conf /etc/resolv.conf-pre-eventhook
+		fi
+	fi
+	mv /tmp/resolv.conf.$$ /etc/resolv.conf
+	chmod 644 /etc/resolv.conf
+
+	# Configure hosts entry in nsswitch.conf for dns first
+	# but first preserve existing nsswitch.conf
+	backup_nsswitch
+
+	if [ -n "$ndomain" ]
+	then
+		# for dns and nis we use "dns nis" for host lookup
+		sed -e '/^hosts:/s/.*/hosts:    files dns nis/' \
+			< /etc/nsswitch.nis > /etc/nsswitch.conf
+	else
+		# only dns
+		cp /etc/nsswitch.dns /etc/nsswitch.conf
+	fi
+	svcadm enable -t svc:/network/dns/client
+}
+
+if [ "$ACTION" == "BOUND" ]
+then
+
+	# Try to set up a hosts entry for the DHCP address
+	addr=`dhcpinfo -i $INTERFACE Yiaddr`
+	if [ -n "$addr" ]
+	then
+		hostname=`dhcpinfo -i $INTERFACE Hostname`
+		nodename=`uname -n`
+		names="$hostname"
+
+		if [ -n "$nodename" ]
+		then
+			if [ -n "$names" ]
+			then
+				names="${names} ${nodename}-$INTERFACE"
+			else
+				names="${nodename}-$INTERFACE"
+			fi
+		fi
+		if [ -n "$names" ]
+		then
+			echo "${addr} ${names} ${ehook_comment}" >> /etc/inet/hosts
+			echo "${addr} ${names} ${ehook_comment}" >> /etc/inet/ipnodes
+		fi
+	fi
+
+	# Check whether we are having NIS or DNS
+	dnsdomain=`dhcpinfo -i $INTERFACE DNSdmain`
+	dnsservers=`dhcpinfo -i $INTERFACE DNSserv`
+	nisdomain=`dhcpinfo -i $INTERFACE NISdmain`
+	dns="0"
+	nis="0"
+
+	if [ -n "$dnsdomain" -o -n "$dnsservers" ]
+	then
+		configure_dns "$dnsdomain" "$dnsservers" "$nisdomain"
+		dns="1"
+	fi
+
+	if [ -n "$nisdomain" -a ! -f /tmp/nonis ]
+	then
+		configure_nis "$nisdomain" $dns
+		nis="1"
+	else
+		rm -f /etc/defaultdomain
+
+		svcs svc:/system/identity:domain | grep "^online" > /dev/null
+		[ $? -eq 0 ] && svcadm restart svc:/system/identity:domain
+		svcadm disable -t svc:/network/nis/client
+
+		if [ $dns -eq 0 ]
+		then
+			backup_nsswitch
+			cp /etc/nsswitch.files /etc/nsswitch.conf
+		fi
+	fi
+
+	svcs svc:/system/name-service-cache | grep "^online" > /dev/null
+	[ $? -eq 0 ] && svcadm restart svc:/system/name-service-cache
+
+	svcs svc:/system/filesystem/autofs | grep "^online" > /dev/null
+	[ $? -eq 0 ] && svcadm restart svc:/system/filesystem/autofs
+
+	touch /var/tmp/inetcnf/.configured
+	echo "$dns $nis" >> /var/tmp/inetcnf/.configured
+	rm -f /var/tmp/inetcnf/$mypid
+
+elif [ "$ACTION" == "DROP" -o "$ACTION" == "RELEASE" ]; then
+
+	[ ! -f /var/tmp/inetcnf/.configured ] && exit 0
+	cat /var/tmp/inetcnf/.configured | read dns nis
+
+	if [ "$dns" = "1" ]
+	then
+		rm -f /etc/resolv.conf
+		if [ -r /etc/resolv.conf-pre-eventhook ]
+		then
+			echo "Restoring pre-eventhook resolv.conf" >> $LOG
+			mv /etc/resolv.conf-pre-eventhook /etc/resolv.conf
+		fi
+		svcadm disable svc:/network/dns/client
+	fi
+	if [ -r /etc/nsswitch.conf-pre-eventhook ]
+	then
+		rm -f /etc/nsswitch.conf
+		echo "Restoring pre-eventhook nsswitch.conf" >> $LOG
+		mv /etc/nsswitch.conf-pre-eventhook /etc/nsswitch.conf
+	fi
+
+	if [ "$nis" = "1" ]
+	then
+		ndomain=`cat /etc/defaultdomain`
+		rm -rf /var/yp/binding/${ndomain}
+		rm -f /etc/defaultdomain
+		svcadm disable svc:/network/nis/client
+	fi
+
+	grep -v "$ehook_comment" /etc/inet/hosts > /tmp/hosts.$$
+	mv /tmp/hosts.$$ /etc/inet/hosts
+	grep -v "$eventhook_comment" /etc/inet/ipnodes > /tmp/ipnodes.$$
+	mv -f /tmp/ipnodes.$$  /etc/inet/ipnodes
+	svcadm restart svc:/system/identity:domain
+
+	sleep 1
+	svcadm restart svc:/system/filesystem/autofs
+
+	rm -f /var/tmp/inetcnf/.configured
+fi
+echo "`date`:$@ End" >> $LOG

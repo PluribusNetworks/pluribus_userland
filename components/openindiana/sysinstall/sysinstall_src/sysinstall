@@ -38,6 +38,7 @@ CREATE_FACTORY_RESET=n
 CLEAR_IF_FLAGS=0
 PLUMB_INTERFACES=""
 DHCP_INTERFACES=""
+ENABLE_REMOTE_ROOT=n
 
 #
 # Empty OSCONSOLE means auto-detect
@@ -175,15 +176,16 @@ force_dhcp() {
 	if [ "$wait" != "nowait" ]
 	then
 		count=0
-		while [[ -z $(/sbin/dhcpinfo BootSrvA) ]]
+		while [ ! -f /var/tmp/inetcnf/.configured ]
 		do
-			log "Waiting for dhcpinfo..."
+			log "Waiting for dhcp ..."
 			sleep 1
 			count=$((count + 1))
-			[ $count -eq 10 ] && break
+			[ $count -eq 15 ] && break
 		done
+	else
+		sleep 2
 	fi
-	sleep 1
 }
 
 partition_disk() {
@@ -265,9 +267,32 @@ discover_config() {
 	log "Config discovery ..."
 
 	#
-	# Start DHCP but do not wait for DHCP options
+	# Start DHCP wait for IP
 	#
-	force_dhcp nowait
+	force_dhcp
+
+	#
+	# Wait for NTP. If no peers then adjust date to one day before
+	# date on current system clock. This is needed to handle some
+	# weirdness with beadm and GRUB.
+	#
+	ntpserv=`awk 'BEGIN {cnt = 1} /^server/ { if (cnt == 1) { print $2; cnt = cnt + 1; } }' /etc/inet/ntp.conf`
+	cnt=0
+	rv=0
+	while [ $cnt -lt 3 ]
+	do
+		log "Trying ntpdate probe ..."
+		/usr/sbin/ntpdate -u $ntpserv >> $INSTALL_LOG
+		rv=$?
+		cnt=$((cnt + 1))
+		[ $cnt -eq 3 -o $rv -eq 0 ] && break
+		sleep 1
+	done
+	if [ $rv -ne 0 ]
+	then
+		log "Failed to probe using ntpdate. Moving date to yesterday ..."
+		date `/usr/share/sysinstall/yesterday`
+	fi
 
 	for loc in /.cdrom/local_config /local_config
 	do
@@ -286,9 +311,8 @@ discover_config() {
 	fi
 
 	#
-	# Now we need to probe network so wait for BootSrvA option first
+	# Now we need to probe network boot server
 	#
-	force_dhcp waitonly
 	BOOTSRVA=`/sbin/dhcpinfo BootSrvA`
 	CFG_IP=""
 	[ -f ${LOCAL_CFG_PATH}/config_ip ] && CFG_IP=`cat ${LOCAL_CFG_PATH}/config_ip`
@@ -470,8 +494,36 @@ flag_dhcp_interfaces() {
 	done
 }
 
+copy_extra_files() {
+	for fentry in $EXTRA_FILES
+	do
+		_OIFS="$IFS"
+		IFS=";"
+		set -- $fentry
+		IFS="$_OIFS"
+		fl=$1
+		dst=$2
+		perm=$3
+
+		mkdir -p $ALTROOT/$dst
+		if [ $? -eq 0 ]
+		then
+			if [ -f $LOCAL_CFG_PATH/$fl ]
+			then
+				cp $LOCAL_CFG_PATH/$fl $ALTROOT/$dst
+				chmod $perm $ALTROOT/$dst/$fl
+			else
+				log "Extra file $fl not found in $LOCAL_CFG_PATH/$fl"
+			fi
+		else
+			log "Cannot create destination path $dst for extra file $fl"
+		fi
+	done
+}
+
+
 apply_changes() {
-	log "Basic BE setup"
+	log "Configuring installed Boot Environment"
 	set_root_pwd
 	rm -f $ALTROOT/etc/svc/profile/generic.xml
 	ln -s generic_limited_net.xml $ALTROOT/etc/svc/profile/generic.xml
@@ -540,6 +592,26 @@ apply_changes() {
 	flag_dhcp_interfaces
 
 	#
+	# Disable remote root in sshd if not flagged. 
+	# Default ENABLE_REMOTE_ROOT=n
+	#
+	if [ "$ENABLE_REMOTE_ROOT" != "y" ]
+	then
+		egrep '^PermitRootLogin ' $ALTROOT/etc/ssh/sshd_config > /dev/null
+		if [ $? -eq 0 ]
+		then
+			gsed 's/^PermitRoot.*/PermitRootLogin without-password/' -i $ALTROOT/etc/ssh/sshd_config
+		else
+			echo "PermitRootLogin without-password" >> $ALTROOT/etc/ssh/sshd_config
+		fi
+		egrep '^CONSOLE=/dev/console' $ALTROOT/etc/default/login > /dev/null
+		[ $? -ne 0 ] && echo "CONSOLE=/dev/console" >> $ALTROOT/etc/default/login
+		post_boot 'usermod -K type=role root'
+	fi
+
+	copy_extra_files
+
+	#
 	# Misc cleanup
 	#
 	log "Cleaning up installed Boot Environment"
@@ -552,6 +624,8 @@ apply_changes() {
 	rm -f $ALTROOT/var/adm/lastlog.*
 	rm -f $ALTROOT/var/adm/sulog
 	rm -f $ALTROOT/var/mail/root
+	rm -rf $ALTROOT/var/pkg/download/*
+	rm -rf $ALTROOT/var/pkg/lost+found/*
 	rm -rf $ALTROOT/root/.ssh/*
 	rm -rf $ALTROOT/root/.gconf
 	rm -rf $ALTROOT/root/.cache
@@ -568,7 +642,7 @@ apply_changes() {
 	#
 	# Patch manifest-import to work around a possible race.
 	#
-	cat $ALTROOT/lib/svc/method/manifest-import | /usr/bin/sed '/^	# Apply profiles/a
+	cat $ALTROOT/lib/svc/method/manifest-import | /usr/bin/sed '/^	# Apply profiles/a \
 \	sleep 2
 ' > /tmp/mfi
 	[ $? -eq 0 ] && cp /tmp/mfi $ALTROOT/lib/svc/method/manifest-import

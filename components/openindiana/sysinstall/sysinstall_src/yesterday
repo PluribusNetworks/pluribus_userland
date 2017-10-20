@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# get and split date
+today=`date +%Y%m%d`
+year=${today:0:4}
+month=${today:4:2}
+day=${today:6:2}
+
+# avoid octal mismatch
+if (( ${day:0:1} == 0 )); then day=${day:1:1}; fi
+if (( ${month:0:1} == 0 )); then month=${month:1:1}; fi
+
+# calc
+day=$((day-1))
+if ((day==0)); then
+    month=$((month-1))
+    if ((month==0)); then
+        year=$((year-1))
+        month=12
+    fi
+    last_day_of_month=$((((62648012>>month*2&3)+28)+(month==2 && y%4==0)))
+    day=$last_day_of_month
+fi
+
+# format result
+if ((day<10)); then day="0"$day; fi
+if ((month<10)); then month="0"$month; fi
+yesterday="$month$day$year"
+echo $yesterday

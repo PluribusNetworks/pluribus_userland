@@ -50,6 +50,26 @@ done
 
 [ $ds_copied -eq 1 ] && cp /usr/share/sysinstall/sysinstall.conf $PKG_IMG_ROOT/local_config/
 
+for fentry in $EXTRA_FILES
+do
+	_OIFS="$IFS"
+	IFS=";"
+	set -- $fentry
+	IFS="$_OIFS"
+	fl=$1
+
+	if [ -f $EXTRA_FILES_PATH/$fl ]
+	then
+		echo "Copying extra file $fl into PKG image area"
+		cp $EXTRA_FILES_PATH/$fl $PKG_IMG_ROOT/local_config/
+		if [ $? -ne 0 ]
+		then
+			echo "Error copying file $fl"
+			exit 1
+		fi
+	fi
+done
+
 #
 # Indicate that this is an automated install image
 #

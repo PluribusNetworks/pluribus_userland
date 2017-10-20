@@ -23,7 +23,7 @@
 # Copyright (c) 2010, 2014, Oracle and/or its affiliates. All rights reserved.
 #
 
-include ../../make-rules/shared-macros.mk
+include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		ntp
 COMPONENT_PATCH_VERSION=	3
@@ -43,9 +43,9 @@ PATCH_LEVEL = 0
 
 ASLR_MODE= $(ASLR_ENABLE)
 
-include ../../make-rules/prep.mk
-include ../../make-rules/configure.mk
-include ../../make-rules/ips.mk
+include ../../../make-rules/prep.mk
+include ../../../make-rules/configure.mk
+include ../../../make-rules/ips.mk
 
 COMPONENT_BUILD_ARGS=
 
@@ -71,4 +71,4 @@ build:		$(BUILD_32)
 install:	$(INSTALL_32)
 test:		$(NO_TESTS)
 
-include ../../make-rules/depend.mk
+include ../../../make-rules/depend.mk

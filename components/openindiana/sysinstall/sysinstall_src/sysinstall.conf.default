@@ -13,6 +13,15 @@
 ZFS_DATASET_LIST="pn_illumos.img.bz2;ROOT/netvisor;/;noauto"
 
 #
+# List of extra files to be copied into installed image.
+# These files must be present in the local_config dir on the USB/ISO image.
+# Format:
+# <filename>;<dest path>;<file permissions>
+# 
+# EXTRA_FILES="..."
+#
+
+#
 # These are created in rpool
 #
 ADDITIONAL_DATASETS="export;/export
@@ -40,6 +49,30 @@ CREATE_FACTORY_RESET=n
 SWAP_SIZE=32
 DUMP_SIZE=16
 
+#
+# Other variables with default values:
+#
+# Initial Boot Environment name
+# ROOTBE=netvisor
+#
+# Should be create a backup factory-reset BE?
+# CREATE_FACTORY_RESET=n
+#
+# Do we want ot delete /etc/hostname.* and /etc/dhcp.* files?
+# CLEAR_IF_FLAGS=0
+#
+# List of interfaces to be plumbed by default. The corresponding
+# /etc/hostname.<nic> files will be created
+# PLUMB_INTERFACES=""
+#
+# List of interfaces to be set to DHCP by default. The corresponding
+# /etc/dhcp.<nic> files will be created
+# DHCP_INTERFACES=""
+#
+# Do we want remote root logins?
+# ENABLE_REMOTE_ROOT=n
+# 
+
 #=================================================================================
 #
 # Variables used during ISO/USB image build using
@@ -52,3 +85,10 @@ DUMP_SIZE=16
 # auto-install image.
 #
 ZFS_DATASET_IMAGES=/build/ai_datasets
+
+#
+# If any extra files to be included into image. Dir where they are
+# to be picked up on the build machine.
+#
+# EXTRA_FILES_PATH="..."
+#

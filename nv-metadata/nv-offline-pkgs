@@ -602,6 +602,7 @@ service/network/dhcp/datastore/binfiles
 service/network/dhcp/isc-dhcp
 service/network/dns/bind
 service/network/dns/mdns
+service/network/ntp
 service/network/ftp
 service/network/legacy
 service/network/load-balancer/ilb
