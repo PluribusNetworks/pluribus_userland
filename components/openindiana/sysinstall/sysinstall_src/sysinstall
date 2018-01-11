@@ -159,6 +159,21 @@ post_boot_final() {
 	fi
 }
 
+postinstall_hook() {
+	if [ "x$POSTINSTALL_HOOK" != "x" ]
+	then
+		for loc in /sbin /usr/sbin /usr/bin /bin /usr/local/bin /.cdrom/local_config /local_config
+		do
+			if [ -x $loc/$POSTINSTALL_HOOK ]
+			then
+				log "Running Post-Install hook $POSTINSTALL_HOOK"
+				$loc/$POSTINSTALL_HOOK $ALTROOT
+				break
+			fi
+		done
+	fi
+}
+
 force_dhcp() {
 	wait=$1
 	if [ "$wait" != "waitonly" ]
@@ -504,7 +519,12 @@ copy_extra_files() {
 		fl=$1
 		dst=$2
 		perm=$3
+		typ=$4
 
+		#
+		# Skip data files/hook scripts.
+		#
+		[ "$typ" = "D" ] && continue
 		mkdir -p $ALTROOT/$dst
 		if [ $? -eq 0 ]
 		then
@@ -532,12 +552,17 @@ apply_changes() {
 	[ $CLEAR_IF_FLAGS -eq 1 ] && rm -f $ALTROOT/etc/hostname.*
 	rm -f $ALTROOT/etc/dhcp.*
 
+	/sbin/dladm show-phys -o device -p > /tmp/nics
 	if [ "x$PLUMB_INTERFACES" != "x" ]
 	then
 		set -A plumb_ifs $PLUMB_INTERFACES
 		for nic in ${plumb_ifs[*]}
 		do
-			echo "" > $ALTROOT/etc/hostname.$nic
+			#
+			# Assign nic if it is found in the system.
+			#
+			egrep "^${nic}$" /tmp/nics > /dev/null
+			[ $? -eq 0 ] && echo "" > $ALTROOT/etc/hostname.$nic
 		done
 	fi
 
@@ -546,7 +571,11 @@ apply_changes() {
 		set -A dhcp_ifs $DHCP_INTERFACES
 		for nic in ${dhcp_ifs[*]}
 		do
-			echo "" > $ALTROOT/etc/dhcp.$nic
+			#
+			# Assign nic if it is found in the system.
+			#
+			egrep "^${nic}$" /tmp/nics > /dev/null
+			[ $? -eq 0 ] && echo "" > $ALTROOT/etc/dhcp.$nic
 		done
 	fi
 
@@ -999,6 +1028,7 @@ make_bootable "$rootdev" "$mirrordev"
 [ $? -ne 0 ] && bomb "Boot activation failed"
 generate_grub_menu
 post_boot_final
+postinstall_hook
 log "Done. BE Setup complete."
 copy_install_log
 #

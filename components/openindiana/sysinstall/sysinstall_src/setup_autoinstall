@@ -45,6 +45,9 @@ do
 			exit 1
 		fi
 		ds_copied=1
+	else
+		echo "Error dataset $ds not found"
+		exit 1
 	fi
 done
 
@@ -57,6 +60,8 @@ do
 	set -- $fentry
 	IFS="$_OIFS"
 	fl=$1
+	perm=$3
+	typ=$4
 
 	if [ -f $EXTRA_FILES_PATH/$fl ]
 	then
@@ -67,10 +72,13 @@ do
 			echo "Error copying file $fl"
 			exit 1
 		fi
+		[ "$typ" = "D" ] && chmod $perm $PKG_IMG_ROOT/local_config/$fl
+	else
+		echo "Error extra file $fl not found."
+		exit 1
 	fi
 done
 
-#
 # Indicate that this is an automated install image
 #
 touch $PKG_IMG_ROOT/usr/share/auto_sysinstall

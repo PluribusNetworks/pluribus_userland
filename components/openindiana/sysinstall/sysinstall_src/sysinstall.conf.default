@@ -16,8 +16,12 @@ ZFS_DATASET_LIST="pn_illumos.img.bz2;ROOT/netvisor;/;noauto"
 # List of extra files to be copied into installed image.
 # These files must be present in the local_config dir on the USB/ISO image.
 # Format:
-# <filename>;<dest path>;<file permissions>
+# <filename>;<dest path>;<file permissions>;<type>
 # 
+# <type> = I - Files to be installed into target image at dest path
+# <type> = D - Data files used during installation like hook scripts and
+#              script data.
+#
 # EXTRA_FILES="..."
 #
 
@@ -72,6 +76,14 @@ DUMP_SIZE=16
 # Do we want remote root logins?
 # ENABLE_REMOTE_ROOT=n
 # 
+# Post-install hook script. This script is run after installation is
+# complete and just before BE is unmounted. It receives as argument
+# the temporary mountpoint where the BE is mounted.
+# This script should be found in the system default PATH.
+# It can be included in the image via the EXTRA_FILES list.
+#
+# POSTINSTALL_HOOK="script-name.sh"
+#
 
 #=================================================================================
 #
