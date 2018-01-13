@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cd /; find $1 | while read pth; do
+  if [ -d $pth ]; then
+    stat -c "dir group=%G owner=%U mode=%a path=$pth" $pth
+  elif [ -h $pth ]; then
+    stat -c "%N" $pth | gawk '{ printf("link path=%s target=%s\n", substr($1, 2, length($1)-2), substr($3, 2, length($3)-2)); }'
+  else
+    stat -c "file $pth group=%G owner=%U mode=%a path=$pth" $pth
+  fi
+done

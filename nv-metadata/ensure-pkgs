@@ -187,4 +187,7 @@ x11/x11-config
 system/install/auto-install/auto-install-common
 system/library/install/libinstzones
 developer/lsbgcc
+system/utilities/nv_csw
+system/utilities/nv_tomcat
+system/utilities/nv_glassfish
 _EOT

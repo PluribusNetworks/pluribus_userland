@@ -46,6 +46,7 @@ else
 PKGLINT =	${WS_TOOLS}/pkglint
 endif
 PKGMANGLE =	$(WS_TOOLS)/userland-mangler
+ISALIST =	$(shell /usr/bin/isalist)
 
 # Package headers should all pretty much follow the same format
 METADATA_TEMPLATE =		$(WS_TOP)/transforms/manifest-metadata-template
@@ -292,7 +293,7 @@ $(MANIFEST_BASE)-%.mangled:	$(MANIFEST_BASE)-%.mogrified $(MANGLED_DIR)
 	$(PKGMANGLE) $(PKGMANGLE_OPTIONS) -m $< >$@
 
 # generate dependencies
-PKGDEPEND_GENERATE_OPTIONS = -m $(PKG_PROTO_DIRS:%=-d %)
+PKGDEPEND_GENERATE_OPTIONS = -m $(PKG_PROTO_DIRS:%=-d %) -D ISALIST="$(ISALIST)"
 $(MANIFEST_BASE)-%.depend:	$(MANIFEST_BASE)-%.mangled
 	$(PKGDEPEND) generate $(PKGDEPEND_GENERATE_OPTIONS) $< >$@
 	cat $@ | egrep -v "^depend fmri=__TBD" > $@.notbd

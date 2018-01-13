@@ -1,0 +1,654 @@
+set name=pkg.fmri value=system/utilities/nv_tomcat@$(COMPONENT_VERSION),5.11-0.144
+set name=pkg.summary value="$(COMPONENT_SUMMARY)"
+set name=pkg.description value="$(COMPONENT_SUMMARY)"
+set name=description value="$(COMPONENT_SUMMARY)"
+set name=info.classification value=org.opensolaris.category.2008:System/Utilities
+set name=variant.opensolaris.zone value=global value=nonglobal
+
+legacy arch=i386 category=system desc="Bundled Tomcat for Netvisor" hotline="Please contact your local service provider" name="Bundled Tomcat for Netvisor" pkg=SUNWnv_tomcat vendor="Pluribus Networks, Inc." version=5.11,REV=2017.12.07
+license NOHASH license=nv_tomcat.copyright path=nv_tomcat.copyright
+depend fmri=system/library type=require
+
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14
+file opt/apache-tomcat-7.0.14/NOTICE group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/NOTICE
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/temp
+file opt/apache-tomcat-7.0.14/temp/safeToDelete.tmp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/temp/safeToDelete.tmp
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/conf
+file opt/apache-tomcat-7.0.14/conf/tomcat-users.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/conf/tomcat-users.xml
+file opt/apache-tomcat-7.0.14/conf/catalina.policy group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/conf/catalina.policy
+file opt/apache-tomcat-7.0.14/conf/catalina.properties group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/conf/catalina.properties
+file opt/apache-tomcat-7.0.14/conf/server.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/conf/server.xml
+file opt/apache-tomcat-7.0.14/conf/context.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/conf/context.xml
+file opt/apache-tomcat-7.0.14/conf/logging.properties group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/conf/logging.properties
+file opt/apache-tomcat-7.0.14/conf/web.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/conf/web.xml
+file opt/apache-tomcat-7.0.14/RUNNING.txt group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/RUNNING.txt
+file opt/apache-tomcat-7.0.14/uninstall.sh group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/uninstall.sh
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/logs
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs
+file opt/apache-tomcat-7.0.14/webapps/docs/mbeans-descriptor-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/mbeans-descriptor-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/maven-jars.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/maven-jars.html
+file opt/apache-tomcat-7.0.14/webapps/docs/changelog.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/changelog.html
+file opt/apache-tomcat-7.0.14/webapps/docs/ssl-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/ssl-howto.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/api
+file opt/apache-tomcat-7.0.14/webapps/docs/api/index.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/api/index.html
+file opt/apache-tomcat-7.0.14/webapps/docs/connectors.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/connectors.html
+file opt/apache-tomcat-7.0.14/webapps/docs/building.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/building.html
+file opt/apache-tomcat-7.0.14/webapps/docs/jndi-resources-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/jndi-resources-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/default-servlet.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/default-servlet.html
+file opt/apache-tomcat-7.0.14/webapps/docs/BUILDING.txt group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/BUILDING.txt
+file opt/apache-tomcat-7.0.14/webapps/docs/deployer-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/deployer-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/cgi-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/cgi-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/class-loader-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/class-loader-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/extras.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/extras.html
+file opt/apache-tomcat-7.0.14/webapps/docs/security-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/security-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/proxy-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/proxy-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/logging.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/logging.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/elapi
+file opt/apache-tomcat-7.0.14/webapps/docs/elapi/index.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/elapi/index.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/config
+file opt/apache-tomcat-7.0.14/webapps/docs/config/server.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/server.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/http.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/http.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-sender.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-sender.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/jar-scanner.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/jar-scanner.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/host.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/host.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-receiver.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-receiver.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/listeners.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/listeners.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/service.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/service.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/manager.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/manager.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/valve.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/valve.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/cluster.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/cluster.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/loader.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/loader.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/ajp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/ajp.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/context.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/context.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-membership.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-membership.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-deployer.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-deployer.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-manager.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-manager.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/engine.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/engine.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/filter.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/filter.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-listener.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-listener.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/index.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/index.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/executor.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/executor.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/globalresources.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/globalresources.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/resources.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/resources.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/systemprops.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/systemprops.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-channel.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-channel.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-interceptor.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-interceptor.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-valve.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/cluster-valve.html
+file opt/apache-tomcat-7.0.14/webapps/docs/config/realm.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/config/realm.html
+file opt/apache-tomcat-7.0.14/webapps/docs/developers.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/developers.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/images
+file opt/apache-tomcat-7.0.14/webapps/docs/images/tomcat.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/images/tomcat.gif
+file opt/apache-tomcat-7.0.14/webapps/docs/images/update.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/images/update.gif
+file opt/apache-tomcat-7.0.14/webapps/docs/images/void.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/images/void.gif
+file opt/apache-tomcat-7.0.14/webapps/docs/images/add.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/images/add.gif
+file opt/apache-tomcat-7.0.14/webapps/docs/images/code.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/images/code.gif
+file opt/apache-tomcat-7.0.14/webapps/docs/images/design.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/images/design.gif
+file opt/apache-tomcat-7.0.14/webapps/docs/images/docs.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/images/docs.gif
+file opt/apache-tomcat-7.0.14/webapps/docs/images/tomcat.svg group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/images/tomcat.svg
+file opt/apache-tomcat-7.0.14/webapps/docs/images/printer.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/images/printer.gif
+file opt/apache-tomcat-7.0.14/webapps/docs/images/asf-logo.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/images/asf-logo.gif
+file opt/apache-tomcat-7.0.14/webapps/docs/images/fix.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/images/fix.gif
+file opt/apache-tomcat-7.0.14/webapps/docs/ssi-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/ssi-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/realm-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/realm-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/windows-service-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/windows-service-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/cluster-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/cluster-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/RELEASE-NOTES.txt group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/RELEASE-NOTES.txt
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/jspapi
+file opt/apache-tomcat-7.0.14/webapps/docs/jspapi/index.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/jspapi/index.html
+file opt/apache-tomcat-7.0.14/webapps/docs/manager-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/manager-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/jndi-datasource-examples-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/jndi-datasource-examples-howto.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/servletapi
+file opt/apache-tomcat-7.0.14/webapps/docs/servletapi/index.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/servletapi/index.html
+file opt/apache-tomcat-7.0.14/webapps/docs/introduction.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/introduction.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/tribes
+file opt/apache-tomcat-7.0.14/webapps/docs/tribes/membership.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/tribes/membership.html
+file opt/apache-tomcat-7.0.14/webapps/docs/tribes/status.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/tribes/status.html
+file opt/apache-tomcat-7.0.14/webapps/docs/tribes/interceptors.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/tribes/interceptors.html
+file opt/apache-tomcat-7.0.14/webapps/docs/tribes/transport.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/tribes/transport.html
+file opt/apache-tomcat-7.0.14/webapps/docs/tribes/faq.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/tribes/faq.html
+file opt/apache-tomcat-7.0.14/webapps/docs/tribes/introduction.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/tribes/introduction.html
+file opt/apache-tomcat-7.0.14/webapps/docs/tribes/setup.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/tribes/setup.html
+file opt/apache-tomcat-7.0.14/webapps/docs/tribes/developers.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/tribes/developers.html
+file opt/apache-tomcat-7.0.14/webapps/docs/RUNNING.txt group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/RUNNING.txt
+file opt/apache-tomcat-7.0.14/webapps/docs/index.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/index.html
+file opt/apache-tomcat-7.0.14/webapps/docs/balancer-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/balancer-howto.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/architecture
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/architecture/requestProcess
+file opt/apache-tomcat-7.0.14/webapps/docs/architecture/requestProcess/roseModel.mdl group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/architecture/requestProcess/roseModel.mdl
+file opt/apache-tomcat-7.0.14/webapps/docs/architecture/requestProcess/requestProcess.pdf group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/architecture/requestProcess/requestProcess.pdf
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/architecture/startup
+file opt/apache-tomcat-7.0.14/webapps/docs/architecture/startup/serverStartup.pdf group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/architecture/startup/serverStartup.pdf
+file opt/apache-tomcat-7.0.14/webapps/docs/architecture/startup/serverStartup.txt group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/architecture/startup/serverStartup.txt
+file opt/apache-tomcat-7.0.14/webapps/docs/architecture/index.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/architecture/index.html
+file opt/apache-tomcat-7.0.14/webapps/docs/architecture/startup.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/architecture/startup.html
+file opt/apache-tomcat-7.0.14/webapps/docs/architecture/overview.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/architecture/overview.html
+file opt/apache-tomcat-7.0.14/webapps/docs/architecture/requestProcess.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/architecture/requestProcess.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/funcspecs
+file opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/fs-jndi-realm.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/fs-jndi-realm.html
+file opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/fs-admin-objects.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/fs-admin-objects.html
+file opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/mbean-names.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/mbean-names.html
+file opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/fs-memory-realm.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/fs-memory-realm.html
+file opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/fs-default.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/fs-default.html
+file opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/fs-admin-apps.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/fs-admin-apps.html
+file opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/index.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/index.html
+file opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/fs-jdbc-realm.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/fs-jdbc-realm.html
+file opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/fs-admin-opers.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/funcspecs/fs-admin-opers.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/introduction.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/introduction.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/sample.war group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/sample.war
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/src
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/src/mypackage
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/src/mypackage/Hello.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/src/mypackage/Hello.java
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/web
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/web/index.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/web/index.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/web/images
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/web/images/tomcat.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/web/images/tomcat.gif
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/web/WEB-INF
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/web/WEB-INF/web.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/web/WEB-INF/web.xml
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/web/hello.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/web/hello.jsp
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/index.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/index.html
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/build.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/build.xml
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/docs
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/docs/README.txt group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/sample/docs/README.txt
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/source.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/source.html
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/index.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/index.html
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/processes.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/processes.html
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/installation.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/installation.html
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/web.xml.txt group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/web.xml.txt
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/build.xml.txt group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/build.xml.txt
+file opt/apache-tomcat-7.0.14/webapps/docs/appdev/deployment.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/appdev/deployment.html
+file opt/apache-tomcat-7.0.14/webapps/docs/setup.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/setup.html
+file opt/apache-tomcat-7.0.14/webapps/docs/apr.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/apr.html
+file opt/apache-tomcat-7.0.14/webapps/docs/windows-auth-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/windows-auth-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/aio.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/aio.html
+file opt/apache-tomcat-7.0.14/webapps/docs/jasper-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/jasper-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/virtual-hosting-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/virtual-hosting-howto.html
+file opt/apache-tomcat-7.0.14/webapps/docs/monitoring.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/monitoring.html
+file opt/apache-tomcat-7.0.14/webapps/docs/security-manager-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/security-manager-howto.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/docs/WEB-INF
+file opt/apache-tomcat-7.0.14/webapps/docs/WEB-INF/web.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/WEB-INF/web.xml
+file opt/apache-tomcat-7.0.14/webapps/docs/html-manager-howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/docs/html-manager-howto.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/host-manager
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/host-manager/META-INF
+file opt/apache-tomcat-7.0.14/webapps/host-manager/META-INF/context.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/META-INF/context.xml
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/host-manager/images
+file opt/apache-tomcat-7.0.14/webapps/host-manager/images/update.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/images/update.gif
+file opt/apache-tomcat-7.0.14/webapps/host-manager/images/add.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/images/add.gif
+file opt/apache-tomcat-7.0.14/webapps/host-manager/images/docs.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/images/docs.gif
+file opt/apache-tomcat-7.0.14/webapps/host-manager/images/tomcat.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/images/tomcat.gif
+file opt/apache-tomcat-7.0.14/webapps/host-manager/images/void.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/images/void.gif
+file opt/apache-tomcat-7.0.14/webapps/host-manager/images/code.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/images/code.gif
+file opt/apache-tomcat-7.0.14/webapps/host-manager/images/fix.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/images/fix.gif
+file opt/apache-tomcat-7.0.14/webapps/host-manager/images/design.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/images/design.gif
+file opt/apache-tomcat-7.0.14/webapps/host-manager/images/asf-logo.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/images/asf-logo.gif
+file opt/apache-tomcat-7.0.14/webapps/host-manager/index.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/index.jsp
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/host-manager/WEB-INF
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/host-manager/WEB-INF/jsp
+file opt/apache-tomcat-7.0.14/webapps/host-manager/WEB-INF/jsp/401.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/WEB-INF/jsp/401.jsp
+file opt/apache-tomcat-7.0.14/webapps/host-manager/WEB-INF/jsp/404.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/WEB-INF/jsp/404.jsp
+file opt/apache-tomcat-7.0.14/webapps/host-manager/WEB-INF/jsp/403.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/WEB-INF/jsp/403.jsp
+file opt/apache-tomcat-7.0.14/webapps/host-manager/WEB-INF/web.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/WEB-INF/web.xml
+file opt/apache-tomcat-7.0.14/webapps/host-manager/manager.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/host-manager/manager.xml
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples
+file opt/apache-tomcat-7.0.14/webapps/examples/index.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/index.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/checkbox
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/checkbox/checkresult.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/checkbox/checkresult.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/checkbox/checkresult.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/checkbox/checkresult.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/checkbox/check.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/checkbox/check.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/checkbox/cresult.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/checkbox/cresult.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/checkbox/CheckTest.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/checkbox/CheckTest.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/snp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/snp/snoop.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/snp/snoop.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/snp/snoop.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/snp/snoop.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/snp/snoop.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/snp/snoop.jsp.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/include
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/include/foo.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/include/foo.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/include/include.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/include/include.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/include/inc.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/include/inc.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/include/foo.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/include/foo.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/include/include.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/include/include.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/include/foo.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/include/foo.jsp.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/cal1.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/cal1.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/cal1.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/cal1.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/Entry.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/Entry.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/JspCalendar.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/JspCalendar.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/calendar.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/calendar.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/login.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/login.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/cal2.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/cal2.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/TableBean.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/TableBean.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/Entries.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/Entries.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/cal2.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/cal/cal2.jsp
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/async
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/async/index.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/async/index.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/async/async3.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/async/async3.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/async/async3.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/async/async3.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/async/index.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/async/index.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/async/async1.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/async/async1.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/async/async1.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/async/async1.jsp
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/colors
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/colors/colrs.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/colors/colrs.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/colors/ColorGameBean.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/colors/ColorGameBean.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/colors/colors.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/colors/colors.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/colors/colrs.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/colors/colrs.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/colors/clr.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/colors/clr.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/xml
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/xml/xml.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/xml/xml.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/xml/xml.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/xml/xml.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/xml/xml.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/xml/xml.jsp.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/security
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/security/protected
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/security/protected/login.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/security/protected/login.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/security/protected/index.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/security/protected/index.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/security/protected/error.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/security/protected/error.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/security/protected/error.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/security/protected/error.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/security/protected/login.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/security/protected/login.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/security/protected/index.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/security/protected/index.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/source.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/source.jsp
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsptoserv
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsptoserv/jsptoservlet.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsptoserv/jsptoservlet.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsptoserv/hello.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsptoserv/hello.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsptoserv/ServletToJsp.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsptoserv/ServletToJsp.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsptoserv/jts.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsptoserv/jts.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsptoserv/hello.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsptoserv/hello.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsptoserv/jsptoservlet.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsptoserv/jsptoservlet.jsp.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/error
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/error/err.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/error/err.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/error/er.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/error/er.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/error/errorpge.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/error/errorpge.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/error/err.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/error/err.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/error/error.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/error/error.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/error/errorpge.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/error/errorpge.jsp.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/chat
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/chat/post.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/chat/post.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/chat/login.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/chat/login.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/chat/index.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/chat/index.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/chat/post.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/chat/post.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/chat/login.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/chat/login.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/chat/index.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/chat/index.jsp.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/plugin
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/plugin/applet
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/plugin/applet/Clock2.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/plugin/applet/Clock2.java
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/plugin/applet/Clock2.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/plugin/applet/Clock2.class
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/plugin/plugin.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/plugin/plugin.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/plugin/plugin.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/plugin/plugin.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/plugin/plugin.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/plugin/plugin.jsp
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/images
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/images/code.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/images/code.gif
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/images/read.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/images/read.gif
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/images/execute.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/images/execute.gif
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/images/return.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/images/return.gif
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/source.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/source.jsp.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/simpletag
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/simpletag/foo.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/simpletag/foo.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/simpletag/foo.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/simpletag/foo.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/simpletag/foo.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/simpletag/foo.jsp
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/forward
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/forward/forward.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/forward/forward.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/forward/fwd.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/forward/fwd.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/forward/two.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/forward/two.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/forward/one.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/forward/one.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/forward/forward.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/forward/forward.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/forward/one.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/forward/one.jsp
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/sessions
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/sessions/crt.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/sessions/crt.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/sessions/carts.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/sessions/carts.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/sessions/carts.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/sessions/carts.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/sessions/DummyCart.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/sessions/DummyCart.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/sessions/carts.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/sessions/carts.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/dates
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/dates/date.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/dates/date.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/dates/date.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/dates/date.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/dates/date.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/dates/date.jsp.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/num
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/num/numguess.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/num/numguess.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/num/numguess.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/num/numguess.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/num/numguess.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/num/numguess.jsp.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/svgexample.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/svgexample.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/textRotate.jspx.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/textRotate.jspx.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/basic.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/basic.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/basic.jspx group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/basic.jspx
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/textRotate.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/textRotate.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/basic.jspx.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/basic.jspx.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/textRotate.jpg group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/textRotate.jpg
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/textRotate.jspx group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspx/textRotate.jspx
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/xhtmlbasic.tag.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/xhtmlbasic.tag.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/panel.tag.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/panel.tag.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/panel.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/panel.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/panel.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/panel.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/hello.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/hello.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/products.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/products.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/displayProducts.tag.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/displayProducts.tag.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/panel.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/panel.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/helloWorld.tag.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/helloWorld.tag.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/products.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/products.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/hello.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/hello.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/products.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/products.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/hello.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/tagfiles/hello.jsp
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/book.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/book.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/BookBean.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/BookBean.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/RepeatSimpleTag.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/RepeatSimpleTag.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/book.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/book.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/repeat.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/repeat.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/Functions.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/Functions.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/book.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/book.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/repeat.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/repeat.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/FindBookSimpleTag.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/FindBookSimpleTag.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/hello.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/hello.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/hello.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/hello.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/hello.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/hello.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/HelloWorldSimpleTag.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/HelloWorldSimpleTag.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/repeat.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/simpletag/repeat.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/jspattribute.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/jspattribute.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/shuffle.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/shuffle.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/jspattribute.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/jspattribute.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/HelloWorldSimpleTag.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/HelloWorldSimpleTag.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/jspattribute.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/jspattribute.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/FooBean.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/FooBean.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/TileSimpleTag.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/TileSimpleTag.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/shuffle.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/shuffle.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/ShuffleSimpleTag.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/ShuffleSimpleTag.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/shuffle.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/jspattribute/shuffle.jsp.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/prelude.jspf group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/prelude.jspf
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/config.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/config.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/dynamicattrs.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/dynamicattrs.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/config.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/config.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/coda.jspf group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/coda.jspf
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/config.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/config.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/EchoAttributesTag.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/EchoAttributesTag.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/coda.jspf.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/coda.jspf.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/prelude.jspf.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/prelude.jspf.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/dynamicattrs.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/dynamicattrs.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/dynamicattrs.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/misc/dynamicattrs.jsp.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/implicit-objects.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/implicit-objects.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/functions.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/functions.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/composite.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/composite.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/functions.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/functions.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/basic-comparisons.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/basic-comparisons.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/basic-arithmetic.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/basic-arithmetic.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/basic-arithmetic.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/basic-arithmetic.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/basic-arithmetic.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/basic-arithmetic.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/functions.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/functions.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/ValuesTag.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/ValuesTag.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/implicit-objects.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/implicit-objects.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/composite.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/composite.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/implicit-objects.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/implicit-objects.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/basic-comparisons.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/basic-comparisons.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/Functions.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/Functions.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/ValuesBean.java.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/ValuesBean.java.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/basic-comparisons.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/basic-comparisons.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/composite.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/jsp2/el/composite.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/choose.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/choose.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/if.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/if.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/if.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/if.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/foreach.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/foreach.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/choose.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/choose.jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/foreach.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/foreach.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/notes.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/notes.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/if.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/if.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/choose.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/choose.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/foreach.jsp.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/foreach.jsp.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/howto.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/tagplugin/howto.html
+file opt/apache-tomcat-7.0.14/webapps/examples/jsp/index.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/jsp/index.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/tags
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/tags/xhtmlbasic.tag group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/tags/xhtmlbasic.tag
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/tags/displayProducts.tag group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/tags/displayProducts.tag
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/tags/panel.tag group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/tags/panel.tag
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/tags/helloWorld.tag group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/tags/helloWorld.tag
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/jsp
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/jsp/debug-taglib.tld group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/jsp/debug-taglib.tld
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/jsp/example-taglib.tld group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/jsp/example-taglib.tld
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/jsp/applet
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/jsp/applet/Clock2.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/jsp/applet/Clock2.java
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/SessionExample.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/SessionExample.java
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/sessions
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/sessions/DummyCart.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/sessions/DummyCart.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/sessions/DummyCart.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/sessions/DummyCart.java
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/num
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/num/NumberGuessBean.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/num/NumberGuessBean.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/num/NumberGuessBean.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/num/NumberGuessBean.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/CookieExample.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/CookieExample.java
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/validators
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/validators/DebugValidator.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/validators/DebugValidator.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/validators/DebugValidator.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/validators/DebugValidator.java
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/FooBean.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/FooBean.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/ValuesBean.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/ValuesBean.class
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/HelloWorldSimpleTag.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/HelloWorldSimpleTag.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/EchoAttributesTag.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/EchoAttributesTag.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/RepeatSimpleTag.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/RepeatSimpleTag.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/TileSimpleTag.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/TileSimpleTag.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/ShuffleSimpleTag.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/ShuffleSimpleTag.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/EchoAttributesTag.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/EchoAttributesTag.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/ShuffleSimpleTag.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/ShuffleSimpleTag.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/RepeatSimpleTag.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/RepeatSimpleTag.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/FindBookSimpleTag.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/FindBookSimpleTag.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/FindBookSimpleTag.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/FindBookSimpleTag.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/HelloWorldSimpleTag.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/HelloWorldSimpleTag.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/TileSimpleTag.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/simpletag/TileSimpleTag.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/BookBean.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/BookBean.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/BookBean.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/BookBean.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/FooBean.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/FooBean.class
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/el
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/el/Functions.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/el/Functions.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/el/Functions.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/el/Functions.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/ValuesBean.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/jsp2/examples/ValuesBean.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/SessionExample.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/SessionExample.class
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/filters
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/filters/SetCharacterEncodingFilter.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/filters/SetCharacterEncodingFilter.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/filters/ExampleFilter.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/filters/ExampleFilter.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/filters/ExampleFilter.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/filters/ExampleFilter.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/filters/SetCharacterEncodingFilter.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/filters/SetCharacterEncodingFilter.java
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/colors
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/colors/ColorGameBean.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/colors/ColorGameBean.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/colors/ColorGameBean.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/colors/ColorGameBean.class
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/ValuesTag.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/ValuesTag.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/LogTag.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/LogTag.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/ExampleTagBase.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/ExampleTagBase.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/FooTagExtraInfo.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/FooTagExtraInfo.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/FooTag.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/FooTag.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/ShowSource.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/ShowSource.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/LogTag.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/LogTag.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/ShowSource.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/ShowSource.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/ValuesTag.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/ValuesTag.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/FooTagExtraInfo.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/FooTagExtraInfo.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/FooTag.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/FooTag.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/ExampleTagBase.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/examples/ExampleTagBase.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/HelloWorldExample.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/HelloWorldExample.class
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/dates
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/dates/JspCalendar.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/dates/JspCalendar.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/dates/JspCalendar.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/dates/JspCalendar.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/RequestInfoExample.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/RequestInfoExample.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/CookieExample.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/CookieExample.class
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/util
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/util/HTMLFilter.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/util/HTMLFilter.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/util/HTMLFilter.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/util/HTMLFilter.java
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/listeners
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/listeners/ContextListener.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/listeners/ContextListener.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/listeners/SessionListener.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/listeners/SessionListener.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/listeners/ContextListener.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/listeners/ContextListener.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/listeners/SessionListener.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/listeners/SessionListener.class
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Stockticker$Stock.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Stockticker$Stock.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/AsyncStockServlet.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/AsyncStockServlet.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async3.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async3.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async0$1.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async0$1.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async2.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async2.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Stockticker.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Stockticker.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async1$1.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async1$1.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Stockticker$TickListener.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Stockticker$TickListener.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/AsyncStockServlet.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/AsyncStockServlet.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async0.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async0.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async1.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async1.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async0.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async0.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async3.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async3.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async1.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async1.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async2.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async2.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async2$1.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Async2$1.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Stockticker.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/async/Stockticker.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/LocalStrings_es.properties group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/LocalStrings_es.properties
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionResponseStream.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionResponseStream.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionFilterTestServlet.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionFilterTestServlet.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionServletResponseWrapper.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionServletResponseWrapper.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionResponseStream.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionResponseStream.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionServletResponseWrapper.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionServletResponseWrapper.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionFilter.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionFilter.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionFilterTestServlet.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionFilterTestServlet.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionFilter.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/compressionFilters/CompressionFilter.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/LocalStrings_fr.properties group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/LocalStrings_fr.properties
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/RequestParamExample.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/RequestParamExample.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/LocalStrings.properties group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/LocalStrings.properties
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/RequestParamExample.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/RequestParamExample.class
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/chat
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/chat/ChatServlet.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/chat/ChatServlet.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/chat/ChatServlet.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/chat/ChatServlet.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/chat/ChatServlet$MessageSender.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/chat/ChatServlet$MessageSender.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/LocalStrings_en.properties group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/LocalStrings_en.properties
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/RequestInfoExample.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/RequestInfoExample.java
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/error
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/error/Smart.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/error/Smart.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/error/Smart.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/error/Smart.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/RequestHeaderExample.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/RequestHeaderExample.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/ServletToJsp.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/ServletToJsp.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/RequestHeaderExample.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/RequestHeaderExample.class
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/checkbox
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/checkbox/CheckTest.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/checkbox/CheckTest.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/checkbox/CheckTest.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/checkbox/CheckTest.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/ServletToJsp.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/ServletToJsp.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/LocalStrings_pt.properties group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/LocalStrings_pt.properties
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/TableBean.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/TableBean.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/TableBean.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/TableBean.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/Entry.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/Entry.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/JspCalendar.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/JspCalendar.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/Entry.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/Entry.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/Entries.class group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/Entries.class
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/JspCalendar.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/JspCalendar.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/Entries.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/cal/Entries.java
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/HelloWorldExample.java group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/classes/HelloWorldExample.java
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/jsp2
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/jsp2/jsp2-example-taglib.tld group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/jsp2/jsp2-example-taglib.tld
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/lib
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/lib/jstl.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/lib/jstl.jar
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/lib/standard.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/lib/standard.jar
+file opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/web.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/WEB-INF/web.xml
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/servlets
+file opt/apache-tomcat-7.0.14/webapps/examples/servlets/index.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/servlets/index.html
+file opt/apache-tomcat-7.0.14/webapps/examples/servlets/sessions.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/servlets/sessions.html
+file opt/apache-tomcat-7.0.14/webapps/examples/servlets/reqparams.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/servlets/reqparams.html
+file opt/apache-tomcat-7.0.14/webapps/examples/servlets/cookies.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/servlets/cookies.html
+file opt/apache-tomcat-7.0.14/webapps/examples/servlets/reqinfo.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/servlets/reqinfo.html
+file opt/apache-tomcat-7.0.14/webapps/examples/servlets/helloworld.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/servlets/helloworld.html
+file opt/apache-tomcat-7.0.14/webapps/examples/servlets/reqheaders.html group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/servlets/reqheaders.html
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/examples/servlets/images
+file opt/apache-tomcat-7.0.14/webapps/examples/servlets/images/execute.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/servlets/images/execute.gif
+file opt/apache-tomcat-7.0.14/webapps/examples/servlets/images/code.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/servlets/images/code.gif
+file opt/apache-tomcat-7.0.14/webapps/examples/servlets/images/return.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/examples/servlets/images/return.gif
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/manager
+file opt/apache-tomcat-7.0.14/webapps/manager/index.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/index.jsp
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/manager/META-INF
+file opt/apache-tomcat-7.0.14/webapps/manager/META-INF/context.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/META-INF/context.xml
+file opt/apache-tomcat-7.0.14/webapps/manager/status.xsd group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/status.xsd
+file opt/apache-tomcat-7.0.14/webapps/manager/xform.xsl group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/xform.xsl
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/manager/WEB-INF
+file opt/apache-tomcat-7.0.14/webapps/manager/WEB-INF/web.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/WEB-INF/web.xml
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/manager/WEB-INF/jsp
+file opt/apache-tomcat-7.0.14/webapps/manager/WEB-INF/jsp/401.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/WEB-INF/jsp/401.jsp
+file opt/apache-tomcat-7.0.14/webapps/manager/WEB-INF/jsp/sessionsList.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/WEB-INF/jsp/sessionsList.jsp
+file opt/apache-tomcat-7.0.14/webapps/manager/WEB-INF/jsp/403.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/WEB-INF/jsp/403.jsp
+file opt/apache-tomcat-7.0.14/webapps/manager/WEB-INF/jsp/404.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/WEB-INF/jsp/404.jsp
+file opt/apache-tomcat-7.0.14/webapps/manager/WEB-INF/jsp/sessionDetail.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/WEB-INF/jsp/sessionDetail.jsp
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/manager/images
+file opt/apache-tomcat-7.0.14/webapps/manager/images/asf-logo.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/images/asf-logo.gif
+file opt/apache-tomcat-7.0.14/webapps/manager/images/tomcat.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/images/tomcat.gif
+file opt/apache-tomcat-7.0.14/webapps/manager/images/add.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/images/add.gif
+file opt/apache-tomcat-7.0.14/webapps/manager/images/update.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/images/update.gif
+file opt/apache-tomcat-7.0.14/webapps/manager/images/docs.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/images/docs.gif
+file opt/apache-tomcat-7.0.14/webapps/manager/images/code.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/images/code.gif
+file opt/apache-tomcat-7.0.14/webapps/manager/images/void.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/images/void.gif
+file opt/apache-tomcat-7.0.14/webapps/manager/images/design.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/images/design.gif
+file opt/apache-tomcat-7.0.14/webapps/manager/images/fix.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/manager/images/fix.gif
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/ROOT
+file opt/apache-tomcat-7.0.14/webapps/ROOT/bg-upper.png group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/bg-upper.png
+file opt/apache-tomcat-7.0.14/webapps/ROOT/tomcat.css group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/tomcat.css
+file opt/apache-tomcat-7.0.14/webapps/ROOT/tomcat.png group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/tomcat.png
+file opt/apache-tomcat-7.0.14/webapps/ROOT/asf-logo.png group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/asf-logo.png
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/webapps/ROOT/WEB-INF
+file opt/apache-tomcat-7.0.14/webapps/ROOT/WEB-INF/web.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/WEB-INF/web.xml
+file opt/apache-tomcat-7.0.14/webapps/ROOT/tomcat.svg group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/tomcat.svg
+file opt/apache-tomcat-7.0.14/webapps/ROOT/RELEASE-NOTES.txt group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/RELEASE-NOTES.txt
+file opt/apache-tomcat-7.0.14/webapps/ROOT/favicon.ico group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/favicon.ico
+file opt/apache-tomcat-7.0.14/webapps/ROOT/asf-logo-wide.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/asf-logo-wide.gif
+file opt/apache-tomcat-7.0.14/webapps/ROOT/bg-nav.png group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/bg-nav.png
+file opt/apache-tomcat-7.0.14/webapps/ROOT/bg-middle.png group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/bg-middle.png
+file opt/apache-tomcat-7.0.14/webapps/ROOT/bg-nav-item.png group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/bg-nav-item.png
+file opt/apache-tomcat-7.0.14/webapps/ROOT/index.jsp group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/index.jsp
+file opt/apache-tomcat-7.0.14/webapps/ROOT/tomcat-power.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/tomcat-power.gif
+file opt/apache-tomcat-7.0.14/webapps/ROOT/build.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/build.xml
+file opt/apache-tomcat-7.0.14/webapps/ROOT/bg-button.png group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/bg-button.png
+file opt/apache-tomcat-7.0.14/webapps/ROOT/tomcat.gif group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/webapps/ROOT/tomcat.gif
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/bin
+file opt/apache-tomcat-7.0.14/bin/tomcat7w.exe group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/tomcat7w.exe
+file opt/apache-tomcat-7.0.14/bin/tool-wrapper.bat group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/tool-wrapper.bat
+file opt/apache-tomcat-7.0.14/bin/commons-daemon-native.tar.gz group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/commons-daemon-native.tar.gz
+file opt/apache-tomcat-7.0.14/bin/configtest.sh group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/bin/configtest.sh
+file opt/apache-tomcat-7.0.14/bin/setclasspath.bat group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/setclasspath.bat
+file opt/apache-tomcat-7.0.14/bin/tomcat7.exe group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/tomcat7.exe
+file opt/apache-tomcat-7.0.14/bin/cpappend.bat group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/cpappend.bat
+file opt/apache-tomcat-7.0.14/bin/version.sh group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/bin/version.sh
+file opt/apache-tomcat-7.0.14/bin/version.bat group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/version.bat
+file opt/apache-tomcat-7.0.14/bin/commons-daemon.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/commons-daemon.jar
+file opt/apache-tomcat-7.0.14/bin/digest.bat group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/digest.bat
+file opt/apache-tomcat-7.0.14/bin/tomcat-native.tar.gz group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/tomcat-native.tar.gz
+file opt/apache-tomcat-7.0.14/bin/shutdown.bat group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/shutdown.bat
+file opt/apache-tomcat-7.0.14/bin/shutdown.sh group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/bin/shutdown.sh
+file opt/apache-tomcat-7.0.14/bin/service.bat group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/service.bat
+file opt/apache-tomcat-7.0.14/bin/startup.sh group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/bin/startup.sh
+file opt/apache-tomcat-7.0.14/bin/digest.sh group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/bin/digest.sh
+file opt/apache-tomcat-7.0.14/bin/catalina.sh group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/bin/catalina.sh
+file opt/apache-tomcat-7.0.14/bin/catalina-tasks.xml group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/catalina-tasks.xml
+file opt/apache-tomcat-7.0.14/bin/tool-wrapper.sh group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/bin/tool-wrapper.sh
+file opt/apache-tomcat-7.0.14/bin/startup.bat group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/startup.bat
+file opt/apache-tomcat-7.0.14/bin/tomcat-juli.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/tomcat-juli.jar
+file opt/apache-tomcat-7.0.14/bin/catalina.bat group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/catalina.bat
+file opt/apache-tomcat-7.0.14/bin/bootstrap.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/bin/bootstrap.jar
+file opt/apache-tomcat-7.0.14/bin/setclasspath.sh group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/bin/setclasspath.sh
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/work
+dir group=root owner=root mode=755 path=opt/apache-tomcat-7.0.14/lib
+file opt/apache-tomcat-7.0.14/lib/tomcat-i18n-fr.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/tomcat-i18n-fr.jar
+file opt/apache-tomcat-7.0.14/lib/ecj-3.6.2.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/ecj-3.6.2.jar
+file opt/apache-tomcat-7.0.14/lib/annotations-api.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/annotations-api.jar
+file opt/apache-tomcat-7.0.14/lib/tomcat-i18n-ja.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/tomcat-i18n-ja.jar
+file opt/apache-tomcat-7.0.14/lib/tomcat-util.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/tomcat-util.jar
+file opt/apache-tomcat-7.0.14/lib/el-api.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/el-api.jar
+file opt/apache-tomcat-7.0.14/lib/tomcat-api.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/tomcat-api.jar
+file opt/apache-tomcat-7.0.14/lib/catalina-ant.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/catalina-ant.jar
+file opt/apache-tomcat-7.0.14/lib/catalina-ha.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/catalina-ha.jar
+file opt/apache-tomcat-7.0.14/lib/catalina-tribes.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/catalina-tribes.jar
+file opt/apache-tomcat-7.0.14/lib/catalina.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/catalina.jar
+file opt/apache-tomcat-7.0.14/lib/servlet-api.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/servlet-api.jar
+file opt/apache-tomcat-7.0.14/lib/tomcat-dbcp.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/tomcat-dbcp.jar
+file opt/apache-tomcat-7.0.14/lib/tomcat-coyote.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/tomcat-coyote.jar
+file opt/apache-tomcat-7.0.14/lib/jsp-api.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/jsp-api.jar
+file opt/apache-tomcat-7.0.14/lib/jasper.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/jasper.jar
+file opt/apache-tomcat-7.0.14/lib/tomcat-i18n-es.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/tomcat-i18n-es.jar
+file opt/apache-tomcat-7.0.14/lib/jasper-el.jar group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/lib/jasper-el.jar
+file opt/apache-tomcat-7.0.14/LICENSE group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/LICENSE
+file opt/apache-tomcat-7.0.14/RELEASE-NOTES group=root owner=root mode=644 path=opt/apache-tomcat-7.0.14/RELEASE-NOTES
