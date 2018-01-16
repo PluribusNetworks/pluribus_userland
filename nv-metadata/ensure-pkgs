@@ -21,8 +21,6 @@ database/postgres-93
 database/postgres-93/developer
 database/postgres-93/library
 developer/as
-developer/bcel
-developer/build/ant
 developer/build/autoconf
 developer/build/autoconf/xorg-macros
 developer/build/automake-111
@@ -39,16 +37,10 @@ developer/documentation-tool/openjade
 developer/documentation-tool/opensp
 developer/gcc-3
 developer/gcc-48
-developer/hawtjni
 developer/icu
 developer/illumos-closed
 developer/illumos-gcc
 developer/java/jdk
-developer/java/junit
-developer/java/maven
-developer/java/openjdk7
-developer/java/openjdk7-64
-developer/parser/antlr-2
 developer/sunstudio12u1
 developer/sunstudio12u1/analyzer
 developer/sunstudio12u1/backend
@@ -139,8 +131,6 @@ library/python/python-dbus-27
 library/raptor
 library/tooltalk
 print/qpdf
-runtime/java/openjdk7
-runtime/java/openjdk7/runtime64
 runtime/perl-522-bdb
 service/management/sysinstall
 service/opengl/ogl-select
