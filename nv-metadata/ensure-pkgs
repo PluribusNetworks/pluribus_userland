@@ -2,8 +2,8 @@
 
 while read pkg
 do
-pkg install $pkg
-done < _EOT
+pkg install pkg:/$pkg
+done << _EOT
 cde/cde-runtime
 data/docbook
 data/docbook/dsssl
