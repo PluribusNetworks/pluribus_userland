@@ -1260,3 +1260,4 @@ x11/library/libxext
 x11/library/libxft
 x11/library/libxrender
 x11/server/xvnc@1.0,5.11-0.134
+developer/gcc-48
