@@ -1,0 +1,112 @@
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License (the "License").
+# You may not use this file except in compliance with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+# CDDL HEADER END
+#
+# Copyright (c) 2011, 2013, Oracle and/or its affiliates. All rights reserved.
+#
+
+set name=pkg.fmri \
+    value=pkg:/library/python-2/netsa-python-$(PYV)@$(IPS_COMPONENT_VERSION),5.11-0.134
+set name=pkg.summary value="Python bindings for libcurl"
+set name=pkg.description \
+    value="PycURL provides a thin layer of Python bindings on top of libcurl."
+set name=com.oracle.info.description value="Python bindings for libcurl"
+set name=com.oracle.info.tpno value=5912
+set name=info.classification \
+    value=org.opensolaris.category.2008:Development/Python
+set name=info.source-url value=$(COMPONENT_ARCHIVE_URL)
+set name=info.upstream-url value=$(COMPONENT_PROJECT_URL)
+set name=org.opensolaris.arc-caseid value=PSARC/2011/266
+set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
+#
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa_python-1.5-py2.6.egg-info
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa_silk.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/script/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/script/golem/script.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/script/golem/model.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/script/golem/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/script/model.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/script/params.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/script/catalog.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/tools/scheduler.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/tools/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/tools/opt2pod.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/logging/test/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/logging/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/_netsa_silk/test/ipwildcard.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/_netsa_silk/test/ipset.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/_netsa_silk/test/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/_netsa_silk/test/tcpflags.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/_netsa_silk/test/ipaddr.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/_netsa_silk/python_impl.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/_netsa_silk/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/util/tandem.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/util/compat.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/util/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/util/test/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/util/test/shell.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/util/clitest.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/util/shell.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/util/collections.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/sql/driver_pygresql.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/sql/driver_sqlite3.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/sql/driver_psycopg2_pooled.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/sql/legacy_driver_psycopg2.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/sql/driver_sqlite.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/sql/driver_cx_oracle.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/sql/test/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/sql/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/sql/legacy.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/sql/driver_psycopg2.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/sql/schema.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/dist/run_unit_tests.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/dist/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/dist/tools_web/layout.html
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/dist/tools_web/static/tools.css_t
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/dist/tools_web/theme.conf
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/dist/netsa_sphinx_config.py.in
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/VERSION
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/files/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/files/test/temp.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/files/test/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/files/test/relpath.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/files/test/pidlocks.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/json/test/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/json/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/data/test/times.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/data/test/countries.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/data/test/format.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/data/test/nice.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/data/test/timebin.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/data/test/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/data/__init__.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/data/countries.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/data/format.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/data/nice.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/data/times.py
+file path=usr/lib/python$(PYVER)/vendor-packages/netsa/times.py
+file path=usr/share/netsa-python/sql/create-sa_meta-0.9.sql
+#
+
+license netsa-python.copyright license=GPL
+
+# force a dependency on the Python runtime
+depend type=require fmri=__TBD pkg.debug.depend.file=python$(PYVER) \
+    pkg.debug.depend.path=usr/bin
